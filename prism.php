@@ -24,9 +24,18 @@ class Prism {
 		wp_register_script( 'react', 'https://fb.me/react-with-addons-0.14.0.js', '', '0.14.0', 1 );
 		wp_register_script( 'react-dom', 'https://fb.me/react-dom-0.14.0.js', '', '0.14.0', 1 );
 
-		wp_register_script( 'prism', plugin_dir_url( __FILE__ ) . 'assets/js/prism.js', array( 'react', 'react-dom', 'jquery' ), '', 1 );
+		wp_register_script( 'bootstrap', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js', '', '3.3.5', 1 );
+
+		wp_register_script( 'prism', plugin_dir_url( __FILE__ ) . 'assets/js/prism.js', array( 'react', 'react-dom', 'bootstrap', 'jquery' ), '', 1 );
 
 		wp_enqueue_script( 'prism' );
+
+
+		wp_register_style( 'bootstrap', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css', '', '3.3.5' );
+
+		wp_register_style( 'prism', plugin_dir_url( __FILE__ ) . 'assets/css/prism.css', array( 'bootstrap' ) );
+
+		wp_enqueue_style( 'prism' );
 
 	}
 
@@ -35,7 +44,7 @@ class Prism {
 
 		global $wp_styles;
 		foreach( $wp_styles->queue as $handle ) :
-			if ( $handle == 'admin-bar' ) continue;
+			if ( $handle == 'admin-bar' || $handle == 'prism' ) continue;
 
 			wp_dequeue_style( $handle );
 		endforeach;
