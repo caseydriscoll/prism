@@ -105,6 +105,18 @@ body > *:not(#prism) { display: none; }
 		#prism-leaf {
 			display: block; position: relative; float: left;
 			width: 50%; height: 100%;
+
+			header#prism-leaf-header {
+
+				height: $sub-header-height;
+				padding: 10px;
+				border-bottom: $border;
+
+				h2 {
+					padding: 5px; margin: 0;
+				}
+
+			}
 		}
 
 	}

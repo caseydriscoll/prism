@@ -137,7 +137,28 @@ var PrismLeaf = React.createClass({
 	displayName: "PrismLeaf",
 
 	render: function render() {
-		return React.createElement("div", { id: "prism-leaf" });
+		return React.createElement(
+			"div",
+			{ id: "prism-leaf" },
+			React.createElement(PrismLeafHeader, null)
+		);
+	}
+
+});
+
+var PrismLeafHeader = React.createClass({
+	displayName: "PrismLeafHeader",
+
+	render: function render() {
+		return React.createElement(
+			"header",
+			{ id: "prism-leaf-header" },
+			React.createElement(
+				"h2",
+				null,
+				"Leaf Name"
+			)
+		);
 	}
 
 });
