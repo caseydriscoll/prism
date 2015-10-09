@@ -1,7 +1,7 @@
 $black: #000000;
 
 $border: 2px solid $black;
-$header-height: 50px;
+$header-height: 70px;
 
 body > *:not(#prism) { display: none; }
 
@@ -33,6 +33,34 @@ body > *:not(#prism) { display: none; }
 			width: 16.666667%; height: 100%;
 
 			border-right: $border;
+
+			menu {
+
+				padding: 0; margin: 0;
+
+				ul {
+
+					padding: 0; margin: 0;
+
+					li {
+						list-style: none;
+
+						a { 
+							display: block;
+							padding: 20px;
+
+							color: #808080;
+							font-size: 24px;
+							font-family: 'Source Code Pro', sans-serif;
+							text-decoration: none;
+
+							&:hover {
+								background: #dddddd;
+							}
+						}
+					}
+				}
+			}
 		}
 
 		#prism-branch {

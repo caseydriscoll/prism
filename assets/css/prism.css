@@ -13,13 +13,13 @@ body > *:not(#prism) {
     display: block;
     position: relative;
     width: 100%;
-    height: 50px;
+    height: 70px;
     border-bottom: 2px solid #000000; }
   #prism #prism-body {
     display: block;
     position: relative;
     width: 100%;
-    height: calc( 100vh - 50px ); }
+    height: calc( 100vh - 70px ); }
     #prism #prism-body #prism-trunk {
       display: block;
       position: relative;
@@ -27,6 +27,23 @@ body > *:not(#prism) {
       width: 16.666667%;
       height: 100%;
       border-right: 2px solid #000000; }
+      #prism #prism-body #prism-trunk menu {
+        padding: 0;
+        margin: 0; }
+        #prism #prism-body #prism-trunk menu ul {
+          padding: 0;
+          margin: 0; }
+          #prism #prism-body #prism-trunk menu ul li {
+            list-style: none; }
+            #prism #prism-body #prism-trunk menu ul li a {
+              display: block;
+              padding: 20px;
+              color: #808080;
+              font-size: 24px;
+              font-family: 'Source Code Pro', sans-serif;
+              text-decoration: none; }
+              #prism #prism-body #prism-trunk menu ul li a:hover {
+                background: #dddddd; }
     #prism #prism-body #prism-branch {
       display: block;
       position: relative;

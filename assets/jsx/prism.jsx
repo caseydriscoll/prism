@@ -27,5 +27,5 @@ var Prism = React.createClass( {
 } );
 
 ReactDOM.render(
-	<Prism />, document.body
+	<Prism data={PRISM} />, document.body
 );

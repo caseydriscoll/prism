@@ -3,7 +3,32 @@ var PrismTrunk = React.createClass( {
 	render: function() {
 		return (
 			<div id="prism-trunk">
+				<PrismMenu />
 			</div>
+		);
+	}
+
+} );
+
+
+var PrismMenu = React.createClass( {
+
+	render: function() {
+
+		var menuItems = PRISM.menu.map( function( menuItem, i ) {
+			return(
+				<li key={i}>
+					<a href={menuItem.url}>{menuItem.title}</a>
+				</li>
+			);
+		} );
+
+		return (
+			<menu id="prism-menu">
+				<ul>
+					{menuItems}
+				</ul>
+			</menu>
 		);
 	}
 

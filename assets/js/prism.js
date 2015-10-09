@@ -45,7 +45,41 @@ var PrismTrunk = React.createClass({
 	displayName: "PrismTrunk",
 
 	render: function render() {
-		return React.createElement("div", { id: "prism-trunk" });
+		return React.createElement(
+			"div",
+			{ id: "prism-trunk" },
+			React.createElement(PrismMenu, null)
+		);
+	}
+
+});
+
+var PrismMenu = React.createClass({
+	displayName: "PrismMenu",
+
+	render: function render() {
+
+		var menuItems = PRISM.menu.map(function (menuItem, i) {
+			return React.createElement(
+				"li",
+				{ key: i },
+				React.createElement(
+					"a",
+					{ href: menuItem.url },
+					menuItem.title
+				)
+			);
+		});
+
+		return React.createElement(
+			"menu",
+			{ id: "prism-menu" },
+			React.createElement(
+				"ul",
+				null,
+				menuItems
+			)
+		);
 	}
 
 });
@@ -103,4 +137,4 @@ var Prism = React.createClass({
 
 });
 
-ReactDOM.render(React.createElement(Prism, null), document.body);
+ReactDOM.render(React.createElement(Prism, { data: PRISM }), document.body);
