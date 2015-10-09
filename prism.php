@@ -12,6 +12,8 @@ class Prism {
 
 	public static function init() {
 
+		add_action( 'wp_print_styles', 'Prism::clean_slate' );
+
 		self::load_assets();
 
 	}
@@ -26,6 +28,23 @@ class Prism {
 
 		wp_enqueue_script( 'prism' );
 
+	}
+
+
+	public static function clean_slate() {
+		global $wp_styles;
+		foreach( $wp_styles->queue as $handle ) :
+			if ( $handle == 'admin-bar' ) continue;
+
+			wp_dequeue_style( $handle );
+		endforeach;
+
+		global $wp_scripts;
+		foreach( $wp_scripts->queue as $handle ) :
+			if ( $handle == 'admin-bar' || $handle == 'prism' ) continue;
+
+			wp_dequeue_script( $handle );
+		endforeach;
 	}
 
 
