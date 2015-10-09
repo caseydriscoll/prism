@@ -2,6 +2,7 @@ $black: #000000;
 
 $border: 2px solid $black;
 $header-height: 70px;
+$sub-header-height: 65px;
 
 body > *:not(#prism) { display: none; }
 
@@ -37,7 +38,7 @@ body > *:not(#prism) { display: none; }
 			#prism-search {
 
 				display: block; position: relative;
-				width: 100%;
+				width: 100%; height: $sub-header-height;
 				padding: 10px;
 
 				border-bottom: $border;
@@ -87,6 +88,18 @@ body > *:not(#prism) { display: none; }
 			width: 33.333333%; height: 100%;
 
 			border-right: $border;
+
+			header#prism-branch-header {
+
+				height: $sub-header-height;
+				padding: 10px;
+				border-bottom: $border;
+
+				h2 {
+					padding: 5px; margin: 0;
+				}
+
+			}
 		}
 
 		#prism-leaf {

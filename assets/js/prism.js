@@ -105,7 +105,28 @@ var PrismBranch = React.createClass({
 	displayName: "PrismBranch",
 
 	render: function render() {
-		return React.createElement("div", { id: "prism-branch" });
+		return React.createElement(
+			"div",
+			{ id: "prism-branch" },
+			React.createElement(PrismBranchHeader, null)
+		);
+	}
+
+});
+
+var PrismBranchHeader = React.createClass({
+	displayName: "PrismBranchHeader",
+
+	render: function render() {
+		return React.createElement(
+			"header",
+			{ id: "prism-branch-header" },
+			React.createElement(
+				"h2",
+				null,
+				"Branch Type"
+			)
+		);
 	}
 
 });
