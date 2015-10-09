@@ -12,14 +12,14 @@ class Prism {
 
 	public static function init() {
 
-		add_action( 'wp_print_styles', 'Prism::clean_slate' );
-
-		self::load_assets();
+		add_action( 'wp_enqueue_scripts', 'Prism::load_assets' );
 
 	}
 
 
-	private static function load_assets() {
+	public static function load_assets() {
+
+		add_action( 'wp_print_styles', 'Prism::clean_slate' );
 
 		wp_register_script( 'react', 'https://fb.me/react-with-addons-0.14.0.js', '', '0.14.0', 1 );
 		wp_register_script( 'react-dom', 'https://fb.me/react-dom-0.14.0.js', '', '0.14.0', 1 );
@@ -32,6 +32,7 @@ class Prism {
 
 
 	public static function clean_slate() {
+
 		global $wp_styles;
 		foreach( $wp_styles->queue as $handle ) :
 			if ( $handle == 'admin-bar' ) continue;
