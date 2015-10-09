@@ -1,3 +1,5 @@
+$light: #dddddd;
+$grey:  #808080;
 $black: #000000;
 
 $border: 2px solid $black;
@@ -50,7 +52,7 @@ body > *:not(#prism) { display: none; }
 					padding: 2px 10px;
 
 					border: $border;
-					border-color: #808080;
+					border-color: $grey;
 				}
 			}
 
@@ -69,13 +71,13 @@ body > *:not(#prism) { display: none; }
 							display: block;
 							padding: 20px;
 
-							color: #808080;
+							color: $grey;
 							font-size: 24px;
 							font-family: 'Source Code Pro', sans-serif;
 							text-decoration: none;
 
 							&:hover {
-								background: #dddddd;
+								background: $light;
 							}
 						}
 					}
@@ -99,6 +101,53 @@ body > *:not(#prism) { display: none; }
 					padding: 5px; margin: 0;
 				}
 
+			}
+
+			.prism-leaf {
+				display: block; position: relative; float: left;
+				width: 33.333333%; height: auto;
+				padding: 10px;
+			}
+
+			#prism-add-leaf {
+
+				a {
+					display: block; position: relative;
+					width: 100%; height: auto;
+					padding-bottom: calc( 100% - 10px );
+
+					background: none;
+					border: $grey 5px dotted;
+					border-radius: 0%;
+
+					cursor: pointer;
+
+					&:hover {
+						background: $light;
+						border-style: solid;
+					}
+
+					$plus-thickness: 20%;
+					$plus-size: 60%;
+
+					&:before {
+						content: "";
+						display: block; position: absolute;
+						width: $plus-size; height: $plus-thickness;
+						left: ( 100% - $plus-size ) / 2; top: ( 100% - $plus-thickness ) / 2;
+
+						background: $grey;
+					}
+
+					&:after {
+						content: "";
+						display: block; position: absolute;
+						width: $plus-thickness; height: $plus-size;
+						left: ( 100% - $plus-thickness ) / 2; top: ( 100% - $plus-size ) / 2;
+
+						background: $grey;
+					}
+				}
 			}
 		}
 

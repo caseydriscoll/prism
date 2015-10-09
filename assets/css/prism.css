@@ -71,6 +71,44 @@ body > *:not(#prism) {
         #prism #prism-body #prism-branch header#prism-branch-header h2 {
           padding: 5px;
           margin: 0; }
+      #prism #prism-body #prism-branch .prism-leaf {
+        display: block;
+        position: relative;
+        float: left;
+        width: 33.333333%;
+        height: auto;
+        padding: 10px; }
+      #prism #prism-body #prism-branch #prism-add-leaf a {
+        display: block;
+        position: relative;
+        width: 100%;
+        height: auto;
+        padding-bottom: calc( 100% - 10px );
+        background: none;
+        border: #808080 5px dotted;
+        border-radius: 0%;
+        cursor: pointer; }
+        #prism #prism-body #prism-branch #prism-add-leaf a:hover {
+          background: #dddddd;
+          border-style: solid; }
+        #prism #prism-body #prism-branch #prism-add-leaf a:before {
+          content: "";
+          display: block;
+          position: absolute;
+          width: 60%;
+          height: 20%;
+          left: 20%;
+          top: 40%;
+          background: #808080; }
+        #prism #prism-body #prism-branch #prism-add-leaf a:after {
+          content: "";
+          display: block;
+          position: absolute;
+          width: 20%;
+          height: 60%;
+          left: 40%;
+          top: 20%;
+          background: #808080; }
     #prism #prism-body #prism-leaf {
       display: block;
       position: relative;

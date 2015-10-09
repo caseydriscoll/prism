@@ -108,7 +108,8 @@ var PrismBranch = React.createClass({
 		return React.createElement(
 			"div",
 			{ id: "prism-branch" },
-			React.createElement(PrismBranchHeader, null)
+			React.createElement(PrismBranchHeader, null),
+			React.createElement(PrismAddLeaf, null)
 		);
 	}
 
@@ -126,6 +127,19 @@ var PrismBranchHeader = React.createClass({
 				null,
 				"Branch Type"
 			)
+		);
+	}
+
+});
+
+var PrismAddLeaf = React.createClass({
+	displayName: "PrismAddLeaf",
+
+	render: function render() {
+		return React.createElement(
+			"div",
+			{ id: "prism-add-leaf", className: "prism-leaf" },
+			React.createElement("a", null)
 		);
 	}
 
@@ -174,6 +188,7 @@ var PrismLeafHeader = React.createClass({
  *       - .prism-branch
  *     - #prism-branch
  *       - #prism-branch-header
+ *       - #prism-add-leaf
  *       - .prism-leaf
  *     - #prism-leaf
  *       - #prism-leaf-header

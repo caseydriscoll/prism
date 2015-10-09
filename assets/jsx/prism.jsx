@@ -9,6 +9,7 @@
  *       - .prism-branch
  *     - #prism-branch
  *       - #prism-branch-header
+ *       - #prism-add-leaf
  *       - .prism-leaf
  *     - #prism-leaf
  *       - #prism-leaf-header
