@@ -1,5 +1,6 @@
 $black: #000000;
 
+$border: 2px solid $black;
 $header-height: 50px;
 
 body > *:not(#prism) { display: none; }
@@ -16,11 +17,10 @@ body > *:not(#prism) { display: none; }
 	}
 
 	#prism-header {
-
 		display: block; position: relative;
 		width: 100%; height: $header-height;
 
-		border-bottom: 1px solid $black;
+		border-bottom: $border;
 	}
 
 	#prism-body {
@@ -32,14 +32,14 @@ body > *:not(#prism) { display: none; }
 			display: block; position: relative; float: left;
 			width: 16.666667%; height: 100%;
 
-			border-right: 1px solid $black;
+			border-right: $border;
 		}
 
 		#prism-branch {
 			display: block; position: relative; float: left;
 			width: 33.333333%; height: 100%;
 
-			border-right: 1px solid $black;
+			border-right: $border;
 		}
 
 		#prism-leaf {

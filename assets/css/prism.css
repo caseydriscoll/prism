@@ -14,7 +14,7 @@ body > *:not(#prism) {
     position: relative;
     width: 100%;
     height: 50px;
-    border-bottom: 1px solid #000000; }
+    border-bottom: 2px solid #000000; }
   #prism #prism-body {
     display: block;
     position: relative;
@@ -26,14 +26,14 @@ body > *:not(#prism) {
       float: left;
       width: 16.666667%;
       height: 100%;
-      border-right: 1px solid #000000; }
+      border-right: 2px solid #000000; }
     #prism #prism-body #prism-branch {
       display: block;
       position: relative;
       float: left;
       width: 33.333333%;
       height: 100%;
-      border-right: 1px solid #000000; }
+      border-right: 2px solid #000000; }
     #prism #prism-body #prism-leaf {
       display: block;
       position: relative;
