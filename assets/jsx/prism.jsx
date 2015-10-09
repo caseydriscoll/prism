@@ -17,6 +17,9 @@ var Prism = React.createClass( {
 	render: function() {
 		return (
 			<div id="prism">
+				<PrismHeader />
+				<PrismBody />
+				<PrismFooter />
 			</div>
 		);
 	}

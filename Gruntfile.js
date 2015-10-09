@@ -47,6 +47,14 @@ module.exports = function( grunt ) {
 			dist: {
 				files: {
 					'assets/js/prism.js' : 'assets/jsx/prism.jsx',
+
+					'assets/js/prism-header.js' : 'assets/jsx/prism-header.jsx',
+					'assets/js/prism-body.js'   : 'assets/jsx/prism-body.jsx',
+					'assets/js/prism-footer.js' : 'assets/jsx/prism-footer.jsx',
+
+					'assets/js/prism-trunk.js'   : 'assets/jsx/prism-trunk.jsx',
+					'assets/js/prism-branch.js'  : 'assets/jsx/prism-branch.jsx',
+					'assets/js/prism-leaf.js'    : 'assets/jsx/prism-leaf.jsx'
 				}
 			}
 		},
@@ -54,6 +62,14 @@ module.exports = function( grunt ) {
 		concat: {
 			dist: {
 				src: [
+					'assets/js/prism-header.js',
+					'assets/js/prism-body.js',
+					'assets/js/prism-footer.js',
+
+					'assets/js/prism-trunk.js',
+					'assets/js/prism-branch.js',
+					'assets/js/prism-leaf.js',
+
 					'assets/js/prism.js'
 				],
 				dest: 'assets/js/prism.js'
@@ -62,12 +78,19 @@ module.exports = function( grunt ) {
 
 		/* These are extra files that should be removed after concatenated into patchchat.js */
 		clean: [
+				'assets/js/prism-header.js',
+				'assets/js/prism-body.js',
+				'assets/js/prism-footer.js',
+
+				'assets/js/prism-trunk.js',
+				'assets/js/prism-branch.js',
+				'assets/js/prism-leaf.js'
 		],
 
 		watch: {
 			jsx : {
 				files : ['assets/jsx/*.jsx'],
-				tasks : ['babel', 'concat']
+				tasks : ['babel', 'concat', 'clean']
 			},
 			sass: {
 				files : ['assets/sass/*.scss'],
