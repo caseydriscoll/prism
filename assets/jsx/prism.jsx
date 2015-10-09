@@ -5,10 +5,13 @@
  *   - #prism-header
  *   - #prism-body
  *     - #prism-trunk
+ *       - #prism-search
  *       - .prism-branch
  *     - #prism-branch
+ *       - #prism-branch-header
  *       - .prism-leaf
  *     - #prism-leaf
+ *       - #prism-leaf-header
  *   - #prism-footer
  */
 

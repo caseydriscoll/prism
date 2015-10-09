@@ -48,7 +48,22 @@ var PrismTrunk = React.createClass({
 		return React.createElement(
 			"div",
 			{ id: "prism-trunk" },
+			React.createElement(PrismSearch, null),
 			React.createElement(PrismMenu, null)
+		);
+	}
+
+});
+
+var PrismSearch = React.createClass({
+	displayName: "PrismSearch",
+
+	render: function render() {
+
+		return React.createElement(
+			"div",
+			{ id: "prism-search" },
+			React.createElement("input", { type: "text", placeholder: "Search" })
 		);
 	}
 
@@ -113,10 +128,13 @@ var PrismLeaf = React.createClass({
  *   - #prism-header
  *   - #prism-body
  *     - #prism-trunk
+ *       - #prism-search
  *       - .prism-branch
  *     - #prism-branch
+ *       - #prism-branch-header
  *       - .prism-leaf
  *     - #prism-leaf
+ *       - #prism-leaf-header
  *   - #prism-footer
  */
 

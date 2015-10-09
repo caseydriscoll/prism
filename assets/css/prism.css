@@ -27,6 +27,18 @@ body > *:not(#prism) {
       width: 16.666667%;
       height: 100%;
       border-right: 2px solid #000000; }
+      #prism #prism-body #prism-trunk #prism-search {
+        display: block;
+        position: relative;
+        width: 100%;
+        padding: 10px;
+        border-bottom: 2px solid #000000;
+        font-size: 24px; }
+        #prism #prism-body #prism-trunk #prism-search input {
+          width: 100%;
+          padding: 2px 10px;
+          border: 2px solid #000000;
+          border-color: #808080; }
       #prism #prism-body #prism-trunk menu {
         padding: 0;
         margin: 0; }
