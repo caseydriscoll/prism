@@ -18,4 +18,6 @@ It's non-pretentious hierarchy by design. Root access to information on the left
 
 Clicking on an item moves you up and down the tree.
 
+Here is what it could look like with more stuffs.
+
 ![prism](docs/prism.png)
