@@ -19,7 +19,7 @@ var PrismTree = React.createClass( {
 
 		var state = this.state;
 
-		state.active.leaf = jQuery( e.nativeEvent.target ).data( 'title' );
+		state.active.leaf = jQuery( e.nativeEvent.target ).data( 'id' );
 
 		this.setState( state );
 	},
@@ -60,7 +60,15 @@ var PrismTree = React.createClass( {
 
 				var state = this.state;
 
-				state.branches[this.state.active.branch] = { leaves: response };
+				var leaves = {};
+
+				for ( var i = 0; i < response.length; i++ ) {
+					var leaf = response[i];
+
+					leaves[leaf.id] = leaf;
+				}
+
+				state.branches[this.state.active.branch] = { leaves: leaves };
 
 				this.setState( state );
 
@@ -80,15 +88,11 @@ var PrismTree = React.createClass( {
 
 	leafData: function() {
 
-		var leafData = {
-			title   : this.state.active.leaf
-		}
+		if ( this.state.active.leaf == null )
+			return {};
+		else
+			return this.state.branches[this.state.active.branch].leaves[this.state.active.leaf];
 
-		if ( this.state.branches[this.state.active.branch] != undefined ) {
-			leafData.content = this.state.branches[this.state.active.branch].leaves[0].content.rendered;
-		}
-
-		return leafData;
 	},
 
 	render: function() {

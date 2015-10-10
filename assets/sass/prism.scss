@@ -207,6 +207,16 @@ body > *:not(#prism) { display: none; }
 
 				h2 {
 					padding: 5px; margin: 0;
+
+					date {
+						float: right;
+						padding: 10px;
+						font: {
+							family: 'Courier New', monospace;
+							size: 14px;
+							weight: bold;
+						}
+					}
 				}
 
 			}

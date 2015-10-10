@@ -147,6 +147,12 @@ body > *:not(#prism) {
         #prism #prism-tree #prism-leaf header#prism-leaf-header h2 {
           padding: 5px;
           margin: 0; }
+          #prism #prism-tree #prism-leaf header#prism-leaf-header h2 date {
+            float: right;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            font-weight: bold; }
       #prism #prism-tree #prism-leaf div#prism-leaf-content {
         display: block;
         position: relative;

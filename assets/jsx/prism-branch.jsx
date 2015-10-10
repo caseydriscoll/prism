@@ -2,8 +2,12 @@ var PrismBranch = React.createClass( {
 
 	render: function() {
 
-		var prismLeafNodes = this.props.leaves.map( function( leaf, i ) {
-			return <PrismLeafNode data={leaf} key={i} onClick={this.props.changeLeaf} />;
+		var prismLeafNodes = Object.keys( this.props.leaves ).map( function( key ) {
+
+			var leaf = this.props.leaves[key];
+
+			return <PrismLeafNode data={leaf} key={key} onClick={this.props.changeLeaf} />
+
 		}, this );
 
 		return (
@@ -18,6 +22,7 @@ var PrismBranch = React.createClass( {
 	}
 
 } );
+
 
 var PrismBranchHeader = React.createClass( {
 
@@ -58,8 +63,8 @@ var PrismLeafNode = React.createClass( {
 			title = this.props.data.title.rendered;
 
 		return (
-			<li id={this.props.id} className="prism-leaf" key={this.props.key} onClick={this.props.onClick}>
-				<span data-title={title}>{title}</span>
+			<li id={this.props.data.id} className="prism-leaf" key={this.props.key} onClick={this.props.onClick}>
+				<span data-title={title} data-id={this.props.data.id}>{title}</span>
 			</li>
 		)
 	}

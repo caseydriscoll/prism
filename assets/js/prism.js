@@ -33,7 +33,7 @@ var PrismTree = React.createClass({
 
 		var state = this.state;
 
-		state.active.leaf = jQuery(e.nativeEvent.target).data('title');
+		state.active.leaf = jQuery(e.nativeEvent.target).data('id');
 
 		this.setState(state);
 	},
@@ -74,7 +74,15 @@ var PrismTree = React.createClass({
 
 				var state = this.state;
 
-				state.branches[this.state.active.branch] = { leaves: response };
+				var leaves = {};
+
+				for (var i = 0; i < response.length; i++) {
+					var leaf = response[i];
+
+					leaves[leaf.id] = leaf;
+				}
+
+				state.branches[this.state.active.branch] = { leaves: leaves };
 
 				this.setState(state);
 			}).bind(this)
@@ -92,15 +100,7 @@ var PrismTree = React.createClass({
 
 	leafData: function leafData() {
 
-		var leafData = {
-			title: this.state.active.leaf
-		};
-
-		if (this.state.branches[this.state.active.branch] != undefined) {
-			leafData.content = this.state.branches[this.state.active.branch].leaves[0].content.rendered;
-		}
-
-		return leafData;
+		if (this.state.active.leaf == null) return {};else return this.state.branches[this.state.active.branch].leaves[this.state.active.leaf];
 	},
 
 	render: function render() {
@@ -205,8 +205,11 @@ var PrismBranch = React.createClass({
 
 	render: function render() {
 
-		var prismLeafNodes = this.props.leaves.map(function (leaf, i) {
-			return React.createElement(PrismLeafNode, { data: leaf, key: i, onClick: this.props.changeLeaf });
+		var prismLeafNodes = Object.keys(this.props.leaves).map(function (key) {
+
+			var leaf = this.props.leaves[key];
+
+			return React.createElement(PrismLeafNode, { data: leaf, key: key, onClick: this.props.changeLeaf });
 		}, this);
 
 		return React.createElement(
@@ -264,10 +267,10 @@ var PrismLeafNode = React.createClass({
 
 		return React.createElement(
 			"li",
-			{ id: this.props.id, className: "prism-leaf", key: this.props.key, onClick: this.props.onClick },
+			{ id: this.props.data.id, className: "prism-leaf", key: this.props.key, onClick: this.props.onClick },
 			React.createElement(
 				"span",
-				{ "data-title": title },
+				{ "data-title": title, "data-id": this.props.data.id },
 				title
 			)
 		);
@@ -290,13 +293,18 @@ var PrismLeaf = React.createClass({
 				React.createElement(
 					"h2",
 					null,
-					this.props.data.title
+					this.props.data.title.rendered,
+					React.createElement(
+						"date",
+						null,
+						this.props.data.date.replace('T', ' ')
+					)
 				)
 			),
 			React.createElement(
 				"div",
 				{ id: "prism-leaf-content" },
-				this.props.data.content
+				this.props.data.content.rendered
 			)
 		);
 	}
