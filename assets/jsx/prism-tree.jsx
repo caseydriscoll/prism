@@ -44,7 +44,16 @@ var PrismTree = React.createClass( {
 		var state = this.state;
 		var active = this.state.active;
 
-		state.branches[active.branch].leaves.unshift( { 'id' : 'new' } );
+		state.branches[active.branch].leaves['new'] = { 
+			id : 'new',
+			date : new Date().toISOString().slice(0, 19),
+			content : {
+				rendered : '',
+			},
+			title : {
+				rendered : 'new'
+			}
+		};
 
 		this.setState( state );
 	},

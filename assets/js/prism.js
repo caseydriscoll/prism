@@ -58,7 +58,16 @@ var PrismTree = React.createClass({
 		var state = this.state;
 		var active = this.state.active;
 
-		state.branches[active.branch].leaves.unshift({ 'id': 'new' });
+		state.branches[active.branch].leaves['new'] = {
+			id: 'new',
+			date: new Date().toISOString().slice(0, 19),
+			content: {
+				rendered: ''
+			},
+			title: {
+				rendered: 'new'
+			}
+		};
 
 		this.setState(state);
 	},
@@ -205,7 +214,7 @@ var PrismBranch = React.createClass({
 
 	render: function render() {
 
-		var prismLeafNodes = Object.keys(this.props.leaves).map(function (key) {
+		var prismLeafNodes = Object.keys(this.props.leaves).reverse().map(function (key) {
 
 			var leaf = this.props.leaves[key];
 
@@ -249,9 +258,9 @@ var PrismAddLeaf = React.createClass({
 
 	render: function render() {
 
-		var data = { 'id': '' };
+		var data = { 'id': 'prism-add-leaf' };
 
-		return React.createElement(PrismLeafNode, { data: data, id: "prism-add-leaf", onClick: this.props.addLeaf, key: 0 });
+		return React.createElement(PrismLeafNode, { data: data, onClick: this.props.addLeaf, key: 0 });
 	}
 
 });
@@ -263,7 +272,7 @@ var PrismLeafNode = React.createClass({
 
 		var title = '';
 
-		if (this.props.data.id == 'new') title = 'New';else if (this.props.data.id == '') title = '';else title = this.props.data.title.rendered;
+		if (this.props.data.id == 'prism-add-leaf') title = '';else title = this.props.data.title.rendered;
 
 		return React.createElement(
 			"li",
