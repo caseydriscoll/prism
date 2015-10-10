@@ -54,9 +54,13 @@ body > *:not(#prism) {
               color: #808080;
               font-size: 24px;
               font-family: 'Source Code Pro', sans-serif;
-              text-decoration: none; }
+              text-decoration: none;
+              cursor: pointer; }
               #prism #prism-body #prism-trunk menu ul li a:hover {
                 background: #dddddd; }
+              #prism #prism-body #prism-trunk menu ul li a.active {
+                background: #87CEFA;
+                color: #ffffff; }
     #prism #prism-body #prism-branch {
       display: block;
       position: relative;
@@ -70,7 +74,8 @@ body > *:not(#prism) {
         border-bottom: 2px solid #000000; }
         #prism #prism-body #prism-branch header#prism-branch-header h2 {
           padding: 5px;
-          margin: 0; }
+          margin: 0;
+          text-transform: capitalize; }
       #prism #prism-body #prism-branch ul#prism-leaves {
         height: 100%;
         padding: 5px;

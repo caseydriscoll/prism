@@ -1,38 +1,24 @@
 var PrismBody = React.createClass( {
 
 	getInitialState: function() {
-
-		var posts = Array(0);
-
-		for ( var i = 15; i >= 0; i-- )
-			posts.push( { 'id' : i } );
-
-		var state = {
-			'posts' : posts
-		};
-
-		return state;
+		return { leaves: [] };
 	},
 
 	addLeaf: function() {
 		var state = this.state;
 
-		state.posts.unshift( { 'id' : state.posts.length } );
+		state.leaves.unshift( { 'id' : state.leaves.length } );
 
 		this.setState( state );
 	},
 
 	render: function() {
 
-		var prismBranches = PRISM.branches.map( function( branch, i ) {
-			return <PrismBranch addLeaf={this.addLeaf} leaves={this.state.posts} key={i} />;
-		}, this );
-
 		return (
 
 			<div id="prism-body">
-				<PrismTrunk />
-				{prismBranches}
+				<PrismTrunk changeActiveBranch={this.props.changeActiveBranch} />
+				<PrismBranch addLeaf={this.addLeaf} leaves={this.state.leaves} active={this.props.active} />
 				<PrismLeaf />
 			</div>
 

@@ -1,6 +1,9 @@
-$light: #dddddd;
-$grey:  #808080;
-$black: #000000;
+$white:     #ffffff;
+$light:     #dddddd;
+$grey:      #808080;
+$black:     #000000;
+
+$highlight: #87CEFA;
 
 $border: 2px solid $black;
 $header-height: 70px;
@@ -76,8 +79,15 @@ body > *:not(#prism) { display: none; }
 							font-family: 'Source Code Pro', sans-serif;
 							text-decoration: none;
 
+							cursor: pointer;
+
 							&:hover {
 								background: $light;
+							}
+
+							&.active {
+								background: $highlight;
+								color: $white;
 							}
 						}
 					}
@@ -99,6 +109,7 @@ body > *:not(#prism) { display: none; }
 
 				h2 {
 					padding: 5px; margin: 0;
+					text-transform: capitalize;
 				}
 
 			}

@@ -15,7 +15,7 @@ var PrismLeafHeader = React.createClass( {
 	render: function() {
 		return (
 			<header id="prism-leaf-header">
-				<h2>Leaf Name</h2>
+				<h2></h2>
 			</header>
 		);
 	}

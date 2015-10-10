@@ -4,7 +4,7 @@ var PrismTrunk = React.createClass( {
 		return (
 			<div id="prism-trunk">
 				<PrismSearch />
-				<PrismMenu />
+				<PrismMenu onClick={this.props.changeActiveBranch} />
 			</div>
 		);
 	}
@@ -31,13 +31,13 @@ var PrismMenu = React.createClass( {
 
 	render: function() {
 
-		var menuItems = PRISM.branches.map( function( menuItem, i ) {
+		var menuItems = PRISM.branches.map( function( branch, i ) {
 			return (
 				<li key={i}>
-					<a href={menuItem.url}>{menuItem.title}</a>
+					<a href={'#' + branch.slug} data-slug={branch.slug} onClick={this.props.onClick}>{branch.title}</a>
 				</li>
 			);
-		} );
+		}, this );
 
 		return (
 			<menu id="prism-menu">

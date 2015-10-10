@@ -15,6 +15,36 @@ class Prism {
 
 		add_action( 'wp_enqueue_scripts', 'Prism::load_assets' );
 
+		add_action( 'init', 'Prism::sample_types' );
+
+	}
+
+	public static function sample_types() {
+
+		$args = array(
+			'public' => true,
+			'label'  => 'Events',
+			'show_in_rest' => true
+		);
+
+		register_post_type( 'events', $args );
+
+		$args = array(
+			'public' => true,
+			'label'  => 'Books',
+			'show_in_rest' => true
+		);
+
+		register_post_type( 'books', $args );
+
+		$args = array(
+			'public' => true,
+			'label'  => 'Tasks',
+			'show_in_rest' => true
+		);
+
+		register_post_type( 'tasks', $args );
+
 	}
 
 
@@ -63,12 +93,16 @@ class Prism {
 
 	public static function localize() {
 
-		$menu = array(
-			array( 'title' => 'Posts', 'url' => '#posts' )
+		$branches = array(
+			array( 'title' => 'Posts',  'slug' => 'posts' ),
+			array( 'title' => 'Tasks',  'slug' => 'tasks' ),
+			array( 'title' => 'Books',  'slug' => 'books' ),
+			array( 'title' => 'Events', 'slug' => 'events' )
 		);
 
-		$data = array( 
-			'branches' => $menu
+		$data = array(
+			'url'      => get_bloginfo( 'url' ) . '/wp-json/wp/v2/',
+			'branches' => $branches
 		);
 
 		return $data;

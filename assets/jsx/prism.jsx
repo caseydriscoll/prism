@@ -19,11 +19,25 @@
 
 var Prism = React.createClass( {
 
+	changeActiveBranch: function(e) {
+		e.preventDefault();
+
+		jQuery( '#prism-menu a' ).removeClass( 'active' );
+
+		e.nativeEvent.target.classList.toggle( 'active' );
+
+		this.setState( { 'active' : jQuery( e.nativeEvent.target ).data( 'slug' ) } );
+	},
+
+	getInitialState: function() {
+		return { active : '' }
+	},
+
 	render: function() {
 		return (
 			<div id="prism">
 				<PrismHeader />
-				<PrismBody />
+				<PrismBody changeActiveBranch={this.changeActiveBranch} active={this.state.active} />
 				<PrismFooter />
 			</div>
 		);
