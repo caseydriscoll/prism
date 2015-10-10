@@ -1,1 +1,11 @@
-wp post generate --count=25
+wp post create \
+  --post_title="New Post!" \
+  --post_date="2015-10-10 19:13:41" --post_status="Publish"
+
+wp post create \
+  --post_title="Golly, I like this a lot!" \
+  --post_date="2015-10-04 19:13:41" --post_status="Publish"
+
+wp post create \
+  --post_title="Yep, this sure is swell!" \
+  --post_date="2015-10-04 15:13:41" --post_status="Publish"
