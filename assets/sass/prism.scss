@@ -139,7 +139,9 @@ body > *:not(#prism) { display: none; }
 						top: 0; bottom: 0;
 						padding: 10px;
 
-						font-size: 18px;
+						font-size: 16px;
+						font-weight: bold;
+						line-height: 20px;
 
 						background: none;
 
@@ -151,6 +153,11 @@ body > *:not(#prism) { display: none; }
 						&:hover {
 							background: $light;
 							border-style: solid;
+						}
+
+						&.active {
+							background: $highlight;
+							color: $white;
 						}
 
 					}

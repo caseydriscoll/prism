@@ -19,6 +19,20 @@
 
 var Prism = React.createClass( {
 
+	changeActiveLeaf: function(e) {
+		e.preventDefault();
+
+		jQuery( '.prism-leaf span' ).removeClass( 'active' );
+
+		e.nativeEvent.target.classList.toggle( 'active' );
+
+		var state = this.state;
+
+		state.active.leaf = jQuery( e.nativeEvent.target ).data( 'title' );
+
+		this.setState( state );
+	},
+
 	changeActiveBranch: function(e) {
 		e.preventDefault();
 
@@ -26,18 +40,25 @@ var Prism = React.createClass( {
 
 		e.nativeEvent.target.classList.toggle( 'active' );
 
-		this.setState( { 'active' : jQuery( e.nativeEvent.target ).data( 'slug' ) } );
+		var state = this.state;
+
+		state.active.branch = jQuery( e.nativeEvent.target ).data( 'slug' );
+
+		this.setState( state );
 	},
 
 	getInitialState: function() {
-		return { active : '' }
+		return { active : { branch : '', leaf : '' } }
 	},
 
 	render: function() {
 		return (
 			<div id="prism">
 				<PrismHeader />
-				<PrismBody changeActiveBranch={this.changeActiveBranch} active={this.state.active} />
+				<PrismBody 
+					changeBranch={this.changeActiveBranch} 
+					changeLeaf={this.changeActiveLeaf} 
+					active={this.state.active} />
 				<PrismFooter />
 			</div>
 		);

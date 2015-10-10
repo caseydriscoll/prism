@@ -5,9 +5,9 @@ var PrismBody = React.createClass( {
 		return (
 
 			<div id="prism-body">
-				<PrismTrunk changeActiveBranch={this.props.changeActiveBranch} />
-				<PrismBranch active={this.props.active} />
-				<PrismLeaf />
+				<PrismTrunk changeBranch={this.props.changeBranch} />
+				<PrismBranch active={this.props.active} changeLeaf={this.props.changeLeaf} />
+				<PrismLeaf active={this.props.active.leaf} />
 			</div>
 
 		);
