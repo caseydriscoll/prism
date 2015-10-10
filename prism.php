@@ -10,13 +10,10 @@
 
 class Prism {
 
-	private static $menu_id = '';
 
 	public static function init() {
 
 		add_action( 'wp_enqueue_scripts', 'Prism::load_assets' );
-
-		add_action( 'plugins_loaded', 'Prism::build' );
 
 	}
 
@@ -64,31 +61,18 @@ class Prism {
 	}
 
 
-	public static function build() {
-
-		$menu_name = 'Prism';
-
-		self::$menu_id = wp_get_nav_menu_object( $menu_name );
-
-		if ( ! self::$menu_id )
-			self::$menu_id = wp_create_nav_menu( $menu_name );
-	}
-
-
 	public static function localize() {
 
-		$menu = array();
-		$menu_items = wp_get_nav_menu_items( self::$menu_id, array( 'output' => ARRAY_A, 'nopaging' => true ) );
-
-		foreach ( $menu_items as $menu_item ) {
-			array_push( $menu, array( 'title' => $menu_item->post_title, 'url' => $menu_item->url ) );
-		}
+		$menu = array(
+			array( 'title' => 'Posts', 'url' => '#posts' )
+		);
 
 		$data = array( 
 			'branches' => $menu
 		);
 
 		return $data;
+
 	}
 
 
