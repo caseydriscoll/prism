@@ -9,3 +9,21 @@ wp post create \
 wp post create \
   --post_title="Yep, this sure is swell!" \
   --post_date="2015-10-04 15:13:41" --post_status="Publish"
+
+wp post create \
+  --post_title="Summer Brunch" \
+  --post_type="events" \
+  --post_date="2015-07-21 09:13:41" --post_status="Publish" \
+  --post_content="Let's get some food and have a good time"
+
+wp post create \
+  --post_title="My Bday" \
+  --post_type="events" \
+  --post_date="2015-04-14 00:00:00" --post_status="Publish" \
+  --post_content="Hey, I was born this day"
+
+wp post create \
+  --post_title="Wedding" \
+  --post_type="events" \
+  --post_date="2014-10-12 15:13:41" --post_status="Publish" \
+  --post_content="Mawwiage. Mawwiage is why we are gathewed here today."
