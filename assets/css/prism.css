@@ -147,3 +147,11 @@ body > *:not(#prism) {
         #prism #prism-tree #prism-leaf header#prism-leaf-header h2 {
           padding: 5px;
           margin: 0; }
+      #prism #prism-tree #prism-leaf div#prism-leaf-content {
+        display: block;
+        position: relative;
+        height: calc( 100% - 20px - 65px );
+        padding: 10px;
+        margin: 10px;
+        border: 2px solid #000000;
+        border-color: #dddddd; }

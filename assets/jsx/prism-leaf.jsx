@@ -3,20 +3,13 @@ var PrismLeaf = React.createClass( {
 	render: function() {
 		return (
 			<div id="prism-leaf">
-				<PrismLeafHeader title={this.props.title} />
+				<header id="prism-leaf-header">
+					<h2>{this.props.data.title}</h2>
+				</header>
+				<div id="prism-leaf-content">
+					{this.props.data.content}
+				</div>
 			</div>
-		);
-	}
-
-} );
-
-var PrismLeafHeader = React.createClass( {
-
-	render: function() {
-		return (
-			<header id="prism-leaf-header">
-				<h2>{this.props.title}</h2>
-			</header>
 		);
 	}
 

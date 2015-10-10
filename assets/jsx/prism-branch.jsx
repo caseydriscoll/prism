@@ -8,7 +8,7 @@ var PrismBranch = React.createClass( {
 
 		return (
 			<div id="prism-branch">
-				<PrismBranchHeader title={this.props.title} />
+				<PrismBranchHeader title={this.props.data.title} />
 				<ul id="prism-leaves">
 					<PrismAddLeaf addLeaf={this.props.addLeaf} />
 					{prismLeafNodes}

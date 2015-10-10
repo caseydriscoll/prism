@@ -81,14 +81,36 @@ var PrismTree = React.createClass({
 		});
 	},
 
+	branchData: function branchData() {
+
+		var branchData = {
+			title: this.state.active.branch
+		};
+
+		return branchData;
+	},
+
+	leafData: function leafData() {
+
+		var leafData = {
+			title: this.state.active.leaf
+		};
+
+		if (this.state.branches[this.state.active.branch] != undefined) {
+			leafData.content = this.state.branches[this.state.active.branch].leaves[0].content.rendered;
+		}
+
+		return leafData;
+	},
+
 	render: function render() {
 
 		var active = this.state.active;
 
 		var leaves = this.state.branches[active.branch] == undefined ? [] : this.state.branches[active.branch].leaves;
 
-		var prismBranch = React.createElement(PrismBranch, { title: active.branch, leaves: leaves, changeLeaf: this.changeLeaf, addLeaf: this.addLeaf });
-		var prismLeaf = React.createElement(PrismLeaf, { title: active.leaf });
+		var prismBranch = React.createElement(PrismBranch, { data: this.branchData(), leaves: leaves, changeLeaf: this.changeLeaf, addLeaf: this.addLeaf });
+		var prismLeaf = React.createElement(PrismLeaf, { data: this.leafData() });
 
 		var renderBranch = active.branch == null ? null : prismBranch;
 		var renderLeaf = active.leaf == null ? null : prismLeaf;
@@ -190,7 +212,7 @@ var PrismBranch = React.createClass({
 		return React.createElement(
 			"div",
 			{ id: "prism-branch" },
-			React.createElement(PrismBranchHeader, { title: this.props.title }),
+			React.createElement(PrismBranchHeader, { title: this.props.data.title }),
 			React.createElement(
 				"ul",
 				{ id: "prism-leaves" },
@@ -262,23 +284,19 @@ var PrismLeaf = React.createClass({
 		return React.createElement(
 			"div",
 			{ id: "prism-leaf" },
-			React.createElement(PrismLeafHeader, { title: this.props.title })
-		);
-	}
-
-});
-
-var PrismLeafHeader = React.createClass({
-	displayName: "PrismLeafHeader",
-
-	render: function render() {
-		return React.createElement(
-			"header",
-			{ id: "prism-leaf-header" },
 			React.createElement(
-				"h2",
-				null,
-				this.props.title
+				"header",
+				{ id: "prism-leaf-header" },
+				React.createElement(
+					"h2",
+					null,
+					this.props.data.title
+				)
+			),
+			React.createElement(
+				"div",
+				{ id: "prism-leaf-content" },
+				this.props.data.content
 			)
 		);
 	}

@@ -210,6 +210,16 @@ body > *:not(#prism) { display: none; }
 				}
 
 			}
+
+			div#prism-leaf-content {
+
+				display: block; position: relative;
+				height: calc( 100% - 20px - #{$sub-header-height} );
+				padding: 10px; margin: 10px;
+				border: $border;
+				border-color: $light;
+
+			}
 		}
 
 	}

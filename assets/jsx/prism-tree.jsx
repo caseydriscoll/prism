@@ -69,16 +69,36 @@ var PrismTree = React.createClass( {
 
 	},
 
+	branchData: function() {
+
+		var branchData = {
+			title: this.state.active.branch
+		}
+
+		return branchData;
+	},
+
+	leafData: function() {
+
+		var leafData = {
+			title   : this.state.active.leaf
+		}
+
+		if ( this.state.branches[this.state.active.branch] != undefined ) {
+			leafData.content = this.state.branches[this.state.active.branch].leaves[0].content.rendered;
+		}
+
+		return leafData;
+	},
+
 	render: function() {
 
-		var active = this.state.active
+		var active = this.state.active;
 
 		var leaves = this.state.branches[active.branch] == undefined ? [] : this.state.branches[active.branch].leaves;
 
-
-		var prismBranch = <PrismBranch title={active.branch} leaves={leaves} changeLeaf={this.changeLeaf} addLeaf={this.addLeaf} />;
-		var prismLeaf   = <PrismLeaf   title={active.leaf} />;
-
+		var prismBranch = <PrismBranch data={this.branchData()} leaves={leaves} changeLeaf={this.changeLeaf} addLeaf={this.addLeaf} />;
+		var prismLeaf   = <PrismLeaf   data={this.leafData()} />;
 
 		var renderBranch = active.branch == null ? null : prismBranch;
 		var renderLeaf   = active.leaf   == null ? null : prismLeaf;
