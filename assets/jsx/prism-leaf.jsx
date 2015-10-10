@@ -3,7 +3,7 @@ var PrismLeaf = React.createClass( {
 	render: function() {
 		return (
 			<div id="prism-leaf">
-				<PrismLeafHeader title={this.props.active} />
+				<PrismLeafHeader title={this.props.title} />
 			</div>
 		);
 	}

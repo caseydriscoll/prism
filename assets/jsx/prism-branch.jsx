@@ -2,19 +2,15 @@ var PrismBranch = React.createClass( {
 
 	render: function() {
 
-		this.props.loadLeaves();
-
-		var prismAddLeaf = this.props.active.branch != '' ? <PrismAddLeaf addLeaf={this.props.addLeaf} /> : '';
-
-		var prismLeafNodes = this.props.branches[this.props.active.branch].leaves.map( function( leaf, i ) {
+		var prismLeafNodes = this.props.leaves.map( function( leaf, i ) {
 			return <PrismLeafNode data={leaf} key={i} onClick={this.props.changeLeaf} />;
 		}, this );
 
 		return (
 			<div id="prism-branch">
-				<PrismBranchHeader title={this.props.active.branch} />
+				<PrismBranchHeader title={this.props.title} />
 				<ul id="prism-leaves">
-					{prismAddLeaf}
+					<PrismAddLeaf addLeaf={this.props.addLeaf} />
 					{prismLeafNodes}
 				</ul>
 			</div>
