@@ -119,7 +119,12 @@ body > *:not(#prism) { display: none; }
 				height: 100%;
 				padding: 5px; margin: 0;
 
-				overflow: auto;
+				overflow-y: scroll;
+
+				&::-webkit-scrollbar-track {
+					-webkit-box-shadow: none;
+					background-color: transparent;
+				}
 
 				$leaf-size: 25%;
 

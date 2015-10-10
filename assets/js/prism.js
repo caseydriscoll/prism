@@ -14,25 +14,13 @@ var PrismHeader = React.createClass({
 var PrismBody = React.createClass({
 	displayName: "PrismBody",
 
-	getInitialState: function getInitialState() {
-		return { leaves: [] };
-	},
-
-	addLeaf: function addLeaf() {
-		var state = this.state;
-
-		state.leaves.unshift({ 'id': state.leaves.length });
-
-		this.setState(state);
-	},
-
 	render: function render() {
 
 		return React.createElement(
 			"div",
 			{ id: "prism-body" },
 			React.createElement(PrismTrunk, { changeActiveBranch: this.props.changeActiveBranch }),
-			React.createElement(PrismBranch, { addLeaf: this.addLeaf, leaves: this.state.leaves, active: this.props.active }),
+			React.createElement(PrismBranch, { active: this.props.active }),
 			React.createElement(PrismLeaf, null)
 		);
 	}
@@ -116,11 +104,45 @@ var PrismMenu = React.createClass({
 var PrismBranch = React.createClass({
 	displayName: 'PrismBranch',
 
+	getInitialState: function getInitialState() {
+		return { branches: { '': { leaves: [] } } };
+	},
+
+	addLeaf: function addLeaf() {
+
+		var state = this.state;
+
+		state.branches[this.props.active].leaves.unshift({ 'id': 'new' });
+
+		this.setState(state);
+	},
+
+	loadLeaves: function loadLeaves() {
+		if (this.props.active == '') return;
+
+		if (this.props.active in this.state.branches) return;
+
+		jQuery.ajax({
+			method: 'GET',
+			url: PRISM.url + this.props.active,
+			success: (function (response) {
+
+				var state = this.state;
+
+				state.branches[this.props.active] = { leaves: response };
+
+				this.setState(state);
+			}).bind(this)
+		});
+	},
+
 	render: function render() {
 
-		var prismAddLeaf = this.props.active != '' ? React.createElement(PrismAddLeaf, { addLeaf: this.props.addLeaf }) : '';
+		this.loadLeaves();
 
-		var prismLeafNodes = this.props.leaves.map(function (leaf, i) {
+		var prismAddLeaf = this.props.active != '' ? React.createElement(PrismAddLeaf, { addLeaf: this.addLeaf }) : '';
+
+		var prismLeafNodes = this.state.branches[this.props.active].leaves.map(function (leaf, i) {
 			return React.createElement(PrismLeafNode, { data: leaf, key: i });
 		});
 

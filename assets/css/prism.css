@@ -80,7 +80,10 @@ body > *:not(#prism) {
         height: 100%;
         padding: 5px;
         margin: 0;
-        overflow: auto; }
+        overflow-y: scroll; }
+        #prism #prism-body #prism-branch ul#prism-leaves::-webkit-scrollbar-track {
+          -webkit-box-shadow: none;
+          background-color: transparent; }
         #prism #prism-body #prism-branch ul#prism-leaves .prism-leaf {
           display: block;
           position: relative;
