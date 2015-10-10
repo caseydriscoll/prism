@@ -55,7 +55,7 @@ var Prism = React.createClass( {
 		return (
 			<div id="prism">
 				<PrismHeader />
-				<PrismBody 
+				<PrismTree 
 					changeBranch={this.changeActiveBranch} 
 					changeLeaf={this.changeActiveLeaf} 
 					active={this.state.active} />

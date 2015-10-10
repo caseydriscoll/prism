@@ -49,7 +49,7 @@ module.exports = function( grunt ) {
 					'assets/js/prism.js' : 'assets/jsx/prism.jsx',
 
 					'assets/js/prism-header.js' : 'assets/jsx/prism-header.jsx',
-					'assets/js/prism-body.js'   : 'assets/jsx/prism-body.jsx',
+					'assets/js/prism-tree.js'   : 'assets/jsx/prism-tree.jsx',
 					'assets/js/prism-footer.js' : 'assets/jsx/prism-footer.jsx',
 
 					'assets/js/prism-trunk.js'   : 'assets/jsx/prism-trunk.jsx',
@@ -63,7 +63,7 @@ module.exports = function( grunt ) {
 			dist: {
 				src: [
 					'assets/js/prism-header.js',
-					'assets/js/prism-body.js',
+					'assets/js/prism-tree.js',
 					'assets/js/prism-footer.js',
 
 					'assets/js/prism-trunk.js',
@@ -79,7 +79,7 @@ module.exports = function( grunt ) {
 		/* These are extra files that should be removed after concatenated into patchchat.js */
 		clean: [
 				'assets/js/prism-header.js',
-				'assets/js/prism-body.js',
+				'assets/js/prism-tree.js',
 				'assets/js/prism-footer.js',
 
 				'assets/js/prism-trunk.js',

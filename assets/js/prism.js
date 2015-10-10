@@ -9,18 +9,55 @@ var PrismHeader = React.createClass({
 
 });
 
-"use strict";
+'use strict';
 
-var PrismBody = React.createClass({
-	displayName: "PrismBody",
+var PrismTree = React.createClass({
+	displayName: 'PrismTree',
+
+	getInitialState: function getInitialState() {
+		return { branches: { '': { leaves: [] } } };
+	},
+
+	addLeaf: function addLeaf() {
+		var state = this.state;
+		var active = this.props.active.branch;
+
+		state.branches[active].leaves.unshift({ 'id': 'new' });
+
+		this.setState(state);
+	},
+
+	loadLeaves: function loadLeaves() {
+		if (this.props.active.branch == '') return;
+
+		if (this.props.active.branch in this.state.branches) return;
+
+		jQuery.ajax({
+			method: 'GET',
+			url: PRISM.url + this.props.active.branch + '?filter[posts_per_page]=-1',
+			success: (function (response) {
+
+				var state = this.state;
+
+				state.branches[this.props.active.branch] = { leaves: response };
+
+				this.setState(state);
+			}).bind(this)
+		});
+	},
 
 	render: function render() {
 
 		return React.createElement(
-			"div",
-			{ id: "prism-body" },
+			'div',
+			{ id: 'prism-tree' },
 			React.createElement(PrismTrunk, { changeBranch: this.props.changeBranch }),
-			React.createElement(PrismBranch, { active: this.props.active, changeLeaf: this.props.changeLeaf }),
+			React.createElement(PrismBranch, {
+				active: this.props.active,
+				branches: this.state.branches,
+				changeLeaf: this.props.changeLeaf,
+				addLeaf: this.addLeaf,
+				loadLeaves: this.loadLeaves }),
 			React.createElement(PrismLeaf, { active: this.props.active.leaf })
 		);
 	}
@@ -104,45 +141,13 @@ var PrismMenu = React.createClass({
 var PrismBranch = React.createClass({
 	displayName: 'PrismBranch',
 
-	getInitialState: function getInitialState() {
-		return { branches: { '': { leaves: [] } } };
-	},
-
-	addLeaf: function addLeaf() {
-		var state = this.state;
-		var active = this.props.active.branch;
-
-		state.branches[active].leaves.unshift({ 'id': 'new' });
-
-		this.setState(state);
-	},
-
-	loadLeaves: function loadLeaves() {
-		if (this.props.active.branch == '') return;
-
-		if (this.props.active.branch in this.state.branches) return;
-
-		jQuery.ajax({
-			method: 'GET',
-			url: PRISM.url + this.props.active.branch,
-			success: (function (response) {
-
-				var state = this.state;
-
-				state.branches[this.props.active.branch] = { leaves: response };
-
-				this.setState(state);
-			}).bind(this)
-		});
-	},
-
 	render: function render() {
 
-		this.loadLeaves();
+		this.props.loadLeaves();
 
-		var prismAddLeaf = this.props.active.branch != '' ? React.createElement(PrismAddLeaf, { addLeaf: this.addLeaf }) : '';
+		var prismAddLeaf = this.props.active.branch != '' ? React.createElement(PrismAddLeaf, { addLeaf: this.props.addLeaf }) : '';
 
-		var prismLeafNodes = this.state.branches[this.props.active.branch].leaves.map(function (leaf, i) {
+		var prismLeafNodes = this.props.branches[this.props.active.branch].leaves.map(function (leaf, i) {
 			return React.createElement(PrismLeafNode, { data: leaf, key: i, onClick: this.props.changeLeaf });
 		}, this);
 
@@ -305,7 +310,7 @@ var Prism = React.createClass({
 			'div',
 			{ id: 'prism' },
 			React.createElement(PrismHeader, null),
-			React.createElement(PrismBody, {
+			React.createElement(PrismTree, {
 				changeBranch: this.changeActiveBranch,
 				changeLeaf: this.changeActiveLeaf,
 				active: this.state.active }),

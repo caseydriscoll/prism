@@ -15,19 +15,19 @@ body > *:not(#prism) {
     width: 100%;
     height: 70px;
     border-bottom: 2px solid #000000; }
-  #prism #prism-body {
+  #prism #prism-tree {
     display: block;
     position: relative;
     width: 100%;
     height: calc( 100vh - 70px ); }
-    #prism #prism-body #prism-trunk {
+    #prism #prism-tree #prism-trunk {
       display: block;
       position: relative;
       float: left;
       width: 16.666667%;
       height: 100%;
       border-right: 2px solid #000000; }
-      #prism #prism-body #prism-trunk #prism-search {
+      #prism #prism-tree #prism-trunk #prism-search {
         display: block;
         position: relative;
         width: 100%;
@@ -35,20 +35,20 @@ body > *:not(#prism) {
         padding: 10px;
         border-bottom: 2px solid #000000;
         font-size: 24px; }
-        #prism #prism-body #prism-trunk #prism-search input {
+        #prism #prism-tree #prism-trunk #prism-search input {
           width: 100%;
           padding: 2px 10px;
           border: 2px solid #000000;
           border-color: #808080; }
-      #prism #prism-body #prism-trunk menu {
+      #prism #prism-tree #prism-trunk menu {
         padding: 0;
         margin: 0; }
-        #prism #prism-body #prism-trunk menu ul {
+        #prism #prism-tree #prism-trunk menu ul {
           padding: 0;
           margin: 0; }
-          #prism #prism-body #prism-trunk menu ul li {
+          #prism #prism-tree #prism-trunk menu ul li {
             list-style: none; }
-            #prism #prism-body #prism-trunk menu ul li a {
+            #prism #prism-tree #prism-trunk menu ul li a {
               display: block;
               padding: 20px;
               color: #808080;
@@ -56,35 +56,35 @@ body > *:not(#prism) {
               font-family: 'Source Code Pro', sans-serif;
               text-decoration: none;
               cursor: pointer; }
-              #prism #prism-body #prism-trunk menu ul li a:hover {
+              #prism #prism-tree #prism-trunk menu ul li a:hover {
                 background: #dddddd; }
-              #prism #prism-body #prism-trunk menu ul li a.active {
+              #prism #prism-tree #prism-trunk menu ul li a.active {
                 background: #87CEFA;
                 color: #ffffff; }
-    #prism #prism-body #prism-branch {
+    #prism #prism-tree #prism-branch {
       display: block;
       position: relative;
       float: left;
       width: 33.333333%;
       height: 100%;
       border-right: 2px solid #000000; }
-      #prism #prism-body #prism-branch header#prism-branch-header {
+      #prism #prism-tree #prism-branch header#prism-branch-header {
         height: 65px;
         padding: 10px;
         border-bottom: 2px solid #000000; }
-        #prism #prism-body #prism-branch header#prism-branch-header h2 {
+        #prism #prism-tree #prism-branch header#prism-branch-header h2 {
           padding: 5px;
           margin: 0;
           text-transform: capitalize; }
-      #prism #prism-body #prism-branch ul#prism-leaves {
+      #prism #prism-tree #prism-branch ul#prism-leaves {
         height: 100%;
         padding: 5px;
         margin: 0;
         overflow-y: scroll; }
-        #prism #prism-body #prism-branch ul#prism-leaves::-webkit-scrollbar-track {
+        #prism #prism-tree #prism-branch ul#prism-leaves::-webkit-scrollbar-track {
           -webkit-box-shadow: none;
           background-color: transparent; }
-        #prism #prism-body #prism-branch ul#prism-leaves .prism-leaf {
+        #prism #prism-tree #prism-branch ul#prism-leaves .prism-leaf {
           display: block;
           position: relative;
           float: left;
@@ -92,7 +92,7 @@ body > *:not(#prism) {
           height: auto;
           padding-bottom: calc( 25% - 10px );
           margin: 5px; }
-          #prism #prism-body #prism-branch ul#prism-leaves .prism-leaf span {
+          #prism #prism-tree #prism-branch ul#prism-leaves .prism-leaf span {
             display: block;
             position: absolute;
             left: 0;
@@ -107,16 +107,16 @@ body > *:not(#prism) {
             cursor: pointer;
             border: 2px solid #000000;
             border-color: #dddddd; }
-            #prism #prism-body #prism-branch ul#prism-leaves .prism-leaf span:hover {
+            #prism #prism-tree #prism-branch ul#prism-leaves .prism-leaf span:hover {
               background: #dddddd;
               border-style: solid; }
-            #prism #prism-body #prism-branch ul#prism-leaves .prism-leaf span.active {
+            #prism #prism-tree #prism-branch ul#prism-leaves .prism-leaf span.active {
               background: #87CEFA;
               color: #ffffff; }
-        #prism #prism-body #prism-branch ul#prism-leaves #prism-add-leaf span {
+        #prism #prism-tree #prism-branch ul#prism-leaves #prism-add-leaf span {
           border: #808080 3px dotted;
           border-radius: 0%; }
-          #prism #prism-body #prism-branch ul#prism-leaves #prism-add-leaf span:before {
+          #prism #prism-tree #prism-branch ul#prism-leaves #prism-add-leaf span:before {
             content: "";
             display: block;
             position: absolute;
@@ -125,7 +125,7 @@ body > *:not(#prism) {
             left: 20%;
             top: 40%;
             background: #808080; }
-          #prism #prism-body #prism-branch ul#prism-leaves #prism-add-leaf span:after {
+          #prism #prism-tree #prism-branch ul#prism-leaves #prism-add-leaf span:after {
             content: "";
             display: block;
             position: absolute;
@@ -134,16 +134,16 @@ body > *:not(#prism) {
             left: 40%;
             top: 20%;
             background: #808080; }
-    #prism #prism-body #prism-leaf {
+    #prism #prism-tree #prism-leaf {
       display: block;
       position: relative;
       float: left;
       width: 50%;
       height: 100%; }
-      #prism #prism-body #prism-leaf header#prism-leaf-header {
+      #prism #prism-tree #prism-leaf header#prism-leaf-header {
         height: 65px;
         padding: 10px;
         border-bottom: 2px solid #000000; }
-        #prism #prism-body #prism-leaf header#prism-leaf-header h2 {
+        #prism #prism-tree #prism-leaf header#prism-leaf-header h2 {
           padding: 5px;
           margin: 0; }
