@@ -9,8 +9,9 @@
  *       - .prism-branch
  *     - #prism-branch
  *       - #prism-branch-header
- *       - #prism-add-leaf
- *       - .prism-leaf
+ *       - #prism-leaves
+ *         - #prism-add-leaf
+ *         - .prism-leaf
  *     - #prism-leaf
  *       - #prism-leaf-header
  *   - #prism-footer
@@ -31,5 +32,5 @@ var Prism = React.createClass( {
 } );
 
 ReactDOM.render(
-	<Prism data={PRISM} />, document.body
+	<Prism />, document.body
 );

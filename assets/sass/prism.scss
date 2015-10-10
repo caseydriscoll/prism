@@ -13,7 +13,7 @@ body > *:not(#prism) { display: none; }
 	display: block; position: relative;
 	width: 100%; height: 100vh;
 
-	overflow: none;
+	overflow: hidden;
 
 	* {
 		box-sizing: border-box;
@@ -103,49 +103,70 @@ body > *:not(#prism) { display: none; }
 
 			}
 
-			.prism-leaf {
-				display: block; position: relative; float: left;
-				width: 33.333333%; height: auto;
-				padding: 10px;
-			}
+			ul#prism-leaves {
 
-			#prism-add-leaf {
+				height: 100%;
+				padding: 5px; margin: 0;
 
-				a {
-					display: block; position: relative;
-					width: 100%; height: auto;
-					padding-bottom: calc( 100% - 10px );
+				overflow: auto;
 
-					background: none;
-					border: $grey 5px dotted;
-					border-radius: 0%;
+				$leaf-size: 25%;
 
-					cursor: pointer;
+				.prism-leaf {
+					display: block; position: relative; float: left;
+					width: calc( #{$leaf-size} - 10px ); height: auto;
+					padding-bottom: calc( #{$leaf-size} - 10px ); margin: 5px;
 
-					&:hover {
-						background: $light;
-						border-style: solid;
-					}
-
-					$plus-thickness: 20%;
-					$plus-size: 60%;
-
-					&:before {
-						content: "";
+					span {
 						display: block; position: absolute;
-						width: $plus-size; height: $plus-thickness;
-						left: ( 100% - $plus-size ) / 2; top: ( 100% - $plus-thickness ) / 2;
+						left: 0; right: 0;
+						top: 0; bottom: 0;
+						padding: 10px;
 
-						background: $grey;
+						font-size: 18px;
+
+						background: none;
+
+						cursor: pointer;
+
+						border: $border;
+						border-color: $light;
+
+						&:hover {
+							background: $light;
+							border-style: solid;
+						}
+
 					}
+				}
 
-					&:after {
-						content: "";
-						display: block; position: absolute;
-						width: $plus-thickness; height: $plus-size;
-						left: ( 100% - $plus-thickness ) / 2; top: ( 100% - $plus-size ) / 2;
+				#prism-add-leaf {
 
-						background: $grey;
+					span {
+
+						border: $grey 3px dotted;
+						border-radius: 0%;
+
+						$plus-thickness: 20%;
+						$plus-size: 60%;
+
+						&:before {
+							content: "";
+							display: block; position: absolute;
+							width: $plus-size; height: $plus-thickness;
+							left: ( 100% - $plus-size ) / 2; top: ( 100% - $plus-thickness ) / 2;
+
+							background: $grey;
+						}
+
+						&:after {
+							content: "";
+							display: block; position: absolute;
+							width: $plus-thickness; height: $plus-size;
+							left: ( 100% - $plus-thickness ) / 2; top: ( 100% - $plus-size ) / 2;
+
+							background: $grey;
+						}
 					}
 				}
 			}

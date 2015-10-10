@@ -6,7 +6,7 @@ body > *:not(#prism) {
   position: relative;
   width: 100%;
   height: 100vh;
-  overflow: none; }
+  overflow: hidden; }
   #prism * {
     box-sizing: border-box; }
   #prism #prism-header {
@@ -71,44 +71,56 @@ body > *:not(#prism) {
         #prism #prism-body #prism-branch header#prism-branch-header h2 {
           padding: 5px;
           margin: 0; }
-      #prism #prism-body #prism-branch .prism-leaf {
-        display: block;
-        position: relative;
-        float: left;
-        width: 33.333333%;
-        height: auto;
-        padding: 10px; }
-      #prism #prism-body #prism-branch #prism-add-leaf a {
-        display: block;
-        position: relative;
-        width: 100%;
-        height: auto;
-        padding-bottom: calc( 100% - 10px );
-        background: none;
-        border: #808080 5px dotted;
-        border-radius: 0%;
-        cursor: pointer; }
-        #prism #prism-body #prism-branch #prism-add-leaf a:hover {
-          background: #dddddd;
-          border-style: solid; }
-        #prism #prism-body #prism-branch #prism-add-leaf a:before {
-          content: "";
+      #prism #prism-body #prism-branch ul#prism-leaves {
+        height: 100%;
+        padding: 5px;
+        margin: 0;
+        overflow: auto; }
+        #prism #prism-body #prism-branch ul#prism-leaves .prism-leaf {
           display: block;
-          position: absolute;
-          width: 60%;
-          height: 20%;
-          left: 20%;
-          top: 40%;
-          background: #808080; }
-        #prism #prism-body #prism-branch #prism-add-leaf a:after {
-          content: "";
-          display: block;
-          position: absolute;
-          width: 20%;
-          height: 60%;
-          left: 40%;
-          top: 20%;
-          background: #808080; }
+          position: relative;
+          float: left;
+          width: calc( 25% - 10px );
+          height: auto;
+          padding-bottom: calc( 25% - 10px );
+          margin: 5px; }
+          #prism #prism-body #prism-branch ul#prism-leaves .prism-leaf span {
+            display: block;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            padding: 10px;
+            font-size: 18px;
+            background: none;
+            cursor: pointer;
+            border: 2px solid #000000;
+            border-color: #dddddd; }
+            #prism #prism-body #prism-branch ul#prism-leaves .prism-leaf span:hover {
+              background: #dddddd;
+              border-style: solid; }
+        #prism #prism-body #prism-branch ul#prism-leaves #prism-add-leaf span {
+          border: #808080 3px dotted;
+          border-radius: 0%; }
+          #prism #prism-body #prism-branch ul#prism-leaves #prism-add-leaf span:before {
+            content: "";
+            display: block;
+            position: absolute;
+            width: 60%;
+            height: 20%;
+            left: 20%;
+            top: 40%;
+            background: #808080; }
+          #prism #prism-body #prism-branch ul#prism-leaves #prism-add-leaf span:after {
+            content: "";
+            display: block;
+            position: absolute;
+            width: 20%;
+            height: 60%;
+            left: 40%;
+            top: 20%;
+            background: #808080; }
     #prism #prism-body #prism-leaf {
       display: block;
       position: relative;

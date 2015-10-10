@@ -31,7 +31,7 @@ var PrismMenu = React.createClass( {
 
 	render: function() {
 
-		var menuItems = PRISM.menu.map( function( menuItem, i ) {
+		var menuItems = PRISM.branches.map( function( menuItem, i ) {
 			return (
 				<li key={i}>
 					<a href={menuItem.url}>{menuItem.title}</a>

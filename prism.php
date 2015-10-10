@@ -85,7 +85,7 @@ class Prism {
 		}
 
 		$data = array( 
-			'menu' => $menu
+			'branches' => $menu
 		);
 
 		return $data;
