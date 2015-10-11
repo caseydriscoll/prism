@@ -105,6 +105,7 @@ class Prism {
 			'title'       => get_bloginfo( 'title' ),
 			'description' => get_bloginfo( 'description' ),
 			'url'         => get_bloginfo( 'url' ) . '/wp-json/wp/v2/',
+			'view'        => 'grid',
 			'branches'    => $branches
 		);
 

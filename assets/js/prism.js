@@ -116,7 +116,7 @@ var PrismTree = React.createClass({
 					leaves[leaf.id] = leaf;
 				}
 
-				state.branches[this.state.active.branch] = { leaves: leaves, view: 'grid' };
+				state.branches[this.state.active.branch] = { leaves: leaves, view: PRISM.view };
 
 				this.setState(state);
 			}).bind(this)
