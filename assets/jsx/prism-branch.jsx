@@ -6,6 +6,11 @@ var PrismBranch = React.createClass( {
 
 			var leaf = this.props.leaves[key];
 
+			if ( leaf.id == this.props.data.leaf )
+				leaf.active = 'active';
+			else
+				leaf.active = '';
+
 			return <PrismLeafNode data={leaf} key={key} onClick={this.props.changeLeaf} />
 
 		}, this );
@@ -51,10 +56,12 @@ var PrismLeafNode = React.createClass( {
 
 	render: function() {
 
-		var title = this.props.data.title.rendered;
+		var title   = this.props.data.title.rendered;
+
+		var classes = 'prism-leaf ' + this.props.data.active;
 
 		return (
-			<li id={this.props.data.id} className="prism-leaf" key={this.props.key} onClick={this.props.onClick}>
+			<li id={this.props.data.id} className={classes} key={this.props.key} onClick={this.props.onClick}>
 				<span data-title={title} data-id={this.props.data.id}>{title}</span>
 			</li>
 		)

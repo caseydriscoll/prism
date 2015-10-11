@@ -13,10 +13,6 @@ var PrismTree = React.createClass( {
 	changeLeaf: function(e) {
 		e.preventDefault();
 
-		jQuery( '.prism-leaf span' ).removeClass( 'active' );
-
-		e.nativeEvent.target.classList.toggle( 'active' );
-
 		var state = this.state;
 
 		state.branches[state.active.branch].leaf = jQuery( e.nativeEvent.target ).data( 'id' );
@@ -111,7 +107,8 @@ var PrismTree = React.createClass( {
 		if ( this.state.branches[branch] !== undefined ) {
 			branchData = {
 				title : branch,
-				view  : this.state.branches[branch].view
+				view  : this.state.branches[branch].view,
+				leaf  : this.state.branches[branch].leaf
 			}
 		}
 

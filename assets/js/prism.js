@@ -40,10 +40,6 @@ var PrismTree = React.createClass({
 	changeLeaf: function changeLeaf(e) {
 		e.preventDefault();
 
-		jQuery('.prism-leaf span').removeClass('active');
-
-		e.nativeEvent.target.classList.toggle('active');
-
 		var state = this.state;
 
 		state.branches[state.active.branch].leaf = jQuery(e.nativeEvent.target).data('id');
@@ -136,7 +132,8 @@ var PrismTree = React.createClass({
 		if (this.state.branches[branch] !== undefined) {
 			branchData = {
 				title: branch,
-				view: this.state.branches[branch].view
+				view: this.state.branches[branch].view,
+				leaf: this.state.branches[branch].leaf
 			};
 		}
 
@@ -251,10 +248,10 @@ var PrismMenu = React.createClass({
 
 });
 
-"use strict";
+'use strict';
 
 var PrismBranch = React.createClass({
-	displayName: "PrismBranch",
+	displayName: 'PrismBranch',
 
 	render: function render() {
 
@@ -262,16 +259,18 @@ var PrismBranch = React.createClass({
 
 			var leaf = this.props.leaves[key];
 
+			if (leaf.id == this.props.data.leaf) leaf.active = 'active';else leaf.active = '';
+
 			return React.createElement(PrismLeafNode, { data: leaf, key: key, onClick: this.props.changeLeaf });
 		}, this);
 
 		return React.createElement(
-			"div",
-			{ id: "prism-branch", className: this.props.data.view },
+			'div',
+			{ id: 'prism-branch', className: this.props.data.view },
 			React.createElement(PrismBranchHeader, { data: this.props.data, changeGrid: this.props.changeGrid, addLeaf: this.props.addLeaf }),
 			React.createElement(
-				"ul",
-				{ id: "prism-leaves" },
+				'ul',
+				{ id: 'prism-leaves' },
 				prismLeafNodes
 			)
 		);
@@ -280,7 +279,7 @@ var PrismBranch = React.createClass({
 });
 
 var PrismBranchHeader = React.createClass({
-	displayName: "PrismBranchHeader",
+	displayName: 'PrismBranchHeader',
 
 	render: function render() {
 
@@ -290,19 +289,19 @@ var PrismBranchHeader = React.createClass({
 		var list = this.props.data.view == 'list' ? ' fa-list active' : ' fa-list';
 
 		return React.createElement(
-			"header",
-			{ id: "prism-branch-header" },
+			'header',
+			{ id: 'prism-branch-header' },
 			React.createElement(
-				"h2",
+				'h2',
 				null,
 				this.props.data.title
 			),
 			React.createElement(
-				"div",
-				{ id: "prism-branch-visual-controls" },
-				React.createElement("i", { id: "prism-branch-rows", "data-view": "list", className: classes + list, onClick: this.props.changeGrid }),
-				React.createElement("i", { id: "prism-branch-grid", "data-view": "grid", className: classes + grid, onClick: this.props.changeGrid }),
-				React.createElement("i", { id: "prism-add-leaf", className: classes + ' fa-plus', onClick: this.props.addLeaf })
+				'div',
+				{ id: 'prism-branch-visual-controls' },
+				React.createElement('i', { id: 'prism-branch-rows', 'data-view': 'list', className: classes + list, onClick: this.props.changeGrid }),
+				React.createElement('i', { id: 'prism-branch-grid', 'data-view': 'grid', className: classes + grid, onClick: this.props.changeGrid }),
+				React.createElement('i', { id: 'prism-add-leaf', className: classes + ' fa-plus', onClick: this.props.addLeaf })
 			)
 		);
 	}
@@ -310,18 +309,20 @@ var PrismBranchHeader = React.createClass({
 });
 
 var PrismLeafNode = React.createClass({
-	displayName: "PrismLeafNode",
+	displayName: 'PrismLeafNode',
 
 	render: function render() {
 
 		var title = this.props.data.title.rendered;
 
+		var classes = 'prism-leaf ' + this.props.data.active;
+
 		return React.createElement(
-			"li",
-			{ id: this.props.data.id, className: "prism-leaf", key: this.props.key, onClick: this.props.onClick },
+			'li',
+			{ id: this.props.data.id, className: classes, key: this.props.key, onClick: this.props.onClick },
 			React.createElement(
-				"span",
-				{ "data-title": title, "data-id": this.props.data.id },
+				'span',
+				{ 'data-title': title, 'data-id': this.props.data.id },
 				title
 			)
 		);

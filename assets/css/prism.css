@@ -153,10 +153,10 @@ body > *:not(#prism) {
               color: #000000;
               background-color: #dddddd;
               border-color: #000000; }
-            #prism #prism-tree #prism-branch ul#prism-leaves .prism-leaf span.active {
-              color: #000000;
-              background: #87CEFA;
-              border-color: #000000; }
+          #prism #prism-tree #prism-branch ul#prism-leaves .prism-leaf.active span {
+            color: #000000;
+            background: #87CEFA;
+            border-color: #000000; }
     #prism #prism-tree #prism-leaf {
       display: block;
       position: relative;

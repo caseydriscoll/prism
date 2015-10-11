@@ -227,13 +227,14 @@ body > *:not(#prism) { display: none; }
 							border-color: $black;
 						}
 
-						&.active {
-							color: $black;
-							background: $highlight;
-							border-color: $black;
-						}
-
 					}
+
+					&.active span {
+						color: $black;
+						background: $highlight;
+						border-color: $black;
+					}
+
 				}
 
 			}
