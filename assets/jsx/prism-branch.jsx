@@ -11,10 +11,9 @@ var PrismBranch = React.createClass( {
 		}, this );
 
 		return (
-			<div id="prism-branch">
-				<PrismBranchHeader title={this.props.data.title} />
+			<div id="prism-branch" className={this.props.data.view}>
+				<PrismBranchHeader data={this.props.data} changeGrid={this.props.changeGrid} addLeaf={this.props.addLeaf} />
 				<ul id="prism-leaves">
-					<PrismAddLeaf addLeaf={this.props.addLeaf} />
 					{prismLeafNodes}
 				</ul>
 			</div>
@@ -27,23 +26,22 @@ var PrismBranch = React.createClass( {
 var PrismBranchHeader = React.createClass( {
 
 	render: function() {
+
+		var classes = 'fa fa-border fa-pull-right fa-2x';
+
+		var grid = this.props.data.view == 'grid' ? ' fa-th active'   : ' fa-th';
+		var list = this.props.data.view == 'list' ? ' fa-list active' : ' fa-list';
+
 		return (
 			<header id="prism-branch-header">
-				<h2>{this.props.title}</h2>
+				<h2>{this.props.data.title}</h2>
+				<div id="prism-branch-visual-controls">
+					<i id="prism-branch-rows" data-view="list" className={classes + list} onClick={this.props.changeGrid}></i>
+					<i id="prism-branch-grid" data-view="grid" className={classes + grid} onClick={this.props.changeGrid}></i>
+					<i id="prism-add-leaf" className={classes + ' fa-plus'} onClick={this.props.addLeaf}></i>
+				</div>
 			</header>
 		);
-	}
-
-} );
-
-
-var PrismAddLeaf = React.createClass( {
-
-	render: function() {
-
-		var data = { 'id' : 'prism-add-leaf' };
-
-		return <PrismLeafNode data={data} onClick={this.props.addLeaf} key={0} />;
 	}
 
 } );

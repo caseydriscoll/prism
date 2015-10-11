@@ -3,6 +3,7 @@ $light:     #dddddd;
 $grey:      #808080;
 $black:     #000000;
 
+$green:     #87fab3;
 $highlight: #87CEFA;
 
 $border: 2px solid $black;
@@ -114,7 +115,7 @@ body > *:not(#prism) { display: none; }
 
 							&.active {
 								background: $highlight;
-								color: $white;
+								color: $black;
 							}
 						}
 					}
@@ -139,6 +140,49 @@ body > *:not(#prism) { display: none; }
 					text-transform: capitalize;
 				}
 
+				div#prism-branch-visual-controls {
+
+					display: block; position: absolute;
+					right: 0; top: 0;
+
+					i.fa {
+						margin: 10px 10px 0 0;
+
+						color: $light;
+						cursor: pointer;
+
+						border-color: $light;
+
+						&:hover {
+							color: $highlight;
+							border-color: $highlight;
+						}
+
+						&.active {
+							color: $grey;
+							border-color: $grey;
+							background-color: $light;
+						}
+					}
+
+					i#prism-add-leaf {
+
+						margin-right: 25px;
+
+						&:hover {
+							color: $grey;
+							border-color: $grey;
+							background: $green;
+						}
+					}
+				}
+
+			}
+
+			&.grid .prism-leaf {}
+			&.list .prism-leaf {
+				width: calc( 100% - 10px ) !important;
+				padding-bottom: 70px !important;
 			}
 
 			ul#prism-leaves {
@@ -178,47 +222,20 @@ body > *:not(#prism) { display: none; }
 						border-color: $light;
 
 						&:hover {
-							background: $light;
-							border-style: solid;
+							color: $black;
+							background-color: $light;
+							border-color: $black;
 						}
 
 						&.active {
+							color: $black;
 							background: $highlight;
-							color: $white;
+							border-color: $black;
 						}
 
 					}
 				}
 
-				#prism-add-leaf {
-
-					span {
-
-						border: $grey 3px dotted;
-						border-radius: 0%;
-
-						$plus-thickness: 20%;
-						$plus-size: 60%;
-
-						&:before {
-							content: "";
-							display: block; position: absolute;
-							width: $plus-size; height: $plus-thickness;
-							left: ( 100% - $plus-size ) / 2; top: ( 100% - $plus-thickness ) / 2;
-
-							background: $grey;
-						}
-
-						&:after {
-							content: "";
-							display: block; position: absolute;
-							width: $plus-thickness; height: $plus-size;
-							left: ( 100% - $plus-thickness ) / 2; top: ( 100% - $plus-size ) / 2;
-
-							background: $grey;
-						}
-					}
-				}
 			}
 		}
 

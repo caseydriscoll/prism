@@ -1,10 +1,22 @@
 wp post create \
+  --post_title="Yes I know there are bugs" \
+  --post_date="2015-09-07 19:13:41" --post_status="Publish" \
+  --post_content="Sometimes in life there are gonna be bugs"
+
+wp post create \
+  --post_title="These things take time" \
+  --post_date="2015-09-08 19:13:41" --post_status="Publish" \
+  --post_content="You'll just have to make the most of it"
+
+wp post create \
   --post_title="New Post!" \
-  --post_date="2015-10-10 19:13:41" --post_status="Publish"
+  --post_date="2015-10-10 19:13:41" --post_status="Publish" \
+  --post_content="This here post is new I tell ya waht"
 
 wp post create \
   --post_title="Golly, I like this a lot!" \
-  --post_date="2015-10-04 19:13:41" --post_status="Publish"
+  --post_date="2015-10-04 19:13:41" --post_status="Publish" \
+  --post_content="This is good, mmmm hmmm."
 
 wp post create \
   --post_title="Yep, this sure is swell!" \
