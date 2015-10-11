@@ -31,7 +31,7 @@ var PrismTree = React.createClass({
 
 		var state = {
 			branches: {},
-			active: { branch: null, leaf: null }
+			active: { branch: null }
 		};
 
 		return state;
