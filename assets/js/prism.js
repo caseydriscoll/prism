@@ -164,7 +164,9 @@ var PrismTree = React.createClass({
 		var prismLeaf = React.createElement(PrismLeaf, { data: this.leafData() });
 
 		var renderBranch = active.branch == null ? null : prismBranch;
-		var renderLeaf = active.leaf == null ? null : prismLeaf;
+		var renderLeaf = '';
+
+		if (this.state.branches[active.branch] == undefined || this.state.branches[active.branch].leaf == undefined) renderLeaf = null;else renderLeaf = prismLeaf;
 
 		return React.createElement(
 			'div',
@@ -312,9 +314,7 @@ var PrismLeafNode = React.createClass({
 
 	render: function render() {
 
-		var title = '';
-
-		if (this.props.data.id == 'prism-add-leaf') title = '';else title = this.props.data.title.rendered;
+		var title = this.props.data.title.rendered;
 
 		return React.createElement(
 			"li",

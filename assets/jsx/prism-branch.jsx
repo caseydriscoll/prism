@@ -51,12 +51,7 @@ var PrismLeafNode = React.createClass( {
 
 	render: function() {
 
-		var title = '';
-
-		if ( this.props.data.id == 'prism-add-leaf' )
-			title = '';
-		else
-			title = this.props.data.title.rendered;
+		var title = this.props.data.title.rendered;
 
 		return (
 			<li id={this.props.data.id} className="prism-leaf" key={this.props.key} onClick={this.props.onClick}>

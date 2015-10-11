@@ -140,7 +140,12 @@ var PrismTree = React.createClass( {
 		var prismLeaf   = <PrismLeaf   data={this.leafData()} />;
 
 		var renderBranch = active.branch == null ? null : prismBranch;
-		var renderLeaf   = active.leaf   == null ? null : prismLeaf;
+		var renderLeaf   = '';
+		
+		if ( this.state.branches[active.branch] == undefined || this.state.branches[active.branch].leaf == undefined )
+			renderLeaf = null;
+		else
+			renderLeaf = prismLeaf;
 
 		return (
 
