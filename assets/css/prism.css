@@ -64,6 +64,8 @@ body > *:not(#prism) {
           margin: 0; }
           #prism #prism-tree #prism-trunk menu ul li {
             list-style: none; }
+            #prism #prism-tree #prism-trunk menu ul li:first-of-type a {
+              border-top: none; }
             #prism #prism-tree #prism-trunk menu ul li a {
               display: block;
               padding: 20px;
@@ -71,12 +73,17 @@ body > *:not(#prism) {
               font-size: 24px;
               font-family: 'Source Code Pro', sans-serif;
               text-decoration: none;
-              cursor: pointer; }
+              cursor: pointer;
+              border-top: 2px solid #000000;
+              border-bottom: 2px solid #000000;
+              border-color: transparent; }
               #prism #prism-tree #prism-trunk menu ul li a:hover {
                 background: #dddddd; }
               #prism #prism-tree #prism-trunk menu ul li a.active {
+                font-weight: bold;
                 background: #87CEFA;
-                color: #000000; }
+                color: #000000;
+                border-color: #000000; }
     #prism #prism-tree #prism-branch {
       display: block;
       position: relative;

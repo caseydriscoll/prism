@@ -98,6 +98,11 @@ body > *:not(#prism) { display: none; }
 					li {
 						list-style: none;
 
+
+						&:first-of-type a {
+							border-top: none;
+						}
+
 						a { 
 							display: block;
 							padding: 20px;
@@ -109,14 +114,21 @@ body > *:not(#prism) { display: none; }
 
 							cursor: pointer;
 
+							border-top: $border;
+							border-bottom: $border;
+							border-color: transparent;
+
 							&:hover {
 								background: $light;
 							}
 
 							&.active {
+								font-weight: bold;
 								background: $highlight;
 								color: $black;
+								border-color: $black;
 							}
+
 						}
 					}
 				}
