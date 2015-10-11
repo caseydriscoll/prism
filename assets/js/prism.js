@@ -70,11 +70,15 @@ var PrismTree = React.createClass({
 	changeGrid: function changeGrid(e) {
 		e.preventDefault();
 
-		jQuery('#prism-branch-visual-controls i').removeClass('active');
+		var view = jQuery(e.nativeEvent.target).data('view');
 
 		var state = this.state;
 
-		state.branches[state.active.branch].view = jQuery(e.nativeEvent.target).data('view');
+		if (view == state.branches[state.active.branch].view) return;
+
+		jQuery('#prism-branch-visual-controls i').removeClass('active');
+
+		state.branches[state.active.branch].view = view;
 
 		this.setState(state);
 	},
