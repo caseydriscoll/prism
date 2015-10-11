@@ -3,7 +3,7 @@ wp db create
 
 wp core install
 
-wp user meta update admin show_admin_bar_front 'false'
+wp user meta update 1 show_admin_bar_front 'false'
 
 wp plugin activate prism rest-api
 
