@@ -4,7 +4,20 @@ var PrismHeader = React.createClass({
 	displayName: "PrismHeader",
 
 	render: function render() {
-		return React.createElement("header", { id: "prism-header" });
+		return React.createElement(
+			"header",
+			{ id: "prism-header" },
+			React.createElement(
+				"h1",
+				{ className: "title" },
+				PRISM.title
+			),
+			React.createElement(
+				"span",
+				{ className: "description" },
+				PRISM.description
+			)
+		);
 	}
 
 });

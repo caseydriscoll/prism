@@ -27,6 +27,33 @@ body > *:not(#prism) { display: none; }
 		width: 100%; height: $header-height;
 
 		border-bottom: $border;
+
+		h1 {
+			display: inline-block;
+			margin: 5px 10px;
+			font: {
+				family: 'Kinescope';
+				size: 60px;
+			}
+		}
+
+		span.description {
+			display: block; position: relative; float: right;
+			max-width: 500px;
+			padding: 12px 60px;
+			
+			color: $grey;
+			
+			font: {
+				family: 'Gibson', sans-serif;
+				size: 14px;
+				style: italic;
+			}
+
+			text: {
+				align: right;
+			}
+		}
 	}
 
 	#prism-tree {

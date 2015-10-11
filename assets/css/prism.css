@@ -15,6 +15,22 @@ body > *:not(#prism) {
     width: 100%;
     height: 70px;
     border-bottom: 2px solid #000000; }
+    #prism #prism-header h1 {
+      display: inline-block;
+      margin: 5px 10px;
+      font-family: 'Kinescope';
+      font-size: 60px; }
+    #prism #prism-header span.description {
+      display: block;
+      position: relative;
+      float: right;
+      max-width: 500px;
+      padding: 12px 60px;
+      color: #808080;
+      font-family: 'Gibson', sans-serif;
+      font-size: 14px;
+      font-style: italic;
+      text-align: right; }
   #prism #prism-tree {
     display: block;
     position: relative;

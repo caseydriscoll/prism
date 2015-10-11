@@ -101,8 +101,10 @@ class Prism {
 		);
 
 		$data = array(
-			'url'      => get_bloginfo( 'url' ) . '/wp-json/wp/v2/',
-			'branches' => $branches
+			'title'       => get_bloginfo( 'title' ),
+			'description' => get_bloginfo( 'description' ),
+			'url'         => get_bloginfo( 'url' ) . '/wp-json/wp/v2/',
+			'branches'    => $branches
 		);
 
 		return $data;
