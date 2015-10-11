@@ -170,11 +170,26 @@ body > *:not(#prism) {
       float: left;
       width: 50%;
       height: 100%; }
+      #prism #prism-tree #prism-leaf.metapanel-open div#prism-leaf-meta-controls {
+        width: 300px;
+        border-left: 2px solid #000000;
+        border-bottom: 2px solid #000000;
+        background: #dddddd; }
+        #prism #prism-tree #prism-leaf.metapanel-open div#prism-leaf-meta-controls i.fa {
+          color: #000000 !important; }
+        #prism #prism-tree #prism-leaf.metapanel-open div#prism-leaf-meta-controls h3 {
+          padding-left: 90px; }
+      #prism #prism-tree #prism-leaf.metapanel-open div#prism-leaf-content {
+        width: calc( 100% - 300px - 20px ); }
+      #prism #prism-tree #prism-leaf.metapanel-open div#prism-leaf-meta-panel {
+        width: 300px; }
       #prism #prism-tree #prism-leaf header#prism-leaf-header {
         height: 65px;
         padding: 10px;
         border-bottom: 2px solid #000000; }
         #prism #prism-tree #prism-leaf header#prism-leaf-header h2 {
+          display: inline;
+          float: left;
           padding: 5px;
           margin: 0; }
           #prism #prism-tree #prism-leaf header#prism-leaf-header h2 date {
@@ -183,11 +198,39 @@ body > *:not(#prism) {
             font-family: 'Courier New', monospace;
             font-size: 14px;
             font-weight: bold; }
+        #prism #prism-tree #prism-leaf header#prism-leaf-header div#prism-leaf-meta-controls {
+          display: block;
+          position: absolute;
+          min-width: 50px;
+          height: 65px;
+          right: 0;
+          top: 0;
+          color: #dddddd;
+          cursor: pointer; }
+          #prism #prism-tree #prism-leaf header#prism-leaf-header div#prism-leaf-meta-controls:hover i.fa {
+            color: #87CEFA; }
+          #prism #prism-tree #prism-leaf header#prism-leaf-header div#prism-leaf-meta-controls i.fa {
+            margin: 10px; }
+          #prism #prism-tree #prism-leaf header#prism-leaf-header div#prism-leaf-meta-controls h3 {
+            margin-top: 17px;
+            color: #000000;
+            text-transform: uppercase;
+            font-weight: bold; }
       #prism #prism-tree #prism-leaf div#prism-leaf-content {
         display: block;
         position: relative;
+        float: left;
+        width: calc( 100% - 20px );
         height: calc( 100% - 20px - 65px );
         padding: 10px;
         margin: 10px;
         border: 2px solid #000000;
         border-color: #dddddd; }
+      #prism #prism-tree #prism-leaf div#prism-leaf-meta-panel {
+        display: block;
+        position: relative;
+        float: left;
+        height: calc( 100% - 65px );
+        padding: 10px;
+        border-left: 2px solid #000000;
+        background-color: #dddddd; }

@@ -52,6 +52,22 @@ var PrismTree = React.createClass( {
 		this.setState( state );
 	},
 
+	changeMetaPanel : function(e) {
+		e.preventDefault();
+
+		var state     = this.state;
+
+		var branch    = state.active.branch;
+		var leaf      = state.branches[branch].leaf;
+
+		if ( state.branches[branch].leaves[leaf].metapanel == 'open' )
+			state.branches[branch].leaves[leaf].metapanel = 'closed';
+		else
+			state.branches[branch].leaves[leaf].metapanel = 'open';
+
+		this.setState( state );
+	},
+
 	addLeaf: function() {
 		var state = this.state;
 		var active = this.state.active;
@@ -121,8 +137,9 @@ var PrismTree = React.createClass( {
 
 		var branch = this.state.active.branch;
 
-		if ( this.state.branches[branch] !== undefined  )
+		if ( this.state.branches[branch] !== undefined  ) {
 			leafData = this.state.branches[branch].leaves[this.state.branches[branch].leaf];
+		}
 
 		return leafData;
 	},
@@ -134,7 +151,7 @@ var PrismTree = React.createClass( {
 		var leaves = this.state.branches[active.branch] == undefined ? [] : this.state.branches[active.branch].leaves;
 
 		var prismBranch = <PrismBranch data={this.branchData()} leaves={leaves} changeLeaf={this.changeLeaf} changeGrid={this.changeGrid} addLeaf={this.addLeaf} />;
-		var prismLeaf   = <PrismLeaf   data={this.leafData()} />;
+		var prismLeaf   = <PrismLeaf   data={this.leafData()} changeMetaPanel={this.changeMetaPanel} />;
 
 		var renderBranch = active.branch == null ? null : prismBranch;
 		var renderLeaf   = '';

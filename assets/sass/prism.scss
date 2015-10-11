@@ -10,6 +10,8 @@ $border: 2px solid $black;
 $header-height: 70px;
 $sub-header-height: 65px;
 
+$metapanel-width: 300px;
+
 body > *:not(#prism) { display: none; }
 
 #prism {
@@ -256,6 +258,33 @@ body > *:not(#prism) { display: none; }
 			display: block; position: relative; float: left;
 			width: 50%; height: 100%;
 
+			&.metapanel-open {
+
+				div#prism-leaf-meta-controls {
+					width: $metapanel-width;
+					border-left: $border;
+					border-bottom: $border;
+					background: $light;
+
+					i.fa {
+						color: $black !important;
+					}
+
+					h3 {
+						padding-left: 90px;
+					}
+				}
+
+				div#prism-leaf-content {
+					width: calc( 100% - #{$metapanel-width} - 20px );
+				}
+
+				div#prism-leaf-meta-panel {
+					width: $metapanel-width;
+				}
+
+			}
+
 			header#prism-leaf-header {
 
 				height: $sub-header-height;
@@ -263,6 +292,7 @@ body > *:not(#prism) { display: none; }
 				border-bottom: $border;
 
 				h2 {
+					display: inline; float: left;
 					padding: 5px; margin: 0;
 
 					date {
@@ -276,15 +306,51 @@ body > *:not(#prism) { display: none; }
 					}
 				}
 
+				div#prism-leaf-meta-controls {
+					display: block; position: absolute;
+					min-width: 50px; height: $sub-header-height;
+					right: 0; top: 0;
+					color: $light;
+
+					cursor: pointer;
+
+					&:hover i.fa {
+						color: $highlight;
+					}
+
+					i.fa {
+						margin: 10px;
+					}
+
+					h3 {
+						margin-top: 17px;
+						color: $black;
+						text: {
+							transform: uppercase;
+						}
+						font-weight: bold;
+					}
+				}
+
 			}
 
 			div#prism-leaf-content {
 
-				display: block; position: relative;
-				height: calc( 100% - 20px - #{$sub-header-height} );
+				display: block; position: relative; float: left;
+				width: calc( 100% - 20px ); height: calc( 100% - 20px - #{$sub-header-height} );
 				padding: 10px; margin: 10px;
 				border: $border;
 				border-color: $light;
+
+			}
+
+			div#prism-leaf-meta-panel {
+
+				display: block; position: relative; float: left;
+				height: calc( 100% - #{$sub-header-height} );
+				padding: 10px;
+				border-left: $border;
+				background-color: $light;
 
 			}
 		}

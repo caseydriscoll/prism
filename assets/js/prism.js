@@ -79,6 +79,19 @@ var PrismTree = React.createClass({
 		this.setState(state);
 	},
 
+	changeMetaPanel: function changeMetaPanel(e) {
+		e.preventDefault();
+
+		var state = this.state;
+
+		var branch = state.active.branch;
+		var leaf = state.branches[branch].leaf;
+
+		if (state.branches[branch].leaves[leaf].metapanel == 'open') state.branches[branch].leaves[leaf].metapanel = 'closed';else state.branches[branch].leaves[leaf].metapanel = 'open';
+
+		this.setState(state);
+	},
+
 	addLeaf: function addLeaf() {
 		var state = this.state;
 		var active = this.state.active;
@@ -146,7 +159,9 @@ var PrismTree = React.createClass({
 
 		var branch = this.state.active.branch;
 
-		if (this.state.branches[branch] !== undefined) leafData = this.state.branches[branch].leaves[this.state.branches[branch].leaf];
+		if (this.state.branches[branch] !== undefined) {
+			leafData = this.state.branches[branch].leaves[this.state.branches[branch].leaf];
+		}
 
 		return leafData;
 	},
@@ -158,7 +173,7 @@ var PrismTree = React.createClass({
 		var leaves = this.state.branches[active.branch] == undefined ? [] : this.state.branches[active.branch].leaves;
 
 		var prismBranch = React.createElement(PrismBranch, { data: this.branchData(), leaves: leaves, changeLeaf: this.changeLeaf, changeGrid: this.changeGrid, addLeaf: this.addLeaf });
-		var prismLeaf = React.createElement(PrismLeaf, { data: this.leafData() });
+		var prismLeaf = React.createElement(PrismLeaf, { data: this.leafData(), changeMetaPanel: this.changeMetaPanel });
 
 		var renderBranch = active.branch == null ? null : prismBranch;
 		var renderLeaf = '';
@@ -335,21 +350,43 @@ var PrismLeafNode = React.createClass({
 var PrismLeaf = React.createClass({
 	displayName: "PrismLeaf",
 
+	metapanel: function metapanel() {
+
+		if (this.props.data.metapanel == 'open') return React.createElement(PrismLeafMetaPanel, null);else return null;
+	},
+
 	render: function render() {
+
+		var classes = "metapanel-" + this.props.data.metapanel;
+		var controlClasses = "fa fa-3x fa-pull-left";
+
+		if (this.props.data.metapanel == 'open') {
+			controlClasses += ' fa-toggle-right';
+		} else {
+			controlClasses += ' fa-toggle-left';
+		}
+
+		var metapanelHeading = this.props.data.metapanel == 'open' ? 'Post Meta' : null;
+
 		return React.createElement(
 			"div",
-			{ id: "prism-leaf" },
+			{ id: "prism-leaf", className: classes },
 			React.createElement(
 				"header",
 				{ id: "prism-leaf-header" },
 				React.createElement(
 					"h2",
 					null,
-					this.props.data.title.rendered,
+					this.props.data.title.rendered
+				),
+				React.createElement(
+					"div",
+					{ id: "prism-leaf-meta-controls", onClick: this.props.changeMetaPanel },
+					React.createElement("i", { className: controlClasses }),
 					React.createElement(
-						"date",
+						"h3",
 						null,
-						this.props.data.date.replace('T', ' ')
+						metapanelHeading
 					)
 				)
 			),
@@ -357,7 +394,22 @@ var PrismLeaf = React.createClass({
 				"div",
 				{ id: "prism-leaf-content" },
 				this.props.data.content.rendered
-			)
+			),
+			this.metapanel()
+		);
+	}
+
+});
+
+var PrismLeafMetaPanel = React.createClass({
+	displayName: "PrismLeafMetaPanel",
+
+	render: function render() {
+
+		return React.createElement(
+			"div",
+			{ id: "prism-leaf-meta-panel" },
+			"metapanel"
 		);
 	}
 
