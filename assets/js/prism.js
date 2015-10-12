@@ -352,7 +352,7 @@ var PrismLeaf = React.createClass({
 
 	metapanel: function metapanel() {
 
-		if (this.props.data.metapanel == 'open') return React.createElement(PrismLeafMetaPanel, null);else return null;
+		if (this.props.data.metapanel == 'open') return React.createElement(PrismLeafMetaPanel, { data: this.props.data });else return null;
 	},
 
 	render: function render() {
@@ -406,10 +406,33 @@ var PrismLeafMetaPanel = React.createClass({
 
 	render: function render() {
 
+		var metaInfoToDisplay = this.props.data.type in PRISM.meta ? this.props.data.type : 'default';
+
+		var renderMetaPanel = PRISM.meta[metaInfoToDisplay].map(function (key, i) {
+			return React.createElement(
+				"li",
+				null,
+				React.createElement(
+					"h4",
+					null,
+					key + ':'
+				),
+				React.createElement(
+					"span",
+					null,
+					React.createElement(
+						"code",
+						null,
+						this.props.data[key]
+					)
+				)
+			);
+		}, this);
+
 		return React.createElement(
-			"div",
+			"ul",
 			{ id: "prism-leaf-meta-panel" },
-			"metapanel"
+			renderMetaPanel
 		);
 	}
 

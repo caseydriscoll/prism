@@ -279,7 +279,7 @@ body > *:not(#prism) { display: none; }
 					width: calc( 100% - #{$metapanel-width} - 20px );
 				}
 
-				div#prism-leaf-meta-panel {
+				ul#prism-leaf-meta-panel {
 					width: $metapanel-width;
 				}
 
@@ -344,13 +344,41 @@ body > *:not(#prism) { display: none; }
 
 			}
 
-			div#prism-leaf-meta-panel {
+			ul#prism-leaf-meta-panel {
 
 				display: block; position: relative; float: left;
 				height: calc( 100% - #{$sub-header-height} );
 				padding: 10px;
 				border-left: $border;
 				background-color: $light;
+
+				li {
+					display: block; position: relative;
+					width: 100%;
+					margin-bottom: 10px;
+
+					list-style: none;
+
+					h4 {
+						display: block;
+						padding: 3px 5px; margin: 0;
+						background: $grey;
+						color: $white;
+					}
+
+					span {
+						display: block;
+						padding: 5px;
+						border: 1px solid $grey;
+						background: $white;
+
+						code {
+							display: block;
+							margin: 0;
+						}
+
+					}
+				}
 
 			}
 		}
