@@ -17,7 +17,7 @@ var PrismBranch = React.createClass( {
 
 		return (
 			<div id="prism-branch" className={this.props.data.view}>
-				<PrismBranchHeader data={this.props.data} changeView={this.props.functions.changeView} addLeaf={this.props.functions.addLeaf} />
+				<PrismBranchHeader auth={this.props.auth} data={this.props.data} changeView={this.props.functions.changeView} addLeaf={this.props.functions.addLeaf} />
 				<ul id="prism-leaves">
 					{prismLeafNodes}
 				</ul>
@@ -37,13 +37,15 @@ var PrismBranchHeader = React.createClass( {
 		var grid = this.props.data.view == 'grid' ? ' fa-th active'   : ' fa-th';
 		var list = this.props.data.view == 'list' ? ' fa-list active' : ' fa-list';
 
+		var renderAddLeaf = this.props.auth ? <i id="prism-add-leaf" className={classes + ' fa-plus'} onClick={this.props.addLeaf}></i> : null;
+
 		return (
 			<header id="prism-branch-header">
 				<h2>{this.props.data.title}</h2>
 				<div id="prism-branch-visual-controls">
 					<i id="prism-branch-rows" data-view="list" className={classes + list} onClick={this.props.changeView}></i>
 					<i id="prism-branch-grid" data-view="grid" className={classes + grid} onClick={this.props.changeView}></i>
-					<i id="prism-add-leaf" className={classes + ' fa-plus'} onClick={this.props.addLeaf}></i>
+					{renderAddLeaf}
 				</div>
 			</header>
 		);

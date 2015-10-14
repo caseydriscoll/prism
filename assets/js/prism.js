@@ -300,6 +300,8 @@ var PrismTree = React.createClass({
   */
 	render: function render() {
 
+		var auth = this.props.data.authenticated;
+
 		var prismTrunkFunctions = {
 			changeBranch: this.changeBranch
 		};
@@ -315,9 +317,9 @@ var PrismTree = React.createClass({
 			toggleMetaPanel: this.toggleMetaPanel
 		};
 
-		var prismTrunk = React.createElement(PrismTrunk, { functions: prismTrunkFunctions });
-		var prismBranch = React.createElement(PrismBranch, { functions: prismBranchFunctions, data: this.branchData() });
-		var prismLeaf = React.createElement(PrismLeaf, { functions: prismLeafFunctions, data: this.leafData() });
+		var prismTrunk = React.createElement(PrismTrunk, { functions: prismTrunkFunctions, auth: auth });
+		var prismBranch = React.createElement(PrismBranch, { functions: prismBranchFunctions, auth: auth, data: this.branchData() });
+		var prismLeaf = React.createElement(PrismLeaf, { functions: prismLeafFunctions, auth: auth, data: this.leafData() });
 
 		var renderTrunk = prismTrunk; // For code consistency
 		var renderBranch = this.hasActiveBranch() ? prismBranch : null;
@@ -425,7 +427,7 @@ var PrismBranch = React.createClass({
 		return React.createElement(
 			'div',
 			{ id: 'prism-branch', className: this.props.data.view },
-			React.createElement(PrismBranchHeader, { data: this.props.data, changeView: this.props.functions.changeView, addLeaf: this.props.functions.addLeaf }),
+			React.createElement(PrismBranchHeader, { auth: this.props.auth, data: this.props.data, changeView: this.props.functions.changeView, addLeaf: this.props.functions.addLeaf }),
 			React.createElement(
 				'ul',
 				{ id: 'prism-leaves' },
@@ -446,6 +448,8 @@ var PrismBranchHeader = React.createClass({
 		var grid = this.props.data.view == 'grid' ? ' fa-th active' : ' fa-th';
 		var list = this.props.data.view == 'list' ? ' fa-list active' : ' fa-list';
 
+		var renderAddLeaf = this.props.auth ? React.createElement('i', { id: 'prism-add-leaf', className: classes + ' fa-plus', onClick: this.props.addLeaf }) : null;
+
 		return React.createElement(
 			'header',
 			{ id: 'prism-branch-header' },
@@ -459,7 +463,7 @@ var PrismBranchHeader = React.createClass({
 				{ id: 'prism-branch-visual-controls' },
 				React.createElement('i', { id: 'prism-branch-rows', 'data-view': 'list', className: classes + list, onClick: this.props.changeView }),
 				React.createElement('i', { id: 'prism-branch-grid', 'data-view': 'grid', className: classes + grid, onClick: this.props.changeView }),
-				React.createElement('i', { id: 'prism-add-leaf', className: classes + ' fa-plus', onClick: this.props.addLeaf })
+				renderAddLeaf
 			)
 		);
 	}
@@ -688,15 +692,13 @@ var Prism = React.createClass({
 
 	getInitialState: function getInitialState() {
 
-		PRISM.getUser = this.getUser;
-
 		this.getUser();
 
 		return {};
 	},
 
 	componentDidMount: function componentDidMount() {
-		this.getUser();
+		// this.getUser();
 	},
 
 	getUser: function getUser() {
@@ -733,7 +735,7 @@ var Prism = React.createClass({
 			'div',
 			{ id: 'prism' },
 			React.createElement(PrismHeader, { data: this.state }),
-			React.createElement(PrismTree, null),
+			React.createElement(PrismTree, { data: this.state }),
 			React.createElement(PrismFooter, null)
 		);
 	}

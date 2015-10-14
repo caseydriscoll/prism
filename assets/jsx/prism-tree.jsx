@@ -263,6 +263,8 @@ var PrismTree = React.createClass( {
 	 */
 	render: function() {
 
+		var auth = this.props.data.authenticated;
+
 		var prismTrunkFunctions  = {
 			changeBranch : this.changeBranch
 		};
@@ -278,9 +280,9 @@ var PrismTree = React.createClass( {
 			toggleMetaPanel : this.toggleMetaPanel
 		}
 
-		var prismTrunk   = <PrismTrunk  functions={prismTrunkFunctions} />
-		var prismBranch  = <PrismBranch functions={prismBranchFunctions} data={this.branchData()} />;
-		var prismLeaf    = <PrismLeaf   functions={prismLeafFunctions}   data={this.leafData()}   />;
+		var prismTrunk   = <PrismTrunk  functions={prismTrunkFunctions}  auth={auth} />
+		var prismBranch  = <PrismBranch functions={prismBranchFunctions} auth={auth} data={this.branchData()} />;
+		var prismLeaf    = <PrismLeaf   functions={prismLeafFunctions}   auth={auth} data={this.leafData()}   />;
 
 		var renderTrunk  = prismTrunk; // For code consistency
 		var renderBranch = this.hasActiveBranch() ? prismBranch : null;

@@ -21,8 +21,6 @@ var Prism = React.createClass( {
 
 	getInitialState: function() {
 
-		PRISM.getUser = this.getUser;
-
 		this.getUser();
 
 		return {};
@@ -30,7 +28,7 @@ var Prism = React.createClass( {
 	},
 
 	componentDidMount: function() {
-		this.getUser();
+		// this.getUser();
 	},
 
 	getUser: function() {
@@ -69,7 +67,7 @@ var Prism = React.createClass( {
 		return (
 			<div id="prism">
 				<PrismHeader data={this.state} />
-				<PrismTree />
+				<PrismTree   data={this.state} />
 				<PrismFooter />
 			</div>
 		);
