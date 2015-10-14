@@ -269,4 +269,8 @@ body > *:not(#prism) {
             background: #ffffff; }
             #prism #prism-tree #prism-leaf ul#prism-leaf-meta-panel li span code {
               display: block;
-              margin: 0; }
+              padding: 4px;
+              margin: 0;
+              cursor: pointer; }
+            #prism #prism-tree #prism-leaf ul#prism-leaf-meta-panel li span input {
+              width: 100%; }

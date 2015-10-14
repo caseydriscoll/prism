@@ -528,30 +528,71 @@ var PrismLeafMetaPanel = React.createClass({
 		var metaInfoToDisplay = this.props.data.type in PRISM.meta ? this.props.data.type : 'default';
 
 		var renderMetaPanel = PRISM.meta[metaInfoToDisplay].map(function (key, i) {
-			return React.createElement(
-				'li',
-				{ key: i },
-				React.createElement(
-					'h4',
-					null,
-					key + ':'
-				),
-				React.createElement(
-					'span',
-					null,
-					React.createElement(
-						'code',
-						null,
-						this.props.data[key]
-					)
-				)
-			);
+			return React.createElement(PrismLeafMetaPanelPiece, { data: this.props.data[key], key: i, label: key });
 		}, this);
 
 		return React.createElement(
 			'ul',
 			{ id: 'prism-leaf-meta-panel' },
 			renderMetaPanel
+		);
+	}
+
+});
+
+var PrismLeafMetaPanelPiece = React.createClass({
+	displayName: 'PrismLeafMetaPanelPiece',
+
+	getInitialState: function getInitialState() {
+		return { edit: false };
+	},
+
+	startEdit: function startEdit(e) {
+
+		var state = this.state;
+
+		state.edit = true;
+
+		this.setState(state);
+	},
+
+	stopEdit: function stopEdit() {
+
+		var state = this.state;
+
+		state.edit = false;
+
+		this.setState(state);
+	},
+
+	autoSelect: function autoSelect(e) {
+		e.nativeEvent.target.select();
+	},
+
+	render: function render() {
+
+		var editData = React.createElement('input', { autoFocus: true, readOnly: true, type: 'text', value: this.props.data, onBlur: this.stopEdit, onFocus: this.autoSelect });
+		var staticData = React.createElement(
+			'code',
+			null,
+			this.props.data
+		);
+
+		var renderData = this.state.edit == true ? editData : staticData;
+
+		return React.createElement(
+			'li',
+			{ key: this.props.label },
+			React.createElement(
+				'h4',
+				null,
+				this.props.label + ':'
+			),
+			React.createElement(
+				'span',
+				{ onClick: this.startEdit },
+				renderData
+			)
 		);
 	}
 

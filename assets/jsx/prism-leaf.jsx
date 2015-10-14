@@ -55,10 +55,7 @@ var PrismLeafMetaPanel = React.createClass( {
 
 		var renderMetaPanel = PRISM.meta[metaInfoToDisplay].map( function( key, i ) {
 			return (
-				<li key={i}>
-					<h4>{key + ':'}</h4>
-					<span><code>{this.props.data[key]}</code></span>
-				</li>
+				<PrismLeafMetaPanelPiece data={this.props.data[key]} key={i} label={key} />
 			)
 		}, this );
 
@@ -71,3 +68,54 @@ var PrismLeafMetaPanel = React.createClass( {
 	}
 
 } );
+
+
+var PrismLeafMetaPanelPiece = React.createClass( {
+
+	getInitialState : function() {
+		return { edit : false }
+	},
+
+	startEdit: function(e) {
+
+		var state = this.state;
+
+		state.edit = true;
+
+		this.setState( state );
+
+	},
+
+	stopEdit: function() {
+
+		var state = this.state;
+
+		state.edit = false;
+
+		this.setState( state );
+
+	},
+
+	autoSelect: function(e) {
+		e.nativeEvent.target.select();
+	},
+
+	render: function() {
+
+		var editData    = <input autoFocus readOnly type="text" value={this.props.data} onBlur={this.stopEdit} onFocus={this.autoSelect} />;
+		var staticData  = <code>{this.props.data}</code>;
+
+		var renderData  = this.state.edit == true ? editData : staticData;
+
+		return (
+			<li key={this.props.label}>
+				<h4>{this.props.label + ':'}</h4>
+				<span onClick={this.startEdit}>
+					{renderData}
+				</span>
+			</li>
+		)
+	}
+
+} );
+
