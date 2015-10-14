@@ -12,11 +12,37 @@ var PrismHeader = React.createClass({
 				{ className: "title" },
 				PRISM.title
 			),
+			React.createElement(PrismUserAccount, { data: this.props.data }),
 			React.createElement(
 				"span",
 				{ className: "description" },
 				PRISM.description
 			)
+		);
+	}
+
+});
+
+var PrismUserAccount = React.createClass({
+	displayName: "PrismUserAccount",
+
+	render: function render() {
+
+		var url,
+		    icon = null;
+
+		if (this.props.data.authenticated) {
+			url = PRISM.url.login + '?redirect_to=' + PRISM.url.root + '&action=logout';
+			icon = React.createElement("img", { src: this.props.data.user.avatar_urls[PRISM.gravatar.width], width: PRISM.gravatar.width, height: PRISM.gravatar.height });
+		} else {
+			url = PRISM.url.login + '?redirect_to=' + PRISM.url.root;
+			icon = React.createElement("i", { className: "fa fa-user fa-2x fa-border" });
+		}
+
+		return React.createElement(
+			"a",
+			{ id: "prism-user-account", href: url },
+			icon
 		);
 	}
 
@@ -198,7 +224,7 @@ var PrismTree = React.createClass({
 
 		jQuery.ajax({
 			method: 'GET',
-			url: PRISM.url + this.state.active.branch + '?filter[posts_per_page]=-1',
+			url: PRISM.url.rest + this.state.active.branch + '?filter[posts_per_page]=-1',
 			success: (function (response) {
 
 				var state = this.state;
@@ -655,20 +681,62 @@ var PrismLeafMetaPanelPiece = React.createClass({
  *   - #prism-footer
  */
 
-"use strict";
+'use strict';
 
 var Prism = React.createClass({
-  displayName: "Prism",
+	displayName: 'Prism',
 
-  render: function render() {
-    return React.createElement(
-      "div",
-      { id: "prism" },
-      React.createElement(PrismHeader, null),
-      React.createElement(PrismTree, null),
-      React.createElement(PrismFooter, null)
-    );
-  }
+	getInitialState: function getInitialState() {
+
+		PRISM.getUser = this.getUser;
+
+		this.getUser();
+
+		return {};
+	},
+
+	componentDidMount: function componentDidMount() {
+		this.getUser();
+	},
+
+	getUser: function getUser() {
+
+		jQuery.ajax({
+			method: 'GET',
+			url: PRISM.url.rest + 'users/me',
+			beforeSend: function beforeSend(xhr) {
+				xhr.setRequestHeader('X-WP-Nonce', PRISM.nonce);
+			},
+			success: (function (response) {
+
+				var state = {
+					'authenticated': true,
+					'user': response
+				};
+
+				this.setState(state);
+			}).bind(this),
+			error: (function (response) {
+
+				var state = {
+					'authenticated': false,
+					'user': response
+				};
+
+				this.setState(state);
+			}).bind(this)
+		});
+	},
+
+	render: function render() {
+		return React.createElement(
+			'div',
+			{ id: 'prism' },
+			React.createElement(PrismHeader, { data: this.state }),
+			React.createElement(PrismTree, null),
+			React.createElement(PrismFooter, null)
+		);
+	}
 
 });
 

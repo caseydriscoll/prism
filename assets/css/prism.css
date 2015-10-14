@@ -24,13 +24,27 @@ body > *:not(#prism) {
       display: block;
       position: relative;
       float: right;
-      max-width: 500px;
-      padding: 12px 60px;
+      max-width: 420px;
+      padding: 12px 20px;
       color: #808080;
       font-family: 'Gibson', sans-serif;
       font-size: 14px;
       font-style: italic;
       text-align: right; }
+    #prism #prism-header #prism-user-account {
+      float: right;
+      margin: 12px 20px 0 0;
+      cursor: pointer; }
+      #prism #prism-header #prism-user-account i.fa-user {
+        border-radius: 50%;
+        border-color: #808080;
+        color: #808080; }
+        #prism #prism-header #prism-user-account i.fa-user:hover {
+          color: #87CEFA;
+          border-color: #87CEFA; }
+      #prism #prism-header #prism-user-account img {
+        margin-top: -2px;
+        border-radius: 50%; }
   #prism #prism-tree {
     display: block;
     position: relative;

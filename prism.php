@@ -114,7 +114,16 @@ class Prism {
 		$data = array(
 			'title'         => get_bloginfo( 'title' ),
 			'description'   => get_bloginfo( 'description' ),
-			'url'           => get_bloginfo( 'url' ) . '/wp-json/wp/v2/',
+			'nonce'         => wp_create_nonce( 'wp_rest' ),
+			'url'           => array(
+			    'root'            => get_bloginfo( 'url' ),
+			    'rest'            => get_bloginfo( 'url' ) . '/wp-json/wp/v2/',
+			    'login'           => get_bloginfo( 'url' ) . '/wp-login.php'
+			                   ),
+			'gravatar'      => array(
+			    'width'           => 48,
+			    'height'          => 48
+			                   ),
 			'view'          => 'grid',
 			'branches'      => $branches,
 			'meta'          => $meta,

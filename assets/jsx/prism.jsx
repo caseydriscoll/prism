@@ -19,10 +19,56 @@
 
 var Prism = React.createClass( {
 
+	getInitialState: function() {
+
+		PRISM.getUser = this.getUser;
+
+		this.getUser();
+
+		return {};
+
+	},
+
+	componentDidMount: function() {
+		this.getUser();
+	},
+
+	getUser: function() {
+
+		jQuery.ajax( {
+			method  : 'GET',
+			url     : PRISM.url.rest + 'users/me',
+			beforeSend: function ( xhr ) {
+				xhr.setRequestHeader( 'X-WP-Nonce', PRISM.nonce );
+			},
+			success : function( response ) {
+
+				var state = {
+					'authenticated' : true,
+					'user'          : response
+				}
+
+				this.setState( state );
+
+			}.bind( this ),
+			error   : function( response ) {
+
+				var state = {
+					'authenticated' : false,
+					'user'          : response
+				}
+
+				this.setState( state );
+
+			}.bind( this )
+		} );
+
+	},
+
 	render: function() {
 		return (
 			<div id="prism">
-				<PrismHeader />
+				<PrismHeader data={this.state} />
 				<PrismTree />
 				<PrismFooter />
 			</div>

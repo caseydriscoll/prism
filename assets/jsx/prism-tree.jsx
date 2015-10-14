@@ -183,7 +183,7 @@ var PrismTree = React.createClass( {
 
 		jQuery.ajax( {
 			method  : 'GET',
-			url     : PRISM.url + this.state.active.branch + '?filter[posts_per_page]=-1',
+			url     : PRISM.url.rest + this.state.active.branch + '?filter[posts_per_page]=-1',
 			success : function( response ) {
 
 				var state = this.state;

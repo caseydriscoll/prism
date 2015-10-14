@@ -42,8 +42,8 @@ body > *:not(#prism) { display: none; }
 
 		span.description {
 			display: block; position: relative; float: right;
-			max-width: 500px;
-			padding: 12px 60px;
+			max-width: 420px;
+			padding: 12px 20px;
 			
 			color: $grey;
 			
@@ -57,6 +57,35 @@ body > *:not(#prism) { display: none; }
 				align: right;
 			}
 		}
+
+
+		#prism-user-account {
+			float: right;
+			margin: 12px 20px 0 0;
+
+			cursor: pointer;
+
+			i.fa-user {
+				border: {
+					radius: 50%;
+					color: $grey;
+				}
+
+				color: $grey;
+
+				&:hover {
+					color: $highlight;
+					border-color: $highlight;
+				}
+			}
+
+			img {
+				margin-top: -2px;
+				border-radius: 50%;
+			}
+
+		}
+
 	}
 
 	#prism-tree {
