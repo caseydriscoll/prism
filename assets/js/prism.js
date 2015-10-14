@@ -603,11 +603,7 @@ var PrismLeaf = React.createClass({
 			React.createElement(
 				"header",
 				{ id: "prism-leaf-header" },
-				React.createElement(
-					"h2",
-					null,
-					this.props.data.title.rendered
-				),
+				React.createElement(PrismLeafTitle, { auth: this.props.auth, title: this.props.data.title.rendered }),
 				React.createElement(
 					"div",
 					{ id: "prism-leaf-meta-controls" },
@@ -622,6 +618,63 @@ var PrismLeaf = React.createClass({
 			),
 			this.renderContent(),
 			this.metapanel()
+		);
+	}
+
+});
+
+var PrismLeafTitle = React.createClass({
+	displayName: "PrismLeafTitle",
+
+	getInitialState: function getInitialState() {
+		return { edit: false };
+	},
+
+	startEdit: function startEdit(e) {
+
+		if (!this.props.auth) return;
+
+		var state = this.state;
+
+		state.edit = true;
+
+		this.setState(state);
+	},
+
+	stopEdit: function stopEdit() {
+
+		if (!this.props.auth) return;
+
+		var state = this.state;
+
+		state.edit = false;
+
+		this.setState(state);
+	},
+
+	autoSelect: function autoSelect(e) {
+		e.nativeEvent.target.select();
+	},
+
+	renderTitle: function renderTitle() {
+		var editTitle = React.createElement("input", { autoFocus: true, readOnly: true, type: "text", value: this.props.title, onBlur: this.stopEdit, onFocus: this.autoSelect });
+		var staticTitle = React.createElement(
+			"div",
+			{ onClick: this.startEdit },
+			this.props.title
+		);
+
+		var renderTitle = this.state.edit ? editTitle : staticTitle;
+
+		return renderTitle;
+	},
+
+	render: function render() {
+
+		return React.createElement(
+			"h2",
+			null,
+			this.renderTitle()
 		);
 	}
 

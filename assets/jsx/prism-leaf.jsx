@@ -73,9 +73,7 @@ var PrismLeaf = React.createClass( {
 		return (
 			<div id="prism-leaf" className={leafClasses}>
 				<header id="prism-leaf-header">
-					<h2>
-						{this.props.data.title.rendered}
-					</h2>
+					<PrismLeafTitle auth={this.props.auth} title={this.props.data.title.rendered} />
 					<div id="prism-leaf-meta-controls" >
 						<i className={panelToggleClasses} onClick={this.props.functions.toggleMetaPanel}></i>
 						<h3>{metapanelHeading}</h3>
@@ -86,6 +84,59 @@ var PrismLeaf = React.createClass( {
 				{this.metapanel()}
 			</div>
 		);
+	}
+
+} );
+
+
+var PrismLeafTitle = React.createClass( {
+
+	getInitialState : function() {
+		return { edit : false }
+	},
+
+	startEdit: function(e) {
+
+		if ( ! this.props.auth ) return;
+
+		var state = this.state;
+
+		state.edit = true;
+
+		this.setState( state );
+
+	},
+
+	stopEdit: function() {
+
+		if ( ! this.props.auth ) return;
+
+		var state = this.state;
+
+		state.edit = false;
+
+		this.setState( state );
+
+	},
+
+	autoSelect: function(e) {
+		e.nativeEvent.target.select();
+	},
+
+	renderTitle: function() {
+		var editTitle    = <input autoFocus readOnly type="text" value={this.props.title} onBlur={this.stopEdit} onFocus={this.autoSelect} />;
+		var staticTitle  = <div onClick={this.startEdit}>{this.props.title}</div>;
+
+		var renderTitle  = this.state.edit ? editTitle : staticTitle;
+
+		return renderTitle;
+	},
+
+	render: function() {
+
+		return (
+			<h2>{this.renderTitle()}</h2>
+		)
 	}
 
 } );

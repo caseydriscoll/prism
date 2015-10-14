@@ -218,14 +218,21 @@ body > *:not(#prism) {
         #prism #prism-tree #prism-leaf header#prism-leaf-header h2 {
           display: inline;
           float: left;
+          width: calc( 100% - 300px );
           padding: 5px;
           margin: 0; }
-          #prism #prism-tree #prism-leaf header#prism-leaf-header h2 date {
-            float: right;
-            padding: 10px;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            font-weight: bold; }
+          #prism #prism-tree #prism-leaf header#prism-leaf-header h2 div {
+            width: 100%;
+            min-height: 30px;
+            margin-top: -2px;
+            border: 2px solid #000000;
+            border-color: transparent; }
+          #prism #prism-tree #prism-leaf header#prism-leaf-header h2 input {
+            width: calc( 100% + 10px );
+            padding: 0 5px;
+            margin: -5px 0 0 -5px;
+            border: 2px solid #000000;
+            border-color: #dddddd; }
         #prism #prism-tree #prism-leaf header#prism-leaf-header div#prism-leaf-meta-controls {
           display: block;
           position: absolute;

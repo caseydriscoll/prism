@@ -347,16 +347,21 @@ body > *:not(#prism) { display: none; }
 
 				h2 {
 					display: inline; float: left;
+					width: calc( 100% - #{$metapanel-width} );
 					padding: 5px; margin: 0;
 
-					date {
-						float: right;
-						padding: 10px;
-						font: {
-							family: 'Courier New', monospace;
-							size: 14px;
-							weight: bold;
-						}
+					div {
+						width: 100%; min-height: 30px;
+						margin-top: -2px;
+						border: $border;
+						border-color: transparent;
+					}
+
+					input {
+						width: calc( 100% + 10px );
+						padding: 0 5px; margin: -5px 0 0 -5px;
+						border: $border;
+						border-color: $light;
 					}
 				}
 
@@ -365,7 +370,6 @@ body > *:not(#prism) { display: none; }
 					min-width: 50px; height: $sub-header-height;
 					right: 0; top: 0;
 					color: $light;
-
 
 					&:hover i.fa.metapanel-control {
 						color: $highlight;
