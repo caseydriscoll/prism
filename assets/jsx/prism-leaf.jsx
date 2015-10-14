@@ -6,6 +6,8 @@ var PrismLeaf = React.createClass( {
 
 	startEdit: function(e) {
 
+		if ( ! this.props.auth ) return;
+
 		var state = this.state;
 
 		state.edit = true;
@@ -15,6 +17,8 @@ var PrismLeaf = React.createClass( {
 	},
 
 	stopEdit: function() {
+
+		if ( ! this.props.auth ) return;
 
 		var state = this.state;
 
@@ -116,6 +120,8 @@ var PrismLeafMetaPanelPiece = React.createClass( {
 
 	startEdit: function(e) {
 
+		if ( ! this.props.auth ) return;
+
 		var state = this.state;
 
 		state.edit = true;
@@ -125,6 +131,8 @@ var PrismLeafMetaPanelPiece = React.createClass( {
 	},
 
 	stopEdit: function() {
+
+		if ( ! this.props.auth ) return;
 
 		var state = this.state;
 
