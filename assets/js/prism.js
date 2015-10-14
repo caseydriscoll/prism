@@ -31,10 +31,75 @@ var PrismTree = React.createClass({
 
 		var state = {
 			branches: {},
-			active: { branch: null }
+			active: { branch: null },
+			lockMetaPanel: 'unlock',
+			isMetaPanelOpen: false
 		};
 
 		return state;
+	},
+
+	/**
+  * Returns true if the value of this.state.active.branch is not null
+  *    and if that value is a key in this.state.branches
+  * 
+  * @return {Boolean} The status of the active branch
+  */
+	hasActiveBranch: function hasActiveBranch() {
+
+		var hasActiveBranch = false;
+
+		if (this.state.active.branch !== null && this.state.active.branch in this.state.branches) hasActiveBranch = true;
+
+		return hasActiveBranch;
+	},
+
+	/**
+  * Returns true if there is an active branch in state,
+  *    there is an active leaf in that branch
+  *    and pertinent active leaf data in state
+  *    
+  * @return {Boolean} The status of the active leaf
+  */
+	hasActiveLeaf: function hasActiveLeaf() {
+
+		var hasActiveLeaf = false;
+
+		if (this.hasActiveBranch()) {
+
+			var activeBranch = this.state.branches[this.state.active.branch];
+
+			if ('leaf' in activeBranch && activeBranch.leaf in activeBranch.leaves) hasActiveLeaf = true;
+		}
+
+		return hasActiveLeaf;
+	},
+
+	/**
+  * The PrismLeafMetaPanel in PrismLeaf is open on two conditions:
+  *     The global state is 'locked' open for all leaves
+  *     The local state is 'open' for that particular leaf
+  *
+  * This condition is checked on toggleMetaPanel and lockMetaPanel
+  *
+  * This needed to be attached to state because it wasn't updating otherwise.
+  * 
+  * @return {Boolean} [description]
+  */
+	isMetaPanelOpen: function isMetaPanelOpen() {
+
+		console.log('here');
+
+		var state = this.state;
+
+		var isMetaPanelOpen = false;
+
+		var branch = state.active.branch;
+		var leaf = state.branches[branch].leaf;
+
+		if (state.lockMetaPanel == 'lock' || state.branches[branch].leaves[leaf].metapanel == 'open') isMetaPanelOpen = true;
+
+		return isMetaPanelOpen;
 	},
 
 	changeLeaf: function changeLeaf(e) {
@@ -43,6 +108,8 @@ var PrismTree = React.createClass({
 		var state = this.state;
 
 		state.branches[state.active.branch].leaf = jQuery(e.nativeEvent.target).data('id');
+
+		state.isMetaPanelOpen = this.isMetaPanelOpen();
 
 		this.setState(state);
 	},
@@ -63,7 +130,7 @@ var PrismTree = React.createClass({
 		this.loadLeaves();
 	},
 
-	changeGrid: function changeGrid(e) {
+	changeBranchView: function changeBranchView(e) {
 		e.preventDefault();
 
 		var view = jQuery(e.nativeEvent.target).data('view');
@@ -79,7 +146,7 @@ var PrismTree = React.createClass({
 		this.setState(state);
 	},
 
-	changeMetaPanel: function changeMetaPanel(e) {
+	toggleMetaPanel: function toggleMetaPanel(e) {
 		e.preventDefault();
 
 		var state = this.state;
@@ -88,6 +155,21 @@ var PrismTree = React.createClass({
 		var leaf = state.branches[branch].leaf;
 
 		if (state.branches[branch].leaves[leaf].metapanel == 'open') state.branches[branch].leaves[leaf].metapanel = 'closed';else state.branches[branch].leaves[leaf].metapanel = 'open';
+
+		state.isMetaPanelOpen = this.isMetaPanelOpen();
+
+		this.setState(state);
+	},
+
+	lockMetaPanel: function lockMetaPanel(e) {
+		e.preventDefault();
+
+		var state = this.state;
+
+		var branch = state.active.branch;
+		var leaf = state.branches[branch].leaf;
+
+		if (state.lockMetaPanel == 'unlock') state.lockMetaPanel = 'lock';else state.lockMetaPanel = 'unlock';
 
 		this.setState(state);
 	},
@@ -112,6 +194,8 @@ var PrismTree = React.createClass({
 
 	loadLeaves: function loadLeaves() {
 
+		// TODO: This is a temporary stop gap. Don't fetch the query if we already have them.
+		// Ultimately, we'll have to check for changes and all that.
 		if (this.state.active.branch in this.state.branches) return;
 
 		jQuery.ajax({
@@ -126,6 +210,8 @@ var PrismTree = React.createClass({
 				for (var i = 0; i < response.length; i++) {
 					var leaf = response[i];
 
+					leaf.metapanel = 'closed';
+
 					leaves[leaf.id] = leaf;
 				}
 
@@ -138,15 +224,17 @@ var PrismTree = React.createClass({
 
 	branchData: function branchData() {
 
-		var branchData = {};
+		var branchData = { leaves: [] };
 
-		var branch = this.state.active.branch;
+		if (this.hasActiveBranch()) {
 
-		if (this.state.branches[branch] !== undefined) {
+			var branch = this.state.active.branch;
+
 			branchData = {
 				title: branch,
 				view: this.state.branches[branch].view,
-				leaf: this.state.branches[branch].leaf
+				leaf: this.state.branches[branch].leaf,
+				leaves: this.state.branches[branch].leaves
 			};
 		}
 
@@ -159,31 +247,62 @@ var PrismTree = React.createClass({
 
 		var branch = this.state.active.branch;
 
-		if (this.state.branches[branch] !== undefined) {
-			leafData = this.state.branches[branch].leaves[this.state.branches[branch].leaf];
+		if (this.hasActiveBranch()) {
+
+			branch = this.state.branches[branch];
+
+			if (this.hasActiveLeaf()) leafData = branch.leaves[branch.leaf];
 		}
+
+		leafData.lockMetaPanel = this.state.lockMetaPanel;
+		leafData.isMetaPanelOpen = this.state.isMetaPanelOpen;
 
 		return leafData;
 	},
 
+	/**
+  * Render the entire PrismTree, which includes the PrismTrunk, PrismBranch and PrismLeaf columns.
+  *
+  * There should be minimal logic in this function. Most conditionals should be in Object functions
+  *
+  * It will ways render the PrismTrunk.
+  *
+  * It will render the PrismBranch on condition that there is an active branch 
+  *    and that the given branch data exists in state (hasActiveBranch)
+  *
+  * It will render the PrismLeaf on condition that there is an active leaf for the given branch
+  *    and that the given leaf data exists in state (hasActiveLeaf)
+  * 
+  */
 	render: function render() {
 
-		var active = this.state.active;
+		var prismTrunkFunctions = {
+			changeBranch: this.changeBranch
+		};
 
-		var leaves = this.state.branches[active.branch] == undefined ? [] : this.state.branches[active.branch].leaves;
+		var prismBranchFunctions = {
+			changeLeaf: this.changeLeaf,
+			changeView: this.changeBranchView,
+			addLeaf: this.addLeaf
+		};
 
-		var prismBranch = React.createElement(PrismBranch, { data: this.branchData(), leaves: leaves, changeLeaf: this.changeLeaf, changeGrid: this.changeGrid, addLeaf: this.addLeaf });
-		var prismLeaf = React.createElement(PrismLeaf, { data: this.leafData(), changeMetaPanel: this.changeMetaPanel });
+		var prismLeafFunctions = {
+			lockMetaPanel: this.lockMetaPanel,
+			toggleMetaPanel: this.toggleMetaPanel
+		};
 
-		var renderBranch = active.branch == null ? null : prismBranch;
-		var renderLeaf = '';
+		var prismTrunk = React.createElement(PrismTrunk, { functions: prismTrunkFunctions });
+		var prismBranch = React.createElement(PrismBranch, { functions: prismBranchFunctions, data: this.branchData() });
+		var prismLeaf = React.createElement(PrismLeaf, { functions: prismLeafFunctions, data: this.leafData() });
 
-		if (this.state.branches[active.branch] == undefined || this.state.branches[active.branch].leaf == undefined) renderLeaf = null;else renderLeaf = prismLeaf;
+		var renderTrunk = prismTrunk; // For code consistency
+		var renderBranch = this.hasActiveBranch() ? prismBranch : null;
+		var renderLeaf = this.hasActiveLeaf() ? prismLeaf : null;
 
 		return React.createElement(
 			'div',
 			{ id: 'prism-tree' },
-			React.createElement(PrismTrunk, { changeBranch: this.changeBranch }),
+			renderTrunk,
 			renderBranch,
 			renderLeaf
 		);
@@ -213,7 +332,7 @@ var PrismTrunk = React.createClass({
 			"div",
 			{ id: "prism-trunk" },
 			React.createElement(PrismSearch, null),
-			React.createElement(PrismMenu, { onClick: this.props.changeBranch })
+			React.createElement(PrismMenu, { onClick: this.props.functions.changeBranch })
 		);
 	}
 
@@ -270,19 +389,19 @@ var PrismBranch = React.createClass({
 
 	render: function render() {
 
-		var prismLeafNodes = Object.keys(this.props.leaves).reverse().map(function (key) {
+		var prismLeafNodes = Object.keys(this.props.data.leaves).reverse().map(function (key) {
 
-			var leaf = this.props.leaves[key];
+			var leaf = this.props.data.leaves[key];
 
 			if (leaf.id == this.props.data.leaf) leaf.active = 'active';else leaf.active = '';
 
-			return React.createElement(PrismLeafNode, { data: leaf, key: key, onClick: this.props.changeLeaf });
+			return React.createElement(PrismLeafNode, { data: leaf, key: key, onClick: this.props.functions.changeLeaf });
 		}, this);
 
 		return React.createElement(
 			'div',
 			{ id: 'prism-branch', className: this.props.data.view },
-			React.createElement(PrismBranchHeader, { data: this.props.data, changeGrid: this.props.changeGrid, addLeaf: this.props.addLeaf }),
+			React.createElement(PrismBranchHeader, { data: this.props.data, changeView: this.props.functions.changeView, addLeaf: this.props.functions.addLeaf }),
 			React.createElement(
 				'ul',
 				{ id: 'prism-leaves' },
@@ -314,8 +433,8 @@ var PrismBranchHeader = React.createClass({
 			React.createElement(
 				'div',
 				{ id: 'prism-branch-visual-controls' },
-				React.createElement('i', { id: 'prism-branch-rows', 'data-view': 'list', className: classes + list, onClick: this.props.changeGrid }),
-				React.createElement('i', { id: 'prism-branch-grid', 'data-view': 'grid', className: classes + grid, onClick: this.props.changeGrid }),
+				React.createElement('i', { id: 'prism-branch-rows', 'data-view': 'list', className: classes + list, onClick: this.props.changeView }),
+				React.createElement('i', { id: 'prism-branch-grid', 'data-view': 'grid', className: classes + grid, onClick: this.props.changeView }),
 				React.createElement('i', { id: 'prism-add-leaf', className: classes + ' fa-plus', onClick: this.props.addLeaf })
 			)
 		);
@@ -345,54 +464,56 @@ var PrismLeafNode = React.createClass({
 
 });
 
-"use strict";
+'use strict';
 
 var PrismLeaf = React.createClass({
-	displayName: "PrismLeaf",
+	displayName: 'PrismLeaf',
 
 	metapanel: function metapanel() {
 
-		if (this.props.data.metapanel == 'open') return React.createElement(PrismLeafMetaPanel, { data: this.props.data });else return null;
+		if (this.props.data.isMetaPanelOpen) return React.createElement(PrismLeafMetaPanel, { data: this.props.data });else return null;
 	},
 
 	render: function render() {
 
-		var classes = "metapanel-" + this.props.data.metapanel;
-		var controlClasses = "fa fa-3x fa-pull-left";
+		var leafClasses = this.props.data.isMetaPanelOpen ? 'metapanel-open' : 'metapanel-closed';
+		var metapanelHeading = this.props.data.isMetaPanelOpen ? 'Post Meta' : null;
 
-		if (this.props.data.metapanel == 'open') {
-			controlClasses += ' fa-toggle-right';
+		var panelLockClasses = "fa fa-lg fa-border fa-pull-right fa-" + this.props.data.lockMetaPanel;
+		var panelToggleClasses = "fa fa-3x fa-pull-left metapanel-control";
+
+		if (this.props.data.isMetaPanelOpen) {
+			panelToggleClasses += ' fa-toggle-right';
 		} else {
-			controlClasses += ' fa-toggle-left';
+			panelToggleClasses += ' fa-toggle-left';
 		}
 
-		var metapanelHeading = this.props.data.metapanel == 'open' ? 'Post Meta' : null;
-
 		return React.createElement(
-			"div",
-			{ id: "prism-leaf", className: classes },
+			'div',
+			{ id: 'prism-leaf', className: leafClasses },
 			React.createElement(
-				"header",
-				{ id: "prism-leaf-header" },
+				'header',
+				{ id: 'prism-leaf-header' },
 				React.createElement(
-					"h2",
+					'h2',
 					null,
 					this.props.data.title.rendered
 				),
 				React.createElement(
-					"div",
-					{ id: "prism-leaf-meta-controls", onClick: this.props.changeMetaPanel },
-					React.createElement("i", { className: controlClasses }),
+					'div',
+					{ id: 'prism-leaf-meta-controls' },
+					React.createElement('i', { className: panelToggleClasses, onClick: this.props.functions.toggleMetaPanel }),
 					React.createElement(
-						"h3",
+						'h3',
 						null,
 						metapanelHeading
-					)
+					),
+					React.createElement('i', { className: panelLockClasses, onClick: this.props.functions.lockMetaPanel })
 				)
 			),
 			React.createElement(
-				"div",
-				{ id: "prism-leaf-content" },
+				'div',
+				{ id: 'prism-leaf-content' },
 				this.props.data.content.rendered
 			),
 			this.metapanel()
@@ -402,7 +523,7 @@ var PrismLeaf = React.createClass({
 });
 
 var PrismLeafMetaPanel = React.createClass({
-	displayName: "PrismLeafMetaPanel",
+	displayName: 'PrismLeafMetaPanel',
 
 	render: function render() {
 
@@ -410,18 +531,18 @@ var PrismLeafMetaPanel = React.createClass({
 
 		var renderMetaPanel = PRISM.meta[metaInfoToDisplay].map(function (key, i) {
 			return React.createElement(
-				"li",
-				null,
+				'li',
+				{ key: i },
 				React.createElement(
-					"h4",
+					'h4',
 					null,
 					key + ':'
 				),
 				React.createElement(
-					"span",
+					'span',
 					null,
 					React.createElement(
-						"code",
+						'code',
 						null,
 						this.props.data[key]
 					)
@@ -430,8 +551,8 @@ var PrismLeafMetaPanel = React.createClass({
 		}, this);
 
 		return React.createElement(
-			"ul",
-			{ id: "prism-leaf-meta-panel" },
+			'ul',
+			{ id: 'prism-leaf-meta-panel' },
 			renderMetaPanel
 		);
 	}

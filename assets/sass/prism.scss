@@ -266,12 +266,36 @@ body > *:not(#prism) { display: none; }
 					border-bottom: $border;
 					background: $light;
 
-					i.fa {
+					i.fa.metapanel-control {
 						color: $black !important;
 					}
 
+					i.fa-lock,
+					i.fa-unlock {
+						display: block !important; position: absolute;
+						right: 20px; top: 20px;
+
+						cursor: pointer;
+
+						border-color: transparent;
+
+						color: $black;
+
+					}
+
+					i.fa-lock {
+					}
+
+					i.fa-unlock {
+						color: $grey;
+
+						&:hover {
+							color: $highlight;
+						}
+					}
+
 					h3 {
-						padding-left: 90px;
+						padding-left: 78px;
 					}
 				}
 
@@ -312,14 +336,19 @@ body > *:not(#prism) { display: none; }
 					right: 0; top: 0;
 					color: $light;
 
-					cursor: pointer;
 
-					&:hover i.fa {
+					&:hover i.fa.metapanel-control {
 						color: $highlight;
 					}
 
-					i.fa {
+					i.fa.metapanel-control {
 						margin: 10px;
+						cursor: pointer;
+					}
+
+					i.fa-lock,
+					i.fa-unlock {
+						display: none;
 					}
 
 					h3 {

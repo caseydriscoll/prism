@@ -175,10 +175,23 @@ body > *:not(#prism) {
         border-left: 2px solid #000000;
         border-bottom: 2px solid #000000;
         background: #dddddd; }
-        #prism #prism-tree #prism-leaf.metapanel-open div#prism-leaf-meta-controls i.fa {
+        #prism #prism-tree #prism-leaf.metapanel-open div#prism-leaf-meta-controls i.fa.metapanel-control {
           color: #000000 !important; }
+        #prism #prism-tree #prism-leaf.metapanel-open div#prism-leaf-meta-controls i.fa-lock,
+        #prism #prism-tree #prism-leaf.metapanel-open div#prism-leaf-meta-controls i.fa-unlock {
+          display: block !important;
+          position: absolute;
+          right: 20px;
+          top: 20px;
+          cursor: pointer;
+          border-color: transparent;
+          color: #000000; }
+        #prism #prism-tree #prism-leaf.metapanel-open div#prism-leaf-meta-controls i.fa-unlock {
+          color: #808080; }
+          #prism #prism-tree #prism-leaf.metapanel-open div#prism-leaf-meta-controls i.fa-unlock:hover {
+            color: #87CEFA; }
         #prism #prism-tree #prism-leaf.metapanel-open div#prism-leaf-meta-controls h3 {
-          padding-left: 90px; }
+          padding-left: 78px; }
       #prism #prism-tree #prism-leaf.metapanel-open div#prism-leaf-content {
         width: calc( 100% - 300px - 20px ); }
       #prism #prism-tree #prism-leaf.metapanel-open ul#prism-leaf-meta-panel {
@@ -205,12 +218,15 @@ body > *:not(#prism) {
           height: 65px;
           right: 0;
           top: 0;
-          color: #dddddd;
-          cursor: pointer; }
-          #prism #prism-tree #prism-leaf header#prism-leaf-header div#prism-leaf-meta-controls:hover i.fa {
+          color: #dddddd; }
+          #prism #prism-tree #prism-leaf header#prism-leaf-header div#prism-leaf-meta-controls:hover i.fa.metapanel-control {
             color: #87CEFA; }
-          #prism #prism-tree #prism-leaf header#prism-leaf-header div#prism-leaf-meta-controls i.fa {
-            margin: 10px; }
+          #prism #prism-tree #prism-leaf header#prism-leaf-header div#prism-leaf-meta-controls i.fa.metapanel-control {
+            margin: 10px;
+            cursor: pointer; }
+          #prism #prism-tree #prism-leaf header#prism-leaf-header div#prism-leaf-meta-controls i.fa-lock,
+          #prism #prism-tree #prism-leaf header#prism-leaf-header div#prism-leaf-meta-controls i.fa-unlock {
+            display: none; }
           #prism #prism-tree #prism-leaf header#prism-leaf-header div#prism-leaf-meta-controls h3 {
             margin-top: 17px;
             color: #000000;

@@ -4,7 +4,7 @@ var PrismTrunk = React.createClass( {
 		return (
 			<div id="prism-trunk">
 				<PrismSearch />
-				<PrismMenu onClick={this.props.changeBranch} />
+				<PrismMenu onClick={this.props.functions.changeBranch} />
 			</div>
 		);
 	}

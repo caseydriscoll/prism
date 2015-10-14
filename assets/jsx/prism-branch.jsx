@@ -2,22 +2,22 @@ var PrismBranch = React.createClass( {
 
 	render: function() {
 
-		var prismLeafNodes = Object.keys( this.props.leaves ).reverse().map( function( key ) {
+		var prismLeafNodes = Object.keys( this.props.data.leaves ).reverse().map( function( key ) {
 
-			var leaf = this.props.leaves[key];
+			var leaf = this.props.data.leaves[key];
 
 			if ( leaf.id == this.props.data.leaf )
 				leaf.active = 'active';
 			else
 				leaf.active = '';
 
-			return <PrismLeafNode data={leaf} key={key} onClick={this.props.changeLeaf} />
+			return <PrismLeafNode data={leaf} key={key} onClick={this.props.functions.changeLeaf} />
 
 		}, this );
 
 		return (
 			<div id="prism-branch" className={this.props.data.view}>
-				<PrismBranchHeader data={this.props.data} changeGrid={this.props.changeGrid} addLeaf={this.props.addLeaf} />
+				<PrismBranchHeader data={this.props.data} changeView={this.props.functions.changeView} addLeaf={this.props.functions.addLeaf} />
 				<ul id="prism-leaves">
 					{prismLeafNodes}
 				</ul>
@@ -41,8 +41,8 @@ var PrismBranchHeader = React.createClass( {
 			<header id="prism-branch-header">
 				<h2>{this.props.data.title}</h2>
 				<div id="prism-branch-visual-controls">
-					<i id="prism-branch-rows" data-view="list" className={classes + list} onClick={this.props.changeGrid}></i>
-					<i id="prism-branch-grid" data-view="grid" className={classes + grid} onClick={this.props.changeGrid}></i>
+					<i id="prism-branch-rows" data-view="list" className={classes + list} onClick={this.props.changeView}></i>
+					<i id="prism-branch-grid" data-view="grid" className={classes + grid} onClick={this.props.changeView}></i>
 					<i id="prism-add-leaf" className={classes + ' fa-plus'} onClick={this.props.addLeaf}></i>
 				</div>
 			</header>
