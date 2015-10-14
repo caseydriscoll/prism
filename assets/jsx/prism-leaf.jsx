@@ -1,11 +1,52 @@
 var PrismLeaf = React.createClass( {
 
+	getInitialState : function() {
+		return { edit : false }
+	},
+
+	startEdit: function(e) {
+
+		var state = this.state;
+
+		state.edit = true;
+
+		this.setState( state );
+
+	},
+
+	stopEdit: function() {
+
+		var state = this.state;
+
+		state.edit = false;
+
+		this.setState( state );
+
+	},
+
+	autoSelect: function(e) {
+		e.nativeEvent.target.select();
+	},
+
 	metapanel: function() {
 
 		if ( this.props.data.isMetaPanelOpen )
 			return <PrismLeafMetaPanel data={this.props.data} />;
 		else
 			return null;
+
+	},
+
+	renderContent: function() {
+
+		var content = this.props.data.content.rendered;
+		
+		var editContent    = <textarea autoFocus readOnly id="prism-leaf-content" value={content} onBlur={this.stopEdit} onFocus={this.autoSelect} />;
+		var staticContent  = <div id="prism-leaf-content" onDoubleClick={this.startEdit}>{content}</div>;
+
+		var renderContent  = this.state.edit == true ? editContent : staticContent;
+
+		return renderContent;
 
 	},
 
@@ -23,7 +64,6 @@ var PrismLeaf = React.createClass( {
 			panelToggleClasses += ' fa-toggle-left';
 		}
 
-
 		return (
 			<div id="prism-leaf" className={leafClasses}>
 				<header id="prism-leaf-header">
@@ -36,9 +76,7 @@ var PrismLeaf = React.createClass( {
 						<i className={panelLockClasses} onClick={this.props.functions.lockMetaPanel}></i>
 					</div>
 				</header>
-				<div id="prism-leaf-content">
-					{this.props.data.content.rendered}
-				</div>
+				{this.renderContent()}
 				{this.metapanel()}
 			</div>
 		);

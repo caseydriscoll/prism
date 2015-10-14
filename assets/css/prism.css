@@ -192,7 +192,7 @@ body > *:not(#prism) {
             color: #87CEFA; }
         #prism #prism-tree #prism-leaf.metapanel-open div#prism-leaf-meta-controls h3 {
           padding-left: 78px; }
-      #prism #prism-tree #prism-leaf.metapanel-open div#prism-leaf-content {
+      #prism #prism-tree #prism-leaf.metapanel-open #prism-leaf-content {
         width: calc( 100% - 300px - 20px ); }
       #prism #prism-tree #prism-leaf.metapanel-open ul#prism-leaf-meta-panel {
         width: 300px; }
@@ -232,7 +232,7 @@ body > *:not(#prism) {
             color: #000000;
             text-transform: uppercase;
             font-weight: bold; }
-      #prism #prism-tree #prism-leaf div#prism-leaf-content {
+      #prism #prism-tree #prism-leaf #prism-leaf-content {
         display: block;
         position: relative;
         float: left;

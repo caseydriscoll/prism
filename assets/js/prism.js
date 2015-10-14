@@ -462,14 +462,56 @@ var PrismLeafNode = React.createClass({
 
 });
 
-'use strict';
+"use strict";
 
 var PrismLeaf = React.createClass({
-	displayName: 'PrismLeaf',
+	displayName: "PrismLeaf",
+
+	getInitialState: function getInitialState() {
+		return { edit: false };
+	},
+
+	startEdit: function startEdit(e) {
+
+		var state = this.state;
+
+		state.edit = true;
+
+		this.setState(state);
+	},
+
+	stopEdit: function stopEdit() {
+
+		var state = this.state;
+
+		state.edit = false;
+
+		this.setState(state);
+	},
+
+	autoSelect: function autoSelect(e) {
+		e.nativeEvent.target.select();
+	},
 
 	metapanel: function metapanel() {
 
 		if (this.props.data.isMetaPanelOpen) return React.createElement(PrismLeafMetaPanel, { data: this.props.data });else return null;
+	},
+
+	renderContent: function renderContent() {
+
+		var content = this.props.data.content.rendered;
+
+		var editContent = React.createElement("textarea", { autoFocus: true, readOnly: true, id: "prism-leaf-content", value: content, onBlur: this.stopEdit, onFocus: this.autoSelect });
+		var staticContent = React.createElement(
+			"div",
+			{ id: "prism-leaf-content", onDoubleClick: this.startEdit },
+			content
+		);
+
+		var renderContent = this.state.edit == true ? editContent : staticContent;
+
+		return renderContent;
 	},
 
 	render: function render() {
@@ -487,33 +529,29 @@ var PrismLeaf = React.createClass({
 		}
 
 		return React.createElement(
-			'div',
-			{ id: 'prism-leaf', className: leafClasses },
+			"div",
+			{ id: "prism-leaf", className: leafClasses },
 			React.createElement(
-				'header',
-				{ id: 'prism-leaf-header' },
+				"header",
+				{ id: "prism-leaf-header" },
 				React.createElement(
-					'h2',
+					"h2",
 					null,
 					this.props.data.title.rendered
 				),
 				React.createElement(
-					'div',
-					{ id: 'prism-leaf-meta-controls' },
-					React.createElement('i', { className: panelToggleClasses, onClick: this.props.functions.toggleMetaPanel }),
+					"div",
+					{ id: "prism-leaf-meta-controls" },
+					React.createElement("i", { className: panelToggleClasses, onClick: this.props.functions.toggleMetaPanel }),
 					React.createElement(
-						'h3',
+						"h3",
 						null,
 						metapanelHeading
 					),
-					React.createElement('i', { className: panelLockClasses, onClick: this.props.functions.lockMetaPanel })
+					React.createElement("i", { className: panelLockClasses, onClick: this.props.functions.lockMetaPanel })
 				)
 			),
-			React.createElement(
-				'div',
-				{ id: 'prism-leaf-content' },
-				this.props.data.content.rendered
-			),
+			this.renderContent(),
 			this.metapanel()
 		);
 	}
@@ -521,7 +559,7 @@ var PrismLeaf = React.createClass({
 });
 
 var PrismLeafMetaPanel = React.createClass({
-	displayName: 'PrismLeafMetaPanel',
+	displayName: "PrismLeafMetaPanel",
 
 	render: function render() {
 
@@ -532,8 +570,8 @@ var PrismLeafMetaPanel = React.createClass({
 		}, this);
 
 		return React.createElement(
-			'ul',
-			{ id: 'prism-leaf-meta-panel' },
+			"ul",
+			{ id: "prism-leaf-meta-panel" },
 			renderMetaPanel
 		);
 	}
@@ -541,7 +579,7 @@ var PrismLeafMetaPanel = React.createClass({
 });
 
 var PrismLeafMetaPanelPiece = React.createClass({
-	displayName: 'PrismLeafMetaPanelPiece',
+	displayName: "PrismLeafMetaPanelPiece",
 
 	getInitialState: function getInitialState() {
 		return { edit: false };
@@ -571,9 +609,9 @@ var PrismLeafMetaPanelPiece = React.createClass({
 
 	render: function render() {
 
-		var editData = React.createElement('input', { autoFocus: true, readOnly: true, type: 'text', value: this.props.data, onBlur: this.stopEdit, onFocus: this.autoSelect });
+		var editData = React.createElement("input", { autoFocus: true, readOnly: true, type: "text", value: this.props.data, onBlur: this.stopEdit, onFocus: this.autoSelect });
 		var staticData = React.createElement(
-			'code',
+			"code",
 			null,
 			this.props.data
 		);
@@ -581,15 +619,15 @@ var PrismLeafMetaPanelPiece = React.createClass({
 		var renderData = this.state.edit == true ? editData : staticData;
 
 		return React.createElement(
-			'li',
+			"li",
 			{ key: this.props.label },
 			React.createElement(
-				'h4',
+				"h4",
 				null,
 				this.props.label + ':'
 			),
 			React.createElement(
-				'span',
+				"span",
 				{ onClick: this.startEdit },
 				renderData
 			)
