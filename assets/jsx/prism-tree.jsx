@@ -5,7 +5,7 @@ var PrismTree = React.createClass( {
 		var state = { 
 			branches        : {},
 			active          : { branch : null },
-			lockMetaPanel   : 'unlock',
+			lockMetaPanel   : PRISM.lockMetaPanel,
 			isMetaPanelOpen : false
 		};
 
@@ -65,8 +65,6 @@ var PrismTree = React.createClass( {
 	 * @return {Boolean} [description]
 	 */
 	isMetaPanelOpen: function() {
-
-		console.log( 'here' );
 
 		var state     = this.state;
 
