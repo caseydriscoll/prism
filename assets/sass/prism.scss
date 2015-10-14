@@ -300,7 +300,8 @@ body > *:not(#prism) { display: none; }
 					}
 
 					i.fa-lock,
-					i.fa-unlock {
+					i.fa-unlock,
+					i.fa-unlock-alt {
 						display: block !important; position: absolute;
 						right: 20px; top: 20px;
 
@@ -315,7 +316,7 @@ body > *:not(#prism) { display: none; }
 					i.fa-lock {
 					}
 
-					i.fa-unlock {
+					i.fa-unlock-alt {
 						color: $grey;
 
 						&:hover {
@@ -376,7 +377,7 @@ body > *:not(#prism) { display: none; }
 					}
 
 					i.fa-lock,
-					i.fa-unlock {
+					i.fa-unlock-alt {
 						display: none;
 					}
 

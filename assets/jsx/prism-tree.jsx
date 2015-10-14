@@ -175,6 +175,25 @@ var PrismTree = React.createClass( {
 		this.setState( state );
 	},
 
+	saveLeaf : function() {
+
+		jQuery.ajax( {
+			method  : 'POST',
+			url     : PRISM.url.rest + this.state.active.branch,
+			data    : {
+				'title'   : 'This is post today',
+				'status'  : 'publish'
+			},
+			beforeSend: function ( xhr ) {
+				xhr.setRequestHeader( 'X-WP-Nonce', PRISM.nonce );
+			},
+			success : function( response ) {
+				console.log( response );
+			}
+		} );
+		
+	},
+
 	loadLeaves: function() {
 
 		// TODO: This is a temporary stop gap. Don't fetch the query if we already have them.

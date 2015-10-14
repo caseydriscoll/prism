@@ -216,6 +216,24 @@ var PrismTree = React.createClass({
 		this.setState(state);
 	},
 
+	saveLeaf: function saveLeaf() {
+
+		jQuery.ajax({
+			method: 'POST',
+			url: PRISM.url.rest + this.state.active.branch,
+			data: {
+				'title': 'This is post today',
+				'status': 'publish'
+			},
+			beforeSend: function beforeSend(xhr) {
+				xhr.setRequestHeader('X-WP-Nonce', PRISM.nonce);
+			},
+			success: function success(response) {
+				console.log(response);
+			}
+		});
+	},
+
 	loadLeaves: function loadLeaves() {
 
 		// TODO: This is a temporary stop gap. Don't fetch the query if we already have them.
@@ -553,7 +571,9 @@ var PrismLeaf = React.createClass({
 		var leafClasses = this.props.data.isMetaPanelOpen ? 'metapanel-open' : 'metapanel-closed';
 		var metapanelHeading = this.props.data.isMetaPanelOpen ? 'Post Meta' : null;
 
-		var panelLockClasses = "fa fa-lg fa-border fa-pull-right fa-" + this.props.data.lockMetaPanel;
+		var lockIcon = this.props.data.lockMetaPanel == 'lock' ? 'lock' : 'unlock-alt';
+
+		var panelLockClasses = "fa fa-lg fa-border fa-pull-right fa-" + lockIcon;
 		var panelToggleClasses = "fa fa-3x fa-pull-left metapanel-control";
 
 		if (this.props.data.isMetaPanelOpen) {

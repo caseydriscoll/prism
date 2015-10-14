@@ -192,7 +192,8 @@ body > *:not(#prism) {
         #prism #prism-tree #prism-leaf.metapanel-open div#prism-leaf-meta-controls i.fa.metapanel-control {
           color: #000000 !important; }
         #prism #prism-tree #prism-leaf.metapanel-open div#prism-leaf-meta-controls i.fa-lock,
-        #prism #prism-tree #prism-leaf.metapanel-open div#prism-leaf-meta-controls i.fa-unlock {
+        #prism #prism-tree #prism-leaf.metapanel-open div#prism-leaf-meta-controls i.fa-unlock,
+        #prism #prism-tree #prism-leaf.metapanel-open div#prism-leaf-meta-controls i.fa-unlock-alt {
           display: block !important;
           position: absolute;
           right: 20px;
@@ -200,9 +201,9 @@ body > *:not(#prism) {
           cursor: pointer;
           border-color: transparent;
           color: #000000; }
-        #prism #prism-tree #prism-leaf.metapanel-open div#prism-leaf-meta-controls i.fa-unlock {
+        #prism #prism-tree #prism-leaf.metapanel-open div#prism-leaf-meta-controls i.fa-unlock-alt {
           color: #808080; }
-          #prism #prism-tree #prism-leaf.metapanel-open div#prism-leaf-meta-controls i.fa-unlock:hover {
+          #prism #prism-tree #prism-leaf.metapanel-open div#prism-leaf-meta-controls i.fa-unlock-alt:hover {
             color: #87CEFA; }
         #prism #prism-tree #prism-leaf.metapanel-open div#prism-leaf-meta-controls h3 {
           padding-left: 78px; }
@@ -239,7 +240,7 @@ body > *:not(#prism) {
             margin: 10px;
             cursor: pointer; }
           #prism #prism-tree #prism-leaf header#prism-leaf-header div#prism-leaf-meta-controls i.fa-lock,
-          #prism #prism-tree #prism-leaf header#prism-leaf-header div#prism-leaf-meta-controls i.fa-unlock {
+          #prism #prism-tree #prism-leaf header#prism-leaf-header div#prism-leaf-meta-controls i.fa-unlock-alt {
             display: none; }
           #prism #prism-tree #prism-leaf header#prism-leaf-header div#prism-leaf-meta-controls h3 {
             margin-top: 17px;
