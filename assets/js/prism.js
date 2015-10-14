@@ -199,38 +199,40 @@ var PrismTree = React.createClass({
 	},
 
 	addLeaf: function addLeaf() {
-		var state = this.state;
-		var active = this.state.active;
 
-		state.branches[active.branch].leaves['new'] = {
-			id: 'new',
-			date: new Date().toISOString().slice(0, 19),
-			content: {
-				rendered: ''
-			},
-			title: {
-				rendered: 'new'
-			}
+		var data = {
+			title: '',
+			content: ' ',
+			date: new Date().toISOString().slice(0, 19)
 		};
 
-		this.setState(state);
+		this.saveLeaf(data);
 	},
 
-	saveLeaf: function saveLeaf() {
+	saveLeaf: function saveLeaf(data) {
 
 		jQuery.ajax({
 			method: 'POST',
 			url: PRISM.url.rest + this.state.active.branch,
-			data: {
-				'title': 'This is post today',
-				'status': 'publish'
-			},
+			data: data,
 			beforeSend: function beforeSend(xhr) {
 				xhr.setRequestHeader('X-WP-Nonce', PRISM.nonce);
 			},
-			success: function success(response) {
-				console.log(response);
-			}
+			success: (function (response) {
+
+				var state = this.state;
+
+				var leaf = response;
+
+				leaf.metapanel = 'closed';
+
+				PRISM.newleaf = true;
+
+				state.branches[this.state.active.branch].leaf = leaf.id;
+				state.branches[this.state.active.branch].leaves[leaf.id] = leaf;
+
+				this.setState(state);
+			}).bind(this)
 		});
 	},
 
@@ -491,15 +493,28 @@ var PrismBranchHeader = React.createClass({
 var PrismLeafNode = React.createClass({
 	displayName: 'PrismLeafNode',
 
+	id: function id() {
+		return this.props.data.type + "-" + this.props.data.id;
+	},
+
+	componentDidMount: function componentDidMount() {
+		if (PRISM.newleaf) {
+			PRISM.newleaf = false;
+
+			jQuery('#prism-leaf-header h2').click();
+		}
+	},
+
 	render: function render() {
 
+		var id = this.id();
 		var title = this.props.data.title.rendered;
 
 		var classes = 'prism-leaf ' + this.props.data.active;
 
 		return React.createElement(
 			'li',
-			{ id: this.props.data.id, className: classes, key: this.props.key, onClick: this.props.onClick },
+			{ id: id, className: classes, key: this.props.key, onClick: this.props.onClick },
 			React.createElement(
 				'span',
 				{ 'data-title': title, 'data-id': this.props.data.id },

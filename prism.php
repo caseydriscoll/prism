@@ -127,7 +127,8 @@ class Prism {
 			'view'          => 'grid',
 			'branches'      => $branches,
 			'meta'          => $meta,
-			'lockMetaPanel' => 'lock'
+			'lockMetaPanel' => 'lock',
+			'newleaf'       => false
 		);
 
 		return $data;

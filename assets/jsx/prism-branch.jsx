@@ -56,14 +56,28 @@ var PrismBranchHeader = React.createClass( {
 
 var PrismLeafNode = React.createClass( {
 
+	id : function() {
+		return this.props.data.type + "-" + this.props.data.id;
+	},
+
+	componentDidMount: function() {
+		if ( PRISM.newleaf ) {
+			PRISM.newleaf = false;
+
+			jQuery( '#prism-leaf-header h2' ).click();
+		}
+
+	},
+
 	render: function() {
 
+		var id      = this.id();
 		var title   = this.props.data.title.rendered;
 
 		var classes = 'prism-leaf ' + this.props.data.active;
 
 		return (
-			<li id={this.props.data.id} className={classes} key={this.props.key} onClick={this.props.onClick}>
+			<li id={id} className={classes} key={this.props.key} onClick={this.props.onClick}>
 				<span data-title={title} data-id={this.props.data.id}>{title}</span>
 			</li>
 		)

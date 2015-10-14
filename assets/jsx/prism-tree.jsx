@@ -158,40 +158,44 @@ var PrismTree = React.createClass( {
 	},
 
 	addLeaf: function() {
-		var state = this.state;
-		var active = this.state.active;
 
-		state.branches[active.branch].leaves['new'] = { 
-			id : 'new',
-			date : new Date().toISOString().slice(0, 19),
-			content : {
-				rendered : '',
-			},
-			title : {
-				rendered : 'new'
-			}
+		var data = { 
+			title   : '',
+			content : ' ',
+			date    : new Date().toISOString().slice(0, 19)
 		};
 
-		this.setState( state );
+		this.saveLeaf( data );
+
 	},
 
-	saveLeaf : function() {
+	saveLeaf : function( data ) {
 
 		jQuery.ajax( {
 			method  : 'POST',
 			url     : PRISM.url.rest + this.state.active.branch,
-			data    : {
-				'title'   : 'This is post today',
-				'status'  : 'publish'
-			},
+			data    : data,
 			beforeSend: function ( xhr ) {
 				xhr.setRequestHeader( 'X-WP-Nonce', PRISM.nonce );
 			},
 			success : function( response ) {
-				console.log( response );
-			}
+
+				var state = this.state;
+
+				var leaf = response;
+
+				leaf.metapanel = 'closed';
+
+				PRISM.newleaf  = true;
+
+				state.branches[this.state.active.branch].leaf = leaf.id;
+				state.branches[this.state.active.branch].leaves[leaf.id] = leaf;
+
+				this.setState( state );
+
+			}.bind( this )
 		} );
-		
+
 	},
 
 	loadLeaves: function() {
