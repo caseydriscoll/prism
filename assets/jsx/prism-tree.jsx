@@ -107,6 +107,22 @@ var PrismTree = React.createClass( {
 		this.loadLeaves();
 	},
 
+	changeValue : function(e) {
+
+		var state  = this.state;
+
+		var branch = state.branches[state.active.branch];
+		var leaf   = branch.leaf;
+		var key    = e.target.dataset.key;
+
+		if ( key == 'title' || key == 'content' )
+			branch.leaves[leaf][key].rendered = e.target.value;
+		else
+			branch.leaves[leaf][key] = e.target.value;
+
+		this.setState( state );
+	},
+
 	changeBranchView : function(e) {
 		e.preventDefault();
 
@@ -165,34 +181,51 @@ var PrismTree = React.createClass( {
 			date    : new Date().toISOString().slice(0, 19)
 		};
 
-		this.saveLeaf( data );
+		this.saveLeaf( 'create', data );
 
 	},
 
-	saveLeaf : function( data ) {
+	/**
+	 * This function creates a new leaf through this.addLeaf     (create type)
+	 *   or updates and existing leaf through PrismLeaf.prepLeaf (update type)
+	 *
+	 * TODO: The url should not rely on this.state.active.branch,
+	 *   cause maybe the user can switch it real fast
+	 */
+	saveLeaf : function( type, data ) {
+
+		var url = PRISM.url.rest + this.state.active.branch;
+
+		if ( type == 'create' ) PRISM.newleaf = true;
+
+		if ( type == 'update' ) url += '/' + data.id;
 
 		jQuery.ajax( {
 			method  : 'POST',
-			url     : PRISM.url.rest + this.state.active.branch,
+			url     : url,
 			data    : data,
 			beforeSend: function ( xhr ) {
 				xhr.setRequestHeader( 'X-WP-Nonce', PRISM.nonce );
 			},
 			success : function( response ) {
 
-				var state = this.state;
+				var state  = this.state;
 
-				var leaf = response;
+				var leaf   = response;
+				var branch = state.branches[this.state.active.branch];
 
 				leaf.metapanel = 'closed';
 
-				PRISM.newleaf  = true;
+				branch.leaf = leaf.id;
+				branch.leaves[leaf.id] = leaf;
 
-				state.branches[this.state.active.branch].leaf = leaf.id;
-				state.branches[this.state.active.branch].leaves[leaf.id] = leaf;
+				state.isMetaPanelOpen = this.isMetaPanelOpen();
 
 				this.setState( state );
 
+			}.bind( this ),
+			error : function( response ) {
+				console.log( 'error: ', response );
 			}.bind( this )
 		} );
 
@@ -288,24 +321,26 @@ var PrismTree = React.createClass( {
 
 		var auth = this.props.data.authenticated;
 
-		var prismTrunkFunctions  = {
+		var trunkFunctions  = {
 			changeBranch : this.changeBranch
 		};
 
-		var prismBranchFunctions = {
+		var branchFunctions = {
 			changeLeaf : this.changeLeaf,
 			changeView : this.changeBranchView,
 			addLeaf    : this.addLeaf
 		};
 
-		var prismLeafFunctions   = {
+		var leafFunctions   = {
 			lockMetaPanel   : this.lockMetaPanel,
-			toggleMetaPanel : this.toggleMetaPanel
+			toggleMetaPanel : this.toggleMetaPanel,
+			changeValue     : this.changeValue,
+			saveLeaf        : this.saveLeaf
 		}
 
-		var prismTrunk   = <PrismTrunk  functions={prismTrunkFunctions}  auth={auth} />
-		var prismBranch  = <PrismBranch functions={prismBranchFunctions} auth={auth} data={this.branchData()} />;
-		var prismLeaf    = <PrismLeaf   functions={prismLeafFunctions}   auth={auth} data={this.leafData()}   />;
+		var prismTrunk   = <PrismTrunk  func={trunkFunctions}  auth={auth} />
+		var prismBranch  = <PrismBranch func={branchFunctions} auth={auth} data={this.branchData()} />;
+		var prismLeaf    = <PrismLeaf   func={leafFunctions}   auth={auth} data={this.leafData()}   />;
 
 		var renderTrunk  = prismTrunk; // For code consistency
 		var renderBranch = this.hasActiveBranch() ? prismBranch : null;

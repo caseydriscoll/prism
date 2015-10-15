@@ -142,7 +142,7 @@ body > *:not(#prism) {
       #prism #prism-tree #prism-branch ul#prism-leaves {
         height: 100%;
         padding: 5px;
-        margin: 0;
+        margin: 0 1px 0 0;
         overflow-y: scroll; }
         #prism #prism-tree #prism-branch ul#prism-leaves::-webkit-scrollbar-track {
           -webkit-box-shadow: none;
@@ -206,6 +206,7 @@ body > *:not(#prism) {
           #prism #prism-tree #prism-leaf.metapanel-open div#prism-leaf-meta-controls i.fa-unlock-alt:hover {
             color: #87CEFA; }
         #prism #prism-tree #prism-leaf.metapanel-open div#prism-leaf-meta-controls h3 {
+          display: block !important;
           padding-left: 78px; }
       #prism #prism-tree #prism-leaf.metapanel-open #prism-leaf-content {
         width: calc( 100% - 300px - 20px ); }
@@ -250,6 +251,7 @@ body > *:not(#prism) {
           #prism #prism-tree #prism-leaf header#prism-leaf-header div#prism-leaf-meta-controls i.fa-unlock-alt {
             display: none; }
           #prism #prism-tree #prism-leaf header#prism-leaf-header div#prism-leaf-meta-controls h3 {
+            display: none;
             margin-top: 17px;
             color: #000000;
             text-transform: uppercase;

@@ -48,13 +48,15 @@ module.exports = function( grunt ) {
 				files: {
 					'assets/js/prism.js' : 'assets/jsx/prism.jsx',
 
-					'assets/js/prism-header.js' : 'assets/jsx/prism-header.jsx',
-					'assets/js/prism-tree.js'   : 'assets/jsx/prism-tree.jsx',
-					'assets/js/prism-footer.js' : 'assets/jsx/prism-footer.jsx',
+					'assets/js/prism-header.js'         : 'assets/jsx/prism-header.jsx',
+					'assets/js/prism-tree.js'           : 'assets/jsx/prism-tree.jsx',
+					'assets/js/prism-footer.js'         : 'assets/jsx/prism-footer.jsx',
 
-					'assets/js/prism-trunk.js'   : 'assets/jsx/prism-trunk.jsx',
-					'assets/js/prism-branch.js'  : 'assets/jsx/prism-branch.jsx',
-					'assets/js/prism-leaf.js'    : 'assets/jsx/prism-leaf.jsx'
+					'assets/js/prism-trunk.js'          : 'assets/jsx/prism-trunk.jsx',
+					'assets/js/prism-branch.js'         : 'assets/jsx/prism-branch.jsx',
+					'assets/js/prism-leaf.js'           : 'assets/jsx/prism-leaf.jsx',
+					'assets/js/prism-leaf-header.js'    : 'assets/jsx/prism-leaf/header.jsx',
+					'assets/js/prism-leaf-metapanel.js' : 'assets/jsx/prism-leaf/metapanel.jsx'
 				}
 			}
 		},
@@ -69,6 +71,8 @@ module.exports = function( grunt ) {
 					'assets/js/prism-trunk.js',
 					'assets/js/prism-branch.js',
 					'assets/js/prism-leaf.js',
+					'assets/js/prism-leaf-header.js',
+					'assets/js/prism-leaf-metapanel.js',
 
 					'assets/js/prism.js'
 				],
@@ -84,12 +88,14 @@ module.exports = function( grunt ) {
 
 				'assets/js/prism-trunk.js',
 				'assets/js/prism-branch.js',
-				'assets/js/prism-leaf.js'
+				'assets/js/prism-leaf.js',
+				'assets/js/prism-leaf-header.js',
+				'assets/js/prism-leaf-metapanel.js'
 		],
 
 		watch: {
 			jsx : {
-				files : ['assets/jsx/*.jsx'],
+				files : ['assets/jsx/*.jsx', 'assets/jsx/*/*.jsx',],
 				tasks : ['babel', 'concat', 'clean']
 			},
 			sass: {

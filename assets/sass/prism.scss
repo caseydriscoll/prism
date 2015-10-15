@@ -231,7 +231,7 @@ body > *:not(#prism) { display: none; }
 			ul#prism-leaves {
 
 				height: 100%;
-				padding: 5px; margin: 0;
+				padding: 5px; margin: 0 1px 0 0;
 
 				overflow-y: scroll;
 
@@ -325,6 +325,7 @@ body > *:not(#prism) { display: none; }
 					}
 
 					h3 {
+						display: block !important;
 						padding-left: 78px;
 					}
 				}
@@ -386,6 +387,7 @@ body > *:not(#prism) { display: none; }
 					}
 
 					h3 {
+						display: none;
 						margin-top: 17px;
 						color: $black;
 						text: {

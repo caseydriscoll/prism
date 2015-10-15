@@ -154,6 +154,19 @@ var PrismTree = React.createClass({
 		this.loadLeaves();
 	},
 
+	changeValue: function changeValue(e) {
+
+		var state = this.state;
+
+		var branch = state.branches[state.active.branch];
+		var leaf = branch.leaf;
+		var key = e.target.dataset.key;
+
+		if (key == 'title' || key == 'content') branch.leaves[leaf][key].rendered = e.target.value;else branch.leaves[leaf][key] = e.target.value;
+
+		this.setState(state);
+	},
+
 	changeBranchView: function changeBranchView(e) {
 		e.preventDefault();
 
@@ -206,14 +219,27 @@ var PrismTree = React.createClass({
 			date: new Date().toISOString().slice(0, 19)
 		};
 
-		this.saveLeaf(data);
+		this.saveLeaf('create', data);
 	},
 
-	saveLeaf: function saveLeaf(data) {
+	/**
+  * This function creates a new leaf through this.addLeaf     (create type)
+  *   or updates and existing leaf through PrismLeaf.prepLeaf (update type)
+  *
+  * TODO: The url should not rely on this.state.active.branch,
+  *   cause maybe the user can switch it real fast
+  */
+	saveLeaf: function saveLeaf(type, data) {
+
+		var url = PRISM.url.rest + this.state.active.branch;
+
+		if (type == 'create') PRISM.newleaf = true;
+
+		if (type == 'update') url += '/' + data.id;
 
 		jQuery.ajax({
 			method: 'POST',
-			url: PRISM.url.rest + this.state.active.branch,
+			url: url,
 			data: data,
 			beforeSend: function beforeSend(xhr) {
 				xhr.setRequestHeader('X-WP-Nonce', PRISM.nonce);
@@ -223,15 +249,19 @@ var PrismTree = React.createClass({
 				var state = this.state;
 
 				var leaf = response;
+				var branch = state.branches[this.state.active.branch];
 
 				leaf.metapanel = 'closed';
 
-				PRISM.newleaf = true;
+				branch.leaf = leaf.id;
+				branch.leaves[leaf.id] = leaf;
 
-				state.branches[this.state.active.branch].leaf = leaf.id;
-				state.branches[this.state.active.branch].leaves[leaf.id] = leaf;
+				state.isMetaPanelOpen = this.isMetaPanelOpen();
 
 				this.setState(state);
+			}).bind(this),
+			error: (function (response) {
+				console.log('error: ', response);
 			}).bind(this)
 		});
 	},
@@ -322,24 +352,26 @@ var PrismTree = React.createClass({
 
 		var auth = this.props.data.authenticated;
 
-		var prismTrunkFunctions = {
+		var trunkFunctions = {
 			changeBranch: this.changeBranch
 		};
 
-		var prismBranchFunctions = {
+		var branchFunctions = {
 			changeLeaf: this.changeLeaf,
 			changeView: this.changeBranchView,
 			addLeaf: this.addLeaf
 		};
 
-		var prismLeafFunctions = {
+		var leafFunctions = {
 			lockMetaPanel: this.lockMetaPanel,
-			toggleMetaPanel: this.toggleMetaPanel
+			toggleMetaPanel: this.toggleMetaPanel,
+			changeValue: this.changeValue,
+			saveLeaf: this.saveLeaf
 		};
 
-		var prismTrunk = React.createElement(PrismTrunk, { functions: prismTrunkFunctions, auth: auth });
-		var prismBranch = React.createElement(PrismBranch, { functions: prismBranchFunctions, auth: auth, data: this.branchData() });
-		var prismLeaf = React.createElement(PrismLeaf, { functions: prismLeafFunctions, auth: auth, data: this.leafData() });
+		var prismTrunk = React.createElement(PrismTrunk, { func: trunkFunctions, auth: auth });
+		var prismBranch = React.createElement(PrismBranch, { func: branchFunctions, auth: auth, data: this.branchData() });
+		var prismLeaf = React.createElement(PrismLeaf, { func: leafFunctions, auth: auth, data: this.leafData() });
 
 		var renderTrunk = prismTrunk; // For code consistency
 		var renderBranch = this.hasActiveBranch() ? prismBranch : null;
@@ -374,11 +406,15 @@ var PrismTrunk = React.createClass({
 	displayName: "PrismTrunk",
 
 	render: function render() {
+
+		var auth = this.props.auth;
+		var func = this.props.func;
+
 		return React.createElement(
 			"div",
 			{ id: "prism-trunk" },
 			React.createElement(PrismSearch, null),
-			React.createElement(PrismMenu, { onClick: this.props.functions.changeBranch })
+			React.createElement(PrismMenu, { func: func })
 		);
 	}
 
@@ -403,13 +439,15 @@ var PrismMenu = React.createClass({
 
 	render: function render() {
 
+		var func = this.props.func;
+
 		var menuItems = PRISM.branches.map(function (branch, i) {
 			return React.createElement(
 				"li",
 				{ key: i },
 				React.createElement(
 					"a",
-					{ href: '#' + branch.slug, "data-slug": branch.slug, onClick: this.props.onClick },
+					{ href: '#' + branch.slug, "data-slug": branch.slug, onClick: func.changeBranch },
 					branch.title
 				)
 			);
@@ -435,19 +473,23 @@ var PrismBranch = React.createClass({
 
 	render: function render() {
 
-		var prismLeafNodes = Object.keys(this.props.data.leaves).reverse().map(function (key) {
+		var auth = this.props.auth;
+		var data = this.props.data;
+		var func = this.props.func;
 
-			var leaf = this.props.data.leaves[key];
+		var prismLeafNodes = Object.keys(data.leaves).reverse().map(function (key) {
 
-			if (leaf.id == this.props.data.leaf) leaf.active = 'active';else leaf.active = '';
+			var leaf = data.leaves[key];
 
-			return React.createElement(PrismLeafNode, { data: leaf, key: key, onClick: this.props.functions.changeLeaf });
+			if (leaf.id == data.leaf) leaf.active = 'active';else leaf.active = '';
+
+			return React.createElement(PrismLeafNode, { data: leaf, key: key, func: func });
 		}, this);
 
 		return React.createElement(
 			'div',
-			{ id: 'prism-branch', className: this.props.data.view },
-			React.createElement(PrismBranchHeader, { auth: this.props.auth, data: this.props.data, changeView: this.props.functions.changeView, addLeaf: this.props.functions.addLeaf }),
+			{ id: 'prism-branch', className: data.view },
+			React.createElement(PrismBranchHeader, { auth: auth, data: data, func: func }),
 			React.createElement(
 				'ul',
 				{ id: 'prism-leaves' },
@@ -463,12 +505,16 @@ var PrismBranchHeader = React.createClass({
 
 	render: function render() {
 
+		var auth = this.props.auth;
+		var data = this.props.data;
+		var func = this.props.func;
+
+		var grid = data.view == 'grid' ? ' fa-th active' : ' fa-th';
+		var list = data.view == 'list' ? ' fa-list active' : ' fa-list';
+
 		var classes = 'fa fa-border fa-pull-right fa-2x';
 
-		var grid = this.props.data.view == 'grid' ? ' fa-th active' : ' fa-th';
-		var list = this.props.data.view == 'list' ? ' fa-list active' : ' fa-list';
-
-		var renderAddLeaf = this.props.auth ? React.createElement('i', { id: 'prism-add-leaf', className: classes + ' fa-plus', onClick: this.props.addLeaf }) : null;
+		var renderAddLeaf = auth ? React.createElement('i', { id: 'prism-add-leaf', className: classes + ' fa-plus', onClick: func.addLeaf }) : null;
 
 		return React.createElement(
 			'header',
@@ -476,13 +522,13 @@ var PrismBranchHeader = React.createClass({
 			React.createElement(
 				'h2',
 				null,
-				this.props.data.title
+				data.title
 			),
 			React.createElement(
 				'div',
 				{ id: 'prism-branch-visual-controls' },
-				React.createElement('i', { id: 'prism-branch-rows', 'data-view': 'list', className: classes + list, onClick: this.props.changeView }),
-				React.createElement('i', { id: 'prism-branch-grid', 'data-view': 'grid', className: classes + grid, onClick: this.props.changeView }),
+				React.createElement('i', { id: 'prism-branch-rows', 'data-view': 'list', className: classes + list, onClick: func.changeView }),
+				React.createElement('i', { id: 'prism-branch-grid', 'data-view': 'grid', className: classes + grid, onClick: func.changeView }),
 				renderAddLeaf
 			)
 		);
@@ -497,27 +543,23 @@ var PrismLeafNode = React.createClass({
 		return this.props.data.type + "-" + this.props.data.id;
 	},
 
-	componentDidMount: function componentDidMount() {
-		if (PRISM.newleaf) {
-			PRISM.newleaf = false;
-
-			jQuery('#prism-leaf-header h2').click();
-		}
-	},
-
 	render: function render() {
 
-		var id = this.id();
-		var title = this.props.data.title.rendered;
+		var auth = this.props.auth;
+		var data = this.props.data;
+		var func = this.props.func;
 
-		var classes = 'prism-leaf ' + this.props.data.active;
+		var id = this.id();
+		var title = data.title.rendered;
+
+		var classes = 'prism-leaf ' + data.active;
 
 		return React.createElement(
 			'li',
-			{ id: id, className: classes, key: this.props.key, onClick: this.props.onClick },
+			{ id: id, className: classes, key: this.props.key, onClick: func.changeLeaf },
 			React.createElement(
 				'span',
-				{ 'data-title': title, 'data-id': this.props.data.id },
+				{ 'data-title': title, 'data-id': data.id },
 				title
 			)
 		);
@@ -525,54 +567,51 @@ var PrismLeafNode = React.createClass({
 
 });
 
-"use strict";
+'use strict';
 
 var PrismLeaf = React.createClass({
-	displayName: "PrismLeaf",
+	displayName: 'PrismLeaf',
 
 	getInitialState: function getInitialState() {
 		return { edit: false };
 	},
 
-	startEdit: function startEdit(e) {
+	toggleEdit: function toggleEdit() {
 
-		if (!this.props.auth) return;
-
-		var state = this.state;
-
-		state.edit = true;
-
-		this.setState(state);
+		if (this.props.auth) this.setState({ edit: this.state.edit ? false : true });
 	},
 
-	stopEdit: function stopEdit() {
+	prepLeaf: function prepLeaf(e) {
 
-		if (!this.props.auth) return;
+		var data = this.props.data;
+		var func = this.props.func;
 
-		var state = this.state;
+		data = {
+			'id': data.id,
+			'status': 'publish'
+		};
 
-		state.edit = false;
+		data[e.target.dataset.key] = e.target.value;
 
-		this.setState(state);
+		func.saveLeaf('update', data);
 	},
 
 	autoSelect: function autoSelect(e) {
 		e.nativeEvent.target.select();
 	},
 
-	metapanel: function metapanel() {
+	renderContentPanel: function renderContentPanel() {
 
-		if (this.props.data.isMetaPanelOpen) return React.createElement(PrismLeafMetaPanel, { auth: this.props.auth, data: this.props.data });else return null;
-	},
+		var auth = this.props.auth;
+		var data = this.props.data;
+		var func = this.props.func;
 
-	renderContent: function renderContent() {
+		var content = data.content.rendered;
 
-		var content = this.props.data.content.rendered;
-
-		var editContent = React.createElement("textarea", { autoFocus: true, readOnly: true, id: "prism-leaf-content", value: content, onBlur: this.stopEdit, onFocus: this.autoSelect });
+		var editContent = React.createElement('textarea', { autoFocus: true, readOnly: true, id: 'prism-leaf-content', value: content, onBlur: this.toggleEdit, onFocus: this.autoSelect });
 		var staticContent = React.createElement(
-			"div",
-			{ id: "prism-leaf-content", onDoubleClick: this.startEdit },
+			'div',
+			{ id: 'prism-leaf-content', onDoubleClick: this.toggleEdit },
 			content
 		);
 
@@ -581,46 +620,65 @@ var PrismLeaf = React.createClass({
 		return renderContent;
 	},
 
+	renderMetaPanel: function renderMetaPanel() {
+
+		var auth = this.props.auth;
+		var data = this.props.data;
+		var func = this.props.func;
+
+		if (data.isMetaPanelOpen) return React.createElement(PrismLeafMetaPanel, { auth: auth, data: data });else return null;
+	},
+
 	render: function render() {
 
-		var leafClasses = this.props.data.isMetaPanelOpen ? 'metapanel-open' : 'metapanel-closed';
-		var metapanelHeading = this.props.data.isMetaPanelOpen ? 'Post Meta' : null;
+		var auth = this.props.auth;
+		var data = this.props.data;
+		var func = this.props.func;
 
-		var lockIcon = this.props.data.lockMetaPanel == 'lock' ? 'lock' : 'unlock-alt';
+		func.prepLeaf = this.prepLeaf;
+		func.autoSelect = this.autoSelect;
 
-		var panelLockClasses = "fa fa-lg fa-border fa-pull-right fa-" + lockIcon;
-		var panelToggleClasses = "fa fa-3x fa-pull-left metapanel-control";
-
-		if (this.props.data.isMetaPanelOpen) {
-			panelToggleClasses += ' fa-toggle-right';
-		} else {
-			panelToggleClasses += ' fa-toggle-left';
-		}
+		var leafClasses = data.isMetaPanelOpen ? 'metapanel-open' : 'metapanel-closed';
 
 		return React.createElement(
-			"div",
-			{ id: "prism-leaf", className: leafClasses },
-			React.createElement(
-				"header",
-				{ id: "prism-leaf-header" },
-				React.createElement(PrismLeafTitle, { auth: this.props.auth, title: this.props.data.title.rendered }),
-				React.createElement(
-					"div",
-					{ id: "prism-leaf-meta-controls" },
-					React.createElement("i", { className: panelToggleClasses, onClick: this.props.functions.toggleMetaPanel }),
-					React.createElement(
-						"h3",
-						null,
-						metapanelHeading
-					),
-					React.createElement("i", { className: panelLockClasses, onClick: this.props.functions.lockMetaPanel })
-				)
-			),
-			this.renderContent(),
-			this.metapanel()
+			'div',
+			{ id: 'prism-leaf', className: leafClasses },
+			React.createElement(PrismLeafHeader, { auth: auth, data: data, func: func }),
+			this.renderContentPanel(),
+			this.renderMetaPanel()
 		);
 	}
 
+});
+
+"use strict";
+
+var PrismLeafHeader = React.createClass({
+	displayName: "PrismLeafHeader",
+
+	render: function render() {
+
+		var auth = this.props.auth;
+		var data = this.props.data;
+		var func = this.props.func;
+
+		return React.createElement(
+			"header",
+			{ id: "prism-leaf-header" },
+			React.createElement(PrismLeafTitle, { auth: auth, data: data.title.rendered, func: func }),
+			React.createElement(
+				"div",
+				{ id: "prism-leaf-meta-controls" },
+				React.createElement(PrismLeafMetaControlIcon, { type: "lock", data: data, func: func }),
+				React.createElement(PrismLeafMetaControlIcon, { type: "toggle", data: data, func: func }),
+				React.createElement(
+					"h3",
+					null,
+					"Post Meta"
+				)
+			)
+		);
+	}
 });
 
 var PrismLeafTitle = React.createClass({
@@ -630,43 +688,48 @@ var PrismLeafTitle = React.createClass({
 		return { edit: false };
 	},
 
-	startEdit: function startEdit(e) {
+	toggleEdit: function toggleEdit(e) {
 
-		if (!this.props.auth) return;
+		if (this.props.auth) {
 
-		var state = this.state;
+			if (this.state.edit) this.props.func.prepLeaf(e);
 
-		state.edit = true;
-
-		this.setState(state);
-	},
-
-	stopEdit: function stopEdit() {
-
-		if (!this.props.auth) return;
-
-		var state = this.state;
-
-		state.edit = false;
-
-		this.setState(state);
-	},
-
-	autoSelect: function autoSelect(e) {
-		e.nativeEvent.target.select();
+			this.setState({ edit: this.state.edit ? false : true });
+		}
 	},
 
 	renderTitle: function renderTitle() {
-		var editTitle = React.createElement("input", { autoFocus: true, readOnly: true, type: "text", value: this.props.title, onBlur: this.stopEdit, onFocus: this.autoSelect });
+
+		var auth = this.props.auth;
+		var data = this.props.data;
+		var func = this.props.func;
+
+		var editTitle = React.createElement("input", { autoFocus: true, "data-key": "title", type: "text", value: data, onBlur: this.toggleEdit, onFocus: func.autoSelect, onChange: func.changeValue });
 		var staticTitle = React.createElement(
 			"div",
-			{ onClick: this.startEdit },
-			this.props.title
+			{ onClick: this.toggleEdit },
+			data
 		);
 
 		var renderTitle = this.state.edit ? editTitle : staticTitle;
 
 		return renderTitle;
+	},
+
+	clickTitle: function clickTitle() {
+		if (PRISM.newleaf) {
+			PRISM.newleaf = false;
+
+			jQuery('#prism-leaf-header h2 div').click();
+		}
+	},
+
+	componentDidMount: function componentDidMount() {
+		this.clickTitle();
+	},
+
+	componentDidUpdate: function componentDidUpdate() {
+		this.clickTitle();
 	},
 
 	render: function render() {
@@ -679,6 +742,32 @@ var PrismLeafTitle = React.createClass({
 	}
 
 });
+
+var PrismLeafMetaControlIcon = React.createClass({
+	displayName: "PrismLeafMetaControlIcon",
+
+	render: function render() {
+
+		var auth = this.props.auth;
+		var data = this.props.data;
+		var func = this.props.func;
+
+		var lockIcon = data.lockMetaPanel == 'lock' ? 'lock' : 'unlock-alt';
+
+		var lockClasses = "fa fa-lg fa-border fa-pull-right fa-" + lockIcon;
+		var toggleClasses = "fa fa-3x fa-pull-left metapanel-control";
+
+		toggleClasses += data.isMetaPanelOpen ? ' fa-toggle-right' : ' fa-toggle-left';
+
+		var classes = this.props.type == 'lock' ? lockClasses : toggleClasses;
+		var handleClick = this.props.type == 'lock' ? func.lockMetaPanel : func.toggleMetaPanel;
+
+		return React.createElement("i", { className: classes, onClick: handleClick });
+	}
+
+});
+
+"use strict";
 
 var PrismLeafMetaPanel = React.createClass({
 	displayName: "PrismLeafMetaPanel",

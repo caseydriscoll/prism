@@ -1,10 +1,14 @@
 var PrismTrunk = React.createClass( {
 
 	render: function() {
+
+		var auth = this.props.auth;
+		var func = this.props.func;
+
 		return (
 			<div id="prism-trunk">
 				<PrismSearch />
-				<PrismMenu onClick={this.props.functions.changeBranch} />
+				<PrismMenu func={func} />
 			</div>
 		);
 	}
@@ -31,10 +35,12 @@ var PrismMenu = React.createClass( {
 
 	render: function() {
 
+		var func = this.props.func;
+
 		var menuItems = PRISM.branches.map( function( branch, i ) {
 			return (
 				<li key={i}>
-					<a href={'#' + branch.slug} data-slug={branch.slug} onClick={this.props.onClick}>{branch.title}</a>
+					<a href={'#' + branch.slug} data-slug={branch.slug} onClick={func.changeBranch}>{branch.title}</a>
 				</li>
 			);
 		}, this );
