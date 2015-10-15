@@ -576,9 +576,14 @@ var PrismLeaf = React.createClass({
 		return { edit: false };
 	},
 
-	toggleEdit: function toggleEdit() {
+	toggleEdit: function toggleEdit(e) {
 
-		if (this.props.auth) this.setState({ edit: this.state.edit ? false : true });
+		if (this.props.auth) {
+
+			if (this.state.edit) this.prepLeaf(e);
+
+			this.setState({ edit: this.state.edit ? false : true });
+		}
 	},
 
 	prepLeaf: function prepLeaf(e) {
@@ -608,7 +613,7 @@ var PrismLeaf = React.createClass({
 
 		var content = data.content.rendered;
 
-		var editContent = React.createElement('textarea', { autoFocus: true, readOnly: true, id: 'prism-leaf-content', value: content, onBlur: this.toggleEdit, onFocus: this.autoSelect });
+		var editContent = React.createElement('textarea', { autoFocus: true, id: 'prism-leaf-content', 'data-key': 'content', value: content, onBlur: this.toggleEdit, onFocus: this.autoSelect, onChange: func.changeValue });
 		var staticContent = React.createElement(
 			'div',
 			{ id: 'prism-leaf-content', onDoubleClick: this.toggleEdit },
