@@ -377,7 +377,7 @@ var PrismTree = React.createClass({
   */
 	render: function render() {
 
-		var auth = this.props.data.authenticated;
+		var auth = this.props.auth;
 
 		var trunkFunctions = {
 			changeBranch: this.changeBranch
@@ -1005,7 +1005,7 @@ var Prism = React.createClass({
 			'div',
 			{ id: 'prism', className: classes },
 			React.createElement(PrismHeader, { auth: auth, data: data, func: func }),
-			React.createElement(PrismTree, { data: data }),
+			React.createElement(PrismTree, { auth: auth, data: data }),
 			React.createElement(PrismFooter, null)
 		);
 	}
