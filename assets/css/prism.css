@@ -9,8 +9,8 @@ body > *:not(#prism) {
   overflow: hidden; }
   #prism * {
     box-sizing: border-box; }
-  #prism.rainbow {
-    background: #333333; }
+  #prism.rainbow * {
+    background: #333333 !important; }
   #prism #prism-header {
     display: block;
     position: relative;
@@ -33,7 +33,8 @@ body > *:not(#prism) {
       border: 0;
       color: #dddddd; }
       #prism #prism-header #prism-rainbow-bar:focus {
-        color: #333333; }
+        color: #333333;
+        background: #ffffff !important; }
     #prism #prism-header span.description {
       display: block;
       position: relative;
