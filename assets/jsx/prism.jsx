@@ -3,14 +3,17 @@
  *
  * - #prism
  *   - #prism-header
+ *     - #prism-title
+ *     - #prism-rainbow-bar
+ *     - #prism-user-account
  *   - #prism-body
  *     - #prism-trunk
  *       - #prism-search
  *       - .prism-branch
  *     - #prism-branch
  *       - #prism-branch-header
- *       - #prism-leaves
  *         - #prism-add-leaf
+ *       - #prism-leaves
  *         - .prism-leaf
  *     - #prism-leaf
  *       - #prism-leaf-header
@@ -73,6 +76,13 @@ var Prism = React.createClass( {
 		this.setState( state );
 	},
 
+	executeRainbow: function(value) {
+
+		if ( value in RainbowBarHandler )
+			RainbowBarHandler[value]();
+
+	},
+
 	render: function() {
 
 		var auth = this.state.auth;
@@ -80,6 +90,7 @@ var Prism = React.createClass( {
 		var func = {};
 
 		func.toggleRainbowBar = this.toggleRainbowBar;
+		func.executeRainbow   = this.executeRainbow;
 
 		var classes = data.rainbowBar ? 'rainbow' : '';
 

@@ -8,7 +8,7 @@ var PrismHeader = React.createClass( {
 
 		return (
 			<header id="prism-header">
-				<h1 className="title">{PRISM.title}</h1>
+				<h1 id="prism-title" className="title">{PRISM.title}</h1>
 				<PrismRainbowBar  data={data} func={func} />
 				<PrismUserAccount data={data} auth={auth} />
 				<span className="description">{PRISM.description}</span>
@@ -21,13 +21,26 @@ var PrismHeader = React.createClass( {
 
 var PrismRainbowBar = React.createClass( {
 
+	executeRainbow: function(e) {
+
+		var key   = e.keyCode ? e.keyCode : e.which;
+		var func  = this.props.func;
+		var value = e.target.value;
+
+		if ( key == 13 ) {
+			func.executeRainbow( value );
+			e.target.value = '';
+		}
+
+	},
+
 	render: function() {
 
 		var data = this.props.data;
 		var func = this.props.func;
 
 		return (
-			<input type="text" id="prism-bar" onFocus={func.toggleRainbowBar} onBlur={func.toggleRainbowBar} />
+			<input type="text" id="prism-rainbow-bar" onKeyUp={this.executeRainbow} onFocus={func.toggleRainbowBar} onBlur={func.toggleRainbowBar} />
 		);
 	}
 

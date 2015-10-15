@@ -40,7 +40,7 @@ var PrismMenu = React.createClass( {
 		var menuItems = PRISM.branches.map( function( branch, i ) {
 			return (
 				<li key={i}>
-					<a href={'#' + branch.slug} data-slug={branch.slug} onClick={func.changeBranch}>{branch.title}</a>
+					<a href={'#' + branch.slug} id={branch.slug} data-slug={branch.slug} onClick={func.changeBranch}>{branch.title}</a>
 				</li>
 			);
 		}, this );

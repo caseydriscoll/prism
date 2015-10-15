@@ -14,7 +14,7 @@ var PrismHeader = React.createClass({
 			{ id: "prism-header" },
 			React.createElement(
 				"h1",
-				{ className: "title" },
+				{ id: "prism-title", className: "title" },
 				PRISM.title
 			),
 			React.createElement(PrismRainbowBar, { data: data, func: func }),
@@ -32,12 +32,24 @@ var PrismHeader = React.createClass({
 var PrismRainbowBar = React.createClass({
 	displayName: "PrismRainbowBar",
 
+	executeRainbow: function executeRainbow(e) {
+
+		var key = e.keyCode ? e.keyCode : e.which;
+		var func = this.props.func;
+		var value = e.target.value;
+
+		if (key == 13) {
+			func.executeRainbow(value);
+			e.target.value = '';
+		}
+	},
+
 	render: function render() {
 
 		var data = this.props.data;
 		var func = this.props.func;
 
-		return React.createElement("input", { type: "text", id: "prism-bar", onFocus: func.toggleRainbowBar, onBlur: func.toggleRainbowBar });
+		return React.createElement("input", { type: "text", id: "prism-rainbow-bar", onKeyUp: this.executeRainbow, onFocus: func.toggleRainbowBar, onBlur: func.toggleRainbowBar });
 	}
 
 });
@@ -474,7 +486,7 @@ var PrismMenu = React.createClass({
 				{ key: i },
 				React.createElement(
 					"a",
-					{ href: '#' + branch.slug, "data-slug": branch.slug, onClick: func.changeBranch },
+					{ href: '#' + branch.slug, id: branch.slug, "data-slug": branch.slug, onClick: func.changeBranch },
 					branch.title
 				)
 			);
@@ -900,11 +912,22 @@ window.onkeyup = function (e) {
 	};
 
 	var doubleKeyTime = key.time - PRISM.lastKey.time < PRISM.doubleKey.time;
-	var doubleKeyCode = key.code == PRISM.doubleKey.code;
+	var doubleKeyCode = key.code == PRISM.doubleKey.code && PRISM.lastKey.code == PRISM.doubleKey.code;
 
-	if (doubleKeyTime && doubleKeyCode) document.getElementById('prism-bar').focus();
+	if (doubleKeyTime && doubleKeyCode) document.getElementById('prism-rainbow-bar').focus();
+
+	// console.log( key.code );
 
 	switch (key.code) {
+		case 13:
+			// Return
+			if (document.activeElement.tagName == 'INPUT') document.activeElement.blur();
+			break;
+
+		case 27:
+			// Escape
+			if (document.activeElement.id == 'prism-rainbow-bar') document.getElementById('prism-rainbow-bar').blur();
+			break;
 
 		case 32:
 			// Spacebar
@@ -917,19 +940,28 @@ window.onkeyup = function (e) {
 	PRISM.lastKey = key;
 };
 
+var RainbowBarHandler = {
+	'add post': function addPost() {
+		jQuery('#posts').click();jQuery('#prism-add-leaf').click();
+	}
+};
+
 /** 
  * Structure
  *
  * - #prism
  *   - #prism-header
+ *     - #prism-title
+ *     - #prism-rainbow-bar
+ *     - #prism-user-account
  *   - #prism-body
  *     - #prism-trunk
  *       - #prism-search
  *       - .prism-branch
  *     - #prism-branch
  *       - #prism-branch-header
- *       - #prism-leaves
  *         - #prism-add-leaf
+ *       - #prism-leaves
  *         - .prism-leaf
  *     - #prism-leaf
  *       - #prism-leaf-header
@@ -991,6 +1023,11 @@ var Prism = React.createClass({
 		this.setState(state);
 	},
 
+	executeRainbow: function executeRainbow(value) {
+
+		if (value in RainbowBarHandler) RainbowBarHandler[value]();
+	},
+
 	render: function render() {
 
 		var auth = this.state.auth;
@@ -998,6 +1035,7 @@ var Prism = React.createClass({
 		var func = {};
 
 		func.toggleRainbowBar = this.toggleRainbowBar;
+		func.executeRainbow = this.executeRainbow;
 
 		var classes = data.rainbowBar ? 'rainbow' : '';
 

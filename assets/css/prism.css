@@ -23,7 +23,7 @@ body > *:not(#prism) {
       margin: 5px 10px 0;
       font-family: 'Kinescope';
       font-size: 60px; }
-    #prism #prism-header #prism-bar {
+    #prism #prism-header #prism-rainbow-bar {
       display: inline-block;
       float: left;
       width: 40%;
@@ -32,7 +32,7 @@ body > *:not(#prism) {
       font-size: 32px;
       border: 0;
       color: #dddddd; }
-      #prism #prism-header #prism-bar:focus {
+      #prism #prism-header #prism-rainbow-bar:focus {
         color: #333333; }
     #prism #prism-header span.description {
       display: block;
