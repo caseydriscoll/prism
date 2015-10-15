@@ -4,6 +4,11 @@ var PrismHeader = React.createClass({
 	displayName: "PrismHeader",
 
 	render: function render() {
+
+		var auth = this.props.auth;
+		var data = this.props.data;
+		var func = this.props.func;
+
 		return React.createElement(
 			"header",
 			{ id: "prism-header" },
@@ -12,7 +17,8 @@ var PrismHeader = React.createClass({
 				{ className: "title" },
 				PRISM.title
 			),
-			React.createElement(PrismUserAccount, { data: this.props.data }),
+			React.createElement(PrismRainbowBar, { data: data, func: func }),
+			React.createElement(PrismUserAccount, { data: data, auth: auth }),
 			React.createElement(
 				"span",
 				{ className: "description" },
@@ -23,15 +29,31 @@ var PrismHeader = React.createClass({
 
 });
 
+var PrismRainbowBar = React.createClass({
+	displayName: "PrismRainbowBar",
+
+	render: function render() {
+
+		var data = this.props.data;
+		var func = this.props.func;
+
+		return React.createElement("input", { type: "text", id: "prism-bar", onFocus: func.toggleRainbowBar, onBlur: func.toggleRainbowBar });
+	}
+
+});
+
 var PrismUserAccount = React.createClass({
 	displayName: "PrismUserAccount",
 
 	render: function render() {
 
+		var auth = this.props.auth;
+		var data = this.props.data;
+
 		var url,
 		    icon = null;
 
-		if (this.props.data.authenticated) {
+		if (auth) {
 			url = PRISM.url.login + '?redirect_to=' + PRISM.url.root + '&action=logout';
 			icon = React.createElement("img", { src: this.props.data.user.avatar_urls[PRISM.gravatar.width], width: PRISM.gravatar.width, height: PRISM.gravatar.height });
 		} else {
@@ -868,6 +890,33 @@ var PrismLeafMetaPanelPiece = React.createClass({
 
 });
 
+'use strict';
+
+window.onkeyup = function (e) {
+
+	var key = {
+		code: e.keyCode ? e.keyCode : e.which,
+		time: new Date()
+	};
+
+	var doubleKeyTime = key.time - PRISM.lastKey.time < PRISM.doubleKey.time;
+	var doubleKeyCode = key.code == PRISM.doubleKey.code;
+
+	if (doubleKeyTime && doubleKeyCode) document.getElementById('prism-bar').focus();
+
+	switch (key.code) {
+
+		case 32:
+			// Spacebar
+			break;
+
+		default:
+			break;
+	}
+
+	PRISM.lastKey = key;
+};
+
 /** 
  * Structure
  *
@@ -894,13 +943,15 @@ var Prism = React.createClass({
 
 	getInitialState: function getInitialState() {
 
-		this.getUser();
+		var state = {
+			rainbowBar: false
+		};
 
-		return {};
+		return state;
 	},
 
 	componentDidMount: function componentDidMount() {
-		// this.getUser();
+		this.getUser();
 	},
 
 	getUser: function getUser() {
@@ -913,31 +964,48 @@ var Prism = React.createClass({
 			},
 			success: (function (response) {
 
-				var state = {
-					'authenticated': true,
-					'user': response
-				};
+				var state = this.state;
+
+				state.auth = true;
+				state.user = response;
 
 				this.setState(state);
 			}).bind(this),
 			error: (function (response) {
 
-				var state = {
-					'authenticated': false,
-					'user': response
-				};
+				var state = this.state;
+
+				state.auth = false;
+				state.user = response;
 
 				this.setState(state);
 			}).bind(this)
 		});
 	},
 
+	toggleRainbowBar: function toggleRainbowBar() {
+		var state = this.state;
+
+		state.rainbowBar = state.rainbowBar ? false : true;
+
+		this.setState(state);
+	},
+
 	render: function render() {
+
+		var auth = this.state.auth;
+		var data = this.state;
+		var func = {};
+
+		func.toggleRainbowBar = this.toggleRainbowBar;
+
+		var classes = data.rainbowBar ? 'rainbow' : '';
+
 		return React.createElement(
 			'div',
-			{ id: 'prism' },
-			React.createElement(PrismHeader, { data: this.state }),
-			React.createElement(PrismTree, { data: this.state }),
+			{ id: 'prism', className: classes },
+			React.createElement(PrismHeader, { auth: auth, data: data, func: func }),
+			React.createElement(PrismTree, { data: data }),
 			React.createElement(PrismFooter, null)
 		);
 	}

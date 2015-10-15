@@ -21,14 +21,16 @@ var Prism = React.createClass( {
 
 	getInitialState: function() {
 
-		this.getUser();
+		var state = {
+			rainbowBar : false
+		};
 
-		return {};
+		return state;
 
 	},
 
 	componentDidMount: function() {
-		// this.getUser();
+		this.getUser();
 	},
 
 	getUser: function() {
@@ -41,20 +43,20 @@ var Prism = React.createClass( {
 			},
 			success : function( response ) {
 
-				var state = {
-					'authenticated' : true,
-					'user'          : response
-				}
+				var state = this.state;
+
+				state.auth = true;
+				state.user = response;
 
 				this.setState( state );
 
 			}.bind( this ),
 			error   : function( response ) {
 
-				var state = {
-					'authenticated' : false,
-					'user'          : response
-				}
+				var state = this.state;
+
+				state.auth = false;
+				state.user = response;
 
 				this.setState( state );
 
@@ -63,11 +65,28 @@ var Prism = React.createClass( {
 
 	},
 
+	toggleRainbowBar: function() {
+		var state = this.state;
+
+		state.rainbowBar = state.rainbowBar ? false : true;
+
+		this.setState( state );
+	},
+
 	render: function() {
+
+		var auth = this.state.auth;
+		var data = this.state;
+		var func = {};
+
+		func.toggleRainbowBar = this.toggleRainbowBar;
+
+		var classes = data.rainbowBar ? 'rainbow' : '';
+
 		return (
-			<div id="prism">
-				<PrismHeader data={this.state} />
-				<PrismTree   data={this.state} />
+			<div id="prism" className={classes}>
+				<PrismHeader auth={auth} data={data} func={func} />
+				<PrismTree   data={data} />
 				<PrismFooter />
 			</div>
 		);

@@ -128,7 +128,14 @@ class Prism {
 			'branches'      => $branches,
 			'meta'          => $meta,
 			'lockMetaPanel' => 'lock',
-			'newleaf'       => false
+			'newleaf'       => false,
+			'lastKey'       => array(
+			    'time'            => 0,
+			                   ),
+			'doubleKey'     => array(
+			    'time'            => 200,
+			    'code'            => 32   // 32: Spacebar
+			                   )
 		);
 
 		return $data;

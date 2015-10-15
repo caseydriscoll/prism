@@ -1,12 +1,33 @@
 var PrismHeader = React.createClass( {
 
 	render: function() {
+
+		var auth = this.props.auth;
+		var data = this.props.data;
+		var func = this.props.func;
+
 		return (
 			<header id="prism-header">
 				<h1 className="title">{PRISM.title}</h1>
-				<PrismUserAccount data={this.props.data} />
+				<PrismRainbowBar  data={data} func={func} />
+				<PrismUserAccount data={data} auth={auth} />
 				<span className="description">{PRISM.description}</span>
 			</header>
+		);
+	}
+
+} );
+
+
+var PrismRainbowBar = React.createClass( {
+
+	render: function() {
+
+		var data = this.props.data;
+		var func = this.props.func;
+
+		return (
+			<input type="text" id="prism-bar" onFocus={func.toggleRainbowBar} onBlur={func.toggleRainbowBar} />
 		);
 	}
 
@@ -17,9 +38,12 @@ var PrismUserAccount = React.createClass( {
 
 	render: function() {
 
+		var auth = this.props.auth;
+		var data = this.props.data;
+
 		var url, icon = null;
 
-		if ( this.props.data.authenticated ) {
+		if ( auth ) {
 			url  = PRISM.url.login + '?redirect_to=' + PRISM.url.root + '&action=logout';
 			icon = <img src={this.props.data.user.avatar_urls[PRISM.gravatar.width]} width={PRISM.gravatar.width} height={PRISM.gravatar.height} />;
 		} else {

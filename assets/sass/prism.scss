@@ -1,13 +1,14 @@
 $white:     #ffffff;
 $light:     #dddddd;
 $grey:      #808080;
+$dark:      #333333;
 $black:     #000000;
 
 $green:     #87fab3;
 $highlight: #87CEFA;
 
 $border: 2px solid $black;
-$header-height: 70px;
+$header-height: 80px;
 $sub-header-height: 65px;
 
 $metapanel-width: 300px;
@@ -25,6 +26,10 @@ body > *:not(#prism) { display: none; }
 		box-sizing: border-box;
 	}
 
+	&.rainbow {
+		background: $dark;
+	}
+
 	#prism-header {
 		display: block; position: relative;
 		width: 100%; height: $header-height;
@@ -32,18 +37,33 @@ body > *:not(#prism) { display: none; }
 		border-bottom: $border;
 
 		h1 {
-			display: inline-block;
-			margin: 5px 10px;
+			display: inline-block; float: left;
+			margin: 5px 10px 0;
 			font: {
 				family: 'Kinescope';
 				size: 60px;
 			}
 		}
 
+		#prism-bar {
+			display: inline-block; float: left;
+			width: 40%;
+			padding: 5px 10px; margin: 12px 20px 0;
+			font: {
+				size: 32px;
+			}
+			border: 0;
+			color: $light;
+
+			&:focus {
+				color: $dark;
+			}
+		}
+
 		span.description {
 			display: block; position: relative; float: right;
 			max-width: 420px;
-			padding: 12px 20px;
+			padding: 16px 20px;
 			
 			color: $grey;
 			
@@ -61,7 +81,7 @@ body > *:not(#prism) { display: none; }
 
 		#prism-user-account {
 			float: right;
-			margin: 12px 20px 0 0;
+			margin: 16px 20px 0 0;
 
 			cursor: pointer;
 
@@ -115,6 +135,7 @@ body > *:not(#prism) { display: none; }
 
 					border: $border;
 					border-color: $grey;
+					background: transparent;
 				}
 			}
 

@@ -9,23 +9,37 @@ body > *:not(#prism) {
   overflow: hidden; }
   #prism * {
     box-sizing: border-box; }
+  #prism.rainbow {
+    background: #333333; }
   #prism #prism-header {
     display: block;
     position: relative;
     width: 100%;
-    height: 70px;
+    height: 80px;
     border-bottom: 2px solid #000000; }
     #prism #prism-header h1 {
       display: inline-block;
-      margin: 5px 10px;
+      float: left;
+      margin: 5px 10px 0;
       font-family: 'Kinescope';
       font-size: 60px; }
+    #prism #prism-header #prism-bar {
+      display: inline-block;
+      float: left;
+      width: 40%;
+      padding: 5px 10px;
+      margin: 12px 20px 0;
+      font-size: 32px;
+      border: 0;
+      color: #dddddd; }
+      #prism #prism-header #prism-bar:focus {
+        color: #333333; }
     #prism #prism-header span.description {
       display: block;
       position: relative;
       float: right;
       max-width: 420px;
-      padding: 12px 20px;
+      padding: 16px 20px;
       color: #808080;
       font-family: 'Gibson', sans-serif;
       font-size: 14px;
@@ -33,7 +47,7 @@ body > *:not(#prism) {
       text-align: right; }
     #prism #prism-header #prism-user-account {
       float: right;
-      margin: 12px 20px 0 0;
+      margin: 16px 20px 0 0;
       cursor: pointer; }
       #prism #prism-header #prism-user-account i.fa-user {
         border-radius: 50%;
@@ -49,7 +63,7 @@ body > *:not(#prism) {
     display: block;
     position: relative;
     width: 100%;
-    height: calc( 100vh - 70px ); }
+    height: calc( 100vh - 80px ); }
     #prism #prism-tree #prism-trunk {
       display: block;
       position: relative;
@@ -69,7 +83,8 @@ body > *:not(#prism) {
           width: 100%;
           padding: 2px 10px;
           border: 2px solid #000000;
-          border-color: #808080; }
+          border-color: #808080;
+          background: transparent; }
       #prism #prism-tree #prism-trunk menu {
         padding: 0;
         margin: 0; }
