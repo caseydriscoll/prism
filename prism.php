@@ -118,7 +118,7 @@ class Prism {
 			'url'           => array(
 			    'root'            => get_bloginfo( 'url' ),
 			    'rest'            => get_bloginfo( 'url' ) . '/wp-json/wp/v2/',
-			    'login'           => get_bloginfo( 'url' ) . '/wp-login.php'
+			    'login'           => wp_login_url()
 			                   ),
 			'gravatar'      => array(
 			    'width'           => 48,
