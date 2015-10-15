@@ -2,12 +2,18 @@ var PrismLeafMetaPanel = React.createClass( {
 
 	render: function() {
 
-		var metaInfoToDisplay = this.props.data.type in PRISM.meta ? this.props.data.type : 'default';
+		var auth = this.props.auth;
+		var data = this.props.data;
+		var func = this.props.func;
+
+		var metaInfoToDisplay = data.type in PRISM.meta ? data.type : 'default';
 
 		var renderMetaPanel = PRISM.meta[metaInfoToDisplay].map( function( key, i ) {
+
 			return (
-				<PrismLeafMetaPanelPiece auth={this.props.auth} data={this.props.data[key]} key={i} label={key} />
+				<PrismLeafMetaPanelPiece auth={auth} data={data[key]} func={func} key={i} label={key} />
 			)
+
 		}, this );
 
 		return (
@@ -27,45 +33,44 @@ var PrismLeafMetaPanelPiece = React.createClass( {
 		return { edit : false }
 	},
 
-	startEdit: function(e) {
+	toggleEdit: function(e) {
 
-		if ( ! this.props.auth ) return;
+		var key   = e.target.dataset.key;
+		var auth  = this.props.auth;
+		var data  = this.props.data;
+		var value = e.target.value;
 
-		var state = this.state;
+		// If not authenticated, don't all to edit
+		if ( ! auth ) return;
 
-		state.edit = true;
+		// Don't allow editing of the primary ID
+		if ( key == 'id' ) return;
 
-		this.setState( state );
+		this.setState( { edit : this.state.edit ? false : true } );
 
-	},
+		// It is toggling from static to edit
+		if ( value == undefined ) return;
 
-	stopEdit: function() {
+		this.props.func.prepLeaf(e);
 
-		if ( ! this.props.auth ) return;
-
-		var state = this.state;
-
-		state.edit = false;
-
-		this.setState( state );
-
-	},
-
-	autoSelect: function(e) {
-		e.nativeEvent.target.select();
 	},
 
 	render: function() {
 
-		var editData    = <input autoFocus readOnly type="text" value={this.props.data} onBlur={this.stopEdit} onFocus={this.autoSelect} />;
-		var staticData  = <code>{this.props.data}</code>;
+		var data = this.props.data;
+		var func = this.props.func;
+
+		var label = this.props.label;
+
+		var editData    = <input autoFocus type="text" data-key={label} value={data} onBlur={this.toggleEdit} onFocus={func.autoSelect} onChange={func.changeValue} />;
+		var staticData  = <code data-key={label}>{data}</code>;
 
 		var renderData  = this.state.edit == true ? editData : staticData;
 
 		return (
-			<li key={this.props.label}>
-				<h4>{this.props.label + ':'}</h4>
-				<span onClick={this.startEdit}>
+			<li key={label}>
+				<h4>{label + ':'}</h4>
+				<span onClick={this.toggleEdit}>
 					{renderData}
 				</span>
 			</li>

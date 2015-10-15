@@ -21,6 +21,8 @@ var PrismLeaf = React.createClass( {
 		var data = this.props.data;
 		var func = this.props.func;
 
+		if ( ! data.currentlyChanged ) return;
+
 		data = {
 			'id'     : data.id,
 			'status' : 'publish'
@@ -60,7 +62,7 @@ var PrismLeaf = React.createClass( {
 		var func = this.props.func;
 
 		if ( data.isMetaPanelOpen )
-			return <PrismLeafMetaPanel auth={auth} data={data} />;
+			return <PrismLeafMetaPanel auth={auth} data={data} func={func} />;
 		else
 			return null;
 

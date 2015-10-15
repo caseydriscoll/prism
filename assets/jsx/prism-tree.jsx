@@ -3,10 +3,11 @@ var PrismTree = React.createClass( {
 	getInitialState: function() {
 
 		var state = { 
-			branches        : {},
-			active          : { branch : null },
-			lockMetaPanel   : PRISM.lockMetaPanel,
-			isMetaPanelOpen : false
+			branches         : {},
+			active           : { branch : null },
+			lockMetaPanel    : PRISM.lockMetaPanel,
+			isMetaPanelOpen  : false,
+			currentlyChanged : false
 		};
 
 		return state;
@@ -120,6 +121,8 @@ var PrismTree = React.createClass( {
 		else
 			branch.leaves[leaf][key] = e.target.value;
 
+		state.currentlyChanged = true;
+
 		this.setState( state );
 	},
 
@@ -219,7 +222,8 @@ var PrismTree = React.createClass( {
 				branch.leaf = leaf.id;
 				branch.leaves[leaf.id] = leaf;
 
-				state.isMetaPanelOpen = this.isMetaPanelOpen();
+				state.currentlyChanged = false;
+				state.isMetaPanelOpen  = this.isMetaPanelOpen();
 
 				this.setState( state );
 
@@ -297,8 +301,9 @@ var PrismTree = React.createClass( {
 				leafData = branch.leaves[branch.leaf];
 		}
 
-		leafData.lockMetaPanel   = this.state.lockMetaPanel;
-		leafData.isMetaPanelOpen = this.state.isMetaPanelOpen;
+		leafData.lockMetaPanel    = this.state.lockMetaPanel;
+		leafData.isMetaPanelOpen  = this.state.isMetaPanelOpen;
+		leafData.currentlyChanged = this.state.currentlyChanged;
 
 		return leafData;
 	},

@@ -59,7 +59,8 @@ var PrismTree = React.createClass({
 			branches: {},
 			active: { branch: null },
 			lockMetaPanel: PRISM.lockMetaPanel,
-			isMetaPanelOpen: false
+			isMetaPanelOpen: false,
+			currentlyChanged: false
 		};
 
 		return state;
@@ -164,6 +165,8 @@ var PrismTree = React.createClass({
 
 		if (key == 'title' || key == 'content') branch.leaves[leaf][key].rendered = e.target.value;else branch.leaves[leaf][key] = e.target.value;
 
+		state.currentlyChanged = true;
+
 		this.setState(state);
 	},
 
@@ -256,6 +259,7 @@ var PrismTree = React.createClass({
 				branch.leaf = leaf.id;
 				branch.leaves[leaf.id] = leaf;
 
+				state.currentlyChanged = false;
 				state.isMetaPanelOpen = this.isMetaPanelOpen();
 
 				this.setState(state);
@@ -330,6 +334,7 @@ var PrismTree = React.createClass({
 
 		leafData.lockMetaPanel = this.state.lockMetaPanel;
 		leafData.isMetaPanelOpen = this.state.isMetaPanelOpen;
+		leafData.currentlyChanged = this.state.currentlyChanged;
 
 		return leafData;
 	},
@@ -591,6 +596,8 @@ var PrismLeaf = React.createClass({
 		var data = this.props.data;
 		var func = this.props.func;
 
+		if (!data.currentlyChanged) return;
+
 		data = {
 			'id': data.id,
 			'status': 'publish'
@@ -631,7 +638,7 @@ var PrismLeaf = React.createClass({
 		var data = this.props.data;
 		var func = this.props.func;
 
-		if (data.isMetaPanelOpen) return React.createElement(PrismLeafMetaPanel, { auth: auth, data: data });else return null;
+		if (data.isMetaPanelOpen) return React.createElement(PrismLeafMetaPanel, { auth: auth, data: data, func: func });else return null;
 	},
 
 	render: function render() {
@@ -772,22 +779,27 @@ var PrismLeafMetaControlIcon = React.createClass({
 
 });
 
-"use strict";
+'use strict';
 
 var PrismLeafMetaPanel = React.createClass({
-	displayName: "PrismLeafMetaPanel",
+	displayName: 'PrismLeafMetaPanel',
 
 	render: function render() {
 
-		var metaInfoToDisplay = this.props.data.type in PRISM.meta ? this.props.data.type : 'default';
+		var auth = this.props.auth;
+		var data = this.props.data;
+		var func = this.props.func;
+
+		var metaInfoToDisplay = data.type in PRISM.meta ? data.type : 'default';
 
 		var renderMetaPanel = PRISM.meta[metaInfoToDisplay].map(function (key, i) {
-			return React.createElement(PrismLeafMetaPanelPiece, { auth: this.props.auth, data: this.props.data[key], key: i, label: key });
+
+			return React.createElement(PrismLeafMetaPanelPiece, { auth: auth, data: data[key], func: func, key: i, label: key });
 		}, this);
 
 		return React.createElement(
-			"ul",
-			{ id: "prism-leaf-meta-panel" },
+			'ul',
+			{ id: 'prism-leaf-meta-panel' },
 			renderMetaPanel
 		);
 	}
@@ -795,60 +807,60 @@ var PrismLeafMetaPanel = React.createClass({
 });
 
 var PrismLeafMetaPanelPiece = React.createClass({
-	displayName: "PrismLeafMetaPanelPiece",
+	displayName: 'PrismLeafMetaPanelPiece',
 
 	getInitialState: function getInitialState() {
 		return { edit: false };
 	},
 
-	startEdit: function startEdit(e) {
+	toggleEdit: function toggleEdit(e) {
 
-		if (!this.props.auth) return;
+		var key = e.target.dataset.key;
+		var auth = this.props.auth;
+		var data = this.props.data;
+		var value = e.target.value;
 
-		var state = this.state;
+		// If not authenticated, don't all to edit
+		if (!auth) return;
 
-		state.edit = true;
+		// Don't allow editing of the primary ID
+		if (key == 'id') return;
 
-		this.setState(state);
-	},
+		this.setState({ edit: this.state.edit ? false : true });
 
-	stopEdit: function stopEdit() {
+		// It is toggling from static to edit
+		if (value == undefined) return;
 
-		if (!this.props.auth) return;
-
-		var state = this.state;
-
-		state.edit = false;
-
-		this.setState(state);
-	},
-
-	autoSelect: function autoSelect(e) {
-		e.nativeEvent.target.select();
+		this.props.func.prepLeaf(e);
 	},
 
 	render: function render() {
 
-		var editData = React.createElement("input", { autoFocus: true, readOnly: true, type: "text", value: this.props.data, onBlur: this.stopEdit, onFocus: this.autoSelect });
+		var data = this.props.data;
+		var func = this.props.func;
+
+		var label = this.props.label;
+
+		var editData = React.createElement('input', { autoFocus: true, type: 'text', 'data-key': label, value: data, onBlur: this.toggleEdit, onFocus: func.autoSelect, onChange: func.changeValue });
 		var staticData = React.createElement(
-			"code",
-			null,
-			this.props.data
+			'code',
+			{ 'data-key': label },
+			data
 		);
 
 		var renderData = this.state.edit == true ? editData : staticData;
 
 		return React.createElement(
-			"li",
-			{ key: this.props.label },
+			'li',
+			{ key: label },
 			React.createElement(
-				"h4",
+				'h4',
 				null,
-				this.props.label + ':'
+				label + ':'
 			),
 			React.createElement(
-				"span",
-				{ onClick: this.startEdit },
+				'span',
+				{ onClick: this.toggleEdit },
 				renderData
 			)
 		);
