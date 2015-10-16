@@ -700,7 +700,7 @@ var PrismLeaf = React.createClass({
 
 		var editContent = React.createElement('textarea', { autoFocus: true, id: 'prism-leaf-content', 'data-key': 'content', value: content, onBlur: this.toggleEdit, onFocus: this.autoSelect, onChange: func.changeValue });
 		var staticContent = React.createElement(
-			'div',
+			'pre',
 			{ id: 'prism-leaf-content', onDoubleClick: this.toggleEdit },
 			content
 		);

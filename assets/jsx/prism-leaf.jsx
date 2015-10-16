@@ -47,7 +47,7 @@ var PrismLeaf = React.createClass( {
 		var content = data.content.rendered;
 
 		var editContent    = <textarea autoFocus id="prism-leaf-content" data-key="content" value={content} onBlur={this.toggleEdit} onFocus={this.autoSelect} onChange={func.changeValue} />;
-		var staticContent  = <div id="prism-leaf-content" onDoubleClick={this.toggleEdit}>{content}</div>;
+		var staticContent  = <pre id="prism-leaf-content" onDoubleClick={this.toggleEdit}>{content}</pre>;
 
 		var renderContent  = this.state.edit == true ? editContent : staticContent;
 
