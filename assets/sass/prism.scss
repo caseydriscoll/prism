@@ -89,7 +89,7 @@ body > *:not(#prism) { display: none; }
 
 		#prism-user-account {
 			float: right;
-			margin: 16px 20px 0 0;
+			margin: 12px 10px 0 0;
 
 			cursor: pointer;
 
@@ -276,7 +276,7 @@ body > *:not(#prism) { display: none; }
 					width: calc( #{$leaf-size} - 10px ); height: auto;
 					padding-bottom: calc( #{$leaf-size} - 10px ); margin: 5px;
 
-					span {
+					a {
 						display: block; position: absolute;
 						left: 0; right: 0;
 						top: 0; bottom: 0;
@@ -289,6 +289,10 @@ body > *:not(#prism) { display: none; }
 						background: none;
 
 						cursor: pointer;
+
+						color: $grey;
+
+						text-decoration: none;
 
 						border: $border;
 						border-color: $light;

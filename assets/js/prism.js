@@ -86,10 +86,10 @@ var PrismUserAccount = React.createClass({
 
 });
 
-'use strict';
+"use strict";
 
 var PrismTree = React.createClass({
-	displayName: 'PrismTree',
+	displayName: "PrismTree",
 
 	getInitialState: function getInitialState() {
 
@@ -107,16 +107,24 @@ var PrismTree = React.createClass({
 	componentDidMount: function componentDidMount() {
 
 		var routes = {};
+		var routerConfig = {};
 
 		PRISM.branches.map(function (branch, i) {
+
+			var method = "get_" + branch.slug + "_by_id";
+
 			routes[branch.slug] = branch.slug;
-		});
+			routes[branch.slug + "/:id"] = method;
 
-		var routerConfig = { routes: routes };
-
-		PRISM.branches.map(function (branch, i) {
-			routerConfig[branch.slug] = this.setState.bind(this, { active: { branch: branch.slug } });
+			routerConfig[branch.slug] = (function () {
+				this.changeBranch(branch.slug);
+			}).bind(this);
+			routerConfig[method] = (function (id) {
+				this.changeLeaf(id);
+			}).bind(this);
 		}, this);
+
+		routerConfig.routes = routes;
 
 		var Router = Backbone.Router.extend(routerConfig);
 
@@ -191,28 +199,20 @@ var PrismTree = React.createClass({
 		return isMetaPanelOpen;
 	},
 
-	changeLeaf: function changeLeaf(e) {
-		e.preventDefault();
-
+	changeLeaf: function changeLeaf(leaf) {
 		var state = this.state;
 
-		state.branches[state.active.branch].leaf = jQuery(e.nativeEvent.target).data('id');
+		state.branches[state.active.branch].leaf = leaf;
 
 		state.isMetaPanelOpen = this.isMetaPanelOpen();
 
 		this.setState(state);
 	},
 
-	changeBranch: function changeBranch(e) {
-		e.preventDefault();
-
-		jQuery('#prism-menu a').removeClass('active');
-
-		e.nativeEvent.target.classList.toggle('active');
-
+	changeBranch: function changeBranch(branch) {
 		var state = this.state;
 
-		state.active.branch = jQuery(e.nativeEvent.target).data('slug');
+		state.active.branch = branch;
 
 		this.setState(state);
 	},
@@ -454,8 +454,8 @@ var PrismTree = React.createClass({
 		var renderLeaf = this.hasActiveLeaf() ? prismLeaf : null;
 
 		return React.createElement(
-			'div',
-			{ id: 'prism-tree' },
+			"div",
+			{ id: "prism-tree" },
 			renderTrunk,
 			renderBranch,
 			renderLeaf
@@ -559,7 +559,7 @@ var PrismBranch = React.createClass({
 
 			if (leaf.id == data.leaf) leaf.active = 'active';else leaf.active = '';
 
-			return React.createElement(PrismLeafNode, { data: leaf, key: key, func: func });
+			return React.createElement(PrismLeafNode, { data: leaf, key: key, func: func, type: data.title });
 		}, this);
 
 		return React.createElement(
@@ -624,18 +624,20 @@ var PrismLeafNode = React.createClass({
 		var auth = this.props.auth;
 		var data = this.props.data;
 		var func = this.props.func;
+		var type = this.props.type;
 
 		var id = this.id();
+		var href = '/#/' + type + '/' + data.id;
 		var title = data.title.rendered;
 
 		var classes = 'prism-leaf ' + data.active;
 
 		return React.createElement(
 			'li',
-			{ id: id, className: classes, key: this.props.key, onClick: func.changeLeaf },
+			{ id: id, className: classes, key: this.props.key },
 			React.createElement(
-				'span',
-				{ 'data-title': title, 'data-id': data.id },
+				'a',
+				{ href: href, 'data-title': title, 'data-id': data.id },
 				title
 			)
 		);

@@ -51,7 +51,7 @@ body > *:not(#prism) {
       text-align: right; }
     #prism #prism-header #prism-user-account {
       float: right;
-      margin: 16px 20px 0 0;
+      margin: 12px 10px 0 0;
       cursor: pointer; }
       #prism #prism-header #prism-user-account i.fa-user {
         border-radius: 50%;
@@ -174,7 +174,7 @@ body > *:not(#prism) {
           height: auto;
           padding-bottom: calc( 25% - 10px );
           margin: 5px; }
-          #prism #prism-tree #prism-branch ul#prism-leaves .prism-leaf span {
+          #prism #prism-tree #prism-branch ul#prism-leaves .prism-leaf a {
             display: block;
             position: absolute;
             left: 0;
@@ -187,9 +187,11 @@ body > *:not(#prism) {
             line-height: 20px;
             background: none;
             cursor: pointer;
+            color: #808080;
+            text-decoration: none;
             border: 2px solid #000000;
             border-color: #dddddd; }
-            #prism #prism-tree #prism-branch ul#prism-leaves .prism-leaf span:hover {
+            #prism #prism-tree #prism-branch ul#prism-leaves .prism-leaf a:hover {
               color: #000000;
               background-color: #dddddd;
               border-color: #000000; }

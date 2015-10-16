@@ -16,16 +16,21 @@ var PrismTree = React.createClass( {
 	componentDidMount: function() {
 
 		var routes = {};
+		var routerConfig = {};
 
 		PRISM.branches.map( function( branch, i ) {
-			routes[branch.slug] = branch.slug;
-		} );
 
-		var routerConfig = { routes : routes };
+			var method = "get_" + branch.slug + "_by_id";
 
-		PRISM.branches.map( function( branch, i ) {
-			routerConfig[branch.slug] = this.setState.bind( this, { active : { branch : branch.slug } } )
+			routes[branch.slug]          = branch.slug;
+			routes[branch.slug + "/:id"] = method;
+
+			routerConfig[branch.slug]    = function() { this.changeBranch(branch.slug) }.bind( this );
+			routerConfig[method]         = function(id) { this.changeLeaf(id) }.bind( this );
+
 		}, this );
+
+		routerConfig.routes = routes;
 
 		var Router = Backbone.Router.extend( routerConfig );
 
@@ -107,28 +112,20 @@ var PrismTree = React.createClass( {
 		return isMetaPanelOpen;
 	},
 
-	changeLeaf: function(e) {
-		e.preventDefault();
-
+	changeLeaf: function( leaf ) {
 		var state = this.state;
 
-		state.branches[state.active.branch].leaf = jQuery( e.nativeEvent.target ).data( 'id' );
+		state.branches[state.active.branch].leaf = leaf;
 
 		state.isMetaPanelOpen = this.isMetaPanelOpen();
 
 		this.setState( state );
 	},
 
-	changeBranch: function(e) {
-		e.preventDefault();
-
-		jQuery( '#prism-menu a' ).removeClass( 'active' );
-
-		e.nativeEvent.target.classList.toggle( 'active' );
-
+	changeBranch: function( branch ) {
 		var state = this.state;
 
-		state.active.branch = jQuery( e.nativeEvent.target ).data( 'slug' );
+		state.active.branch = branch;
 
 		this.setState( state );
 	},
