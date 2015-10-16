@@ -182,7 +182,9 @@ body > *:not(#prism) {
           height: auto;
           margin: 5px; }
           #prism #prism-tree #prism-branch ul#prism-leaves .prism-leaf.media {
-            opacity: .4; }
+            opacity: .4;
+            background-position: center center;
+            background-size: 100%; }
             #prism #prism-tree #prism-branch ul#prism-leaves .prism-leaf.media a {
               color: #000000;
               text-shadow: 0 0 2px #ffffff; }
@@ -193,7 +195,9 @@ body > *:not(#prism) {
                 text-shadow: 0 0 2px #000000; }
             #prism #prism-tree #prism-branch ul#prism-leaves .prism-leaf.media:hover {
               opacity: .8;
-              box-shadow: 0 0 5px #333333; }
+              background-size: 105% !important;
+              box-shadow: 0 0 5px #333333;
+              transition: background-size .2s; }
             #prism #prism-tree #prism-branch ul#prism-leaves .prism-leaf.media.active {
               opacity: 1;
               box-shadow: 0 0 10px #87CEFA; }

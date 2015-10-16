@@ -646,9 +646,7 @@ var PrismLeafNode = React.createClass({
 		if (type == 'media' && data.media_type == 'image') {
 			var thumbnail = data.media_details.sizes.thumbnail.source_url;
 
-			styles.color = 'white';
 			styles.backgroundImage = 'url(' + thumbnail + ')';
-			styles.backgroundSize = 'cover';
 
 			classes += ' ' + type;
 		}

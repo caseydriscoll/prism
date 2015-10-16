@@ -294,6 +294,8 @@ body > *:not(#prism) { display: none; }
 
 					&.media {
 						opacity: .4;
+						background-position: center center;
+						background-size: 100%;
 
 						a {
 
@@ -311,7 +313,10 @@ body > *:not(#prism) { display: none; }
 
 						&:hover {
 							opacity: .8;
+							background-size: 105% !important;
 							box-shadow: 0 0 5px $dark;
+
+							transition: background-size .2s;
 						}
 
 						&.active {
