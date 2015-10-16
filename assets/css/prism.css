@@ -248,7 +248,8 @@ body > *:not(#prism) {
             min-height: 30px;
             margin-top: -2px;
             border: 2px solid #000000;
-            border-color: transparent; }
+            border-color: transparent;
+            white-space: nowrap; }
           #prism #prism-tree #prism-leaf header#prism-leaf-header h2 input {
             width: calc( 100% + 10px );
             padding: 0 5px;

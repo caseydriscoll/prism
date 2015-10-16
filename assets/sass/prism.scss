@@ -389,6 +389,7 @@ body > *:not(#prism) { display: none; }
 						margin-top: -2px;
 						border: $border;
 						border-color: transparent;
+						white-space: nowrap;
 					}
 
 					input {
