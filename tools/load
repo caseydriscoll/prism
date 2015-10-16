@@ -1,5 +1,5 @@
 function randate {
-  date -d "$((RANDOM%1+2010))-$((RANDOM%12+1))-$((RANDOM%28+1)) $((RANDOM%23+1)):$((RANDOM%59+1)):$((RANDOM%59+1))" '+%Y-%m-%d %H:%M:%S';
+  date -d "$((RANDOM%1+2014))-$((RANDOM%12+1))-$((RANDOM%28+1)) $((RANDOM%23+1)):$((RANDOM%59+1)):$((RANDOM%59+1))" '+%Y-%m-%d %H:%M:%S';
 }
 
 # POSTS
@@ -29,7 +29,7 @@ posts=( 'You think Im an ignorant savage'                        \
 
 for i in "${posts[@]}"
 do
-  wp post create --post_title="${i}" --post_date="${randate}" --post_status="Publish"
+  wp post create --post_title="${i}" --post_date="$(randate)" --post_status="Publish"
 done
 
 
@@ -45,7 +45,7 @@ swatches=( 'Absolute Zero' 'Aero' 'Almond' 'Amazon' 'Amber' 'Antique Ruby' 'Barn
 
 for i in "${swatches[@]}"
 do
-  wp post create --post_title="${i}" --post_type="swatches" --post_date="${randate}" --post_status="Publish"
+  wp post create --post_title="${i}" --post_type="swatches" --post_date="$(randate)" --post_status="Publish"
 done
 
 
@@ -57,7 +57,7 @@ cities=( 'Celadon City' 'Cerulean City' 'Cinnabar Island' 'Fuchsia City' 'Lavend
 
 for i in "${cities[@]}"
 do
-  wp post create --post_title="${i}" --post_type="cities" --post_date="${randate}" --post_status="Publish"
+  wp post create --post_title="${i}" --post_type="cities" --post_date="$(randate)" --post_status="Publish"
 done
 
 
@@ -70,7 +70,7 @@ crayons=( 'Maximum Red' 'Light Venetian Red' 'Macaroni and Cheese' 'Mango Tango'
 
 for i in "${crayons[@]}"
 do
-  wp post create --post_title="${i}" --post_type="crayons" --post_date="${randate}" --post_status="Publish"
+  wp post create --post_title="${i}" --post_type="crayons" --post_date="$(randate)" --post_status="Publish"
 done
 
 
