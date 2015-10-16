@@ -135,6 +135,9 @@ class Prism {
 			'doubleKey'     => array(
 			    'time'            => 200,
 			    'code'            => 32   // 32: Spacebar
+			                   ),
+			'rainbowbar'    => array(
+			    'name'            => 'Rainbow Bar!'
 			                   )
 		);
 
