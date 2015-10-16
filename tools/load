@@ -1,41 +1,74 @@
-wp post create \
-  --post_title="Yes I know there are bugs" \
-  --post_date="2015-09-07 19:13:41" --post_status="Publish" \
-  --post_content="Sometimes in life there are gonna be bugs"
+function randate {
+  date -d "$((RANDOM%1+2010))-$((RANDOM%12+1))-$((RANDOM%28+1)) $((RANDOM%23+1)):$((RANDOM%59+1)):$((RANDOM%59+1))" '+%Y-%m-%d %H:%M:%S';
+}
 
-wp post create \
-  --post_title="These things take time" \
-  --post_date="2015-09-08 19:13:41" --post_status="Publish" \
-  --post_content="You'll just have to make the most of it"
+# POSTS
 
-wp post create \
-  --post_title="New Post!" \
-  --post_date="2015-10-10 19:13:41" --post_status="Publish" \
-  --post_content="This here post is new I tell ya waht"
+posts=( 'You think Im an ignorant savage'                        \
+        'And youve been so many places'                          \
+        'I guess it must be so'                                  \
+        'But still I cannot see'                                 \
+        'If the savage one is me'                                \
+        'How can there be so much that you dont know'            \
+        'You dont know'                                          \
 
-wp post create \
-  --post_title="Golly, I like this a lot!" \
-  --post_date="2015-10-04 19:13:41" --post_status="Publish" \
-  --post_content="This is good, mmmm hmmm."
+        'You think you own whatever land you land on'            \
+        'The Earth is just a dead thing you can claim'           \
+        'But I know every rock and tree and creature'            \
+        'Has a life, has a spirit, has a name'                   \
 
-wp post create \
-  --post_title="Yep, this sure is swell!" \
-  --post_date="2015-10-04 15:13:41" --post_status="Publish"
+        'You think the only people who are people'               \
+        'Are the people who look and think like you'             \
+        'But if you walk the footsteps of a stranger'            \
+        'Youll learn things you never knew, you never knew'      \
 
-wp post create \
-  --post_title="Summer Brunch" \
-  --post_type="events" \
-  --post_date="2015-07-21 09:13:41" --post_status="Publish" \
-  --post_content="Let's get some food and have a good time"
+        'Have you ever heard the wolf cry to the blue corn moon' \
+        'Or asked the grinning bobcat why he grinned'            \
+        'Can you sing with all the voices of the mountains'      \
+        'Can you paint with all the colors of the wind'          )
 
-wp post create \
-  --post_title="My Bday" \
-  --post_type="events" \
-  --post_date="2015-04-14 00:00:00" --post_status="Publish" \
-  --post_content="Hey, I was born this day"
+for i in "${posts[@]}"
+do
+  wp post create --post_title="${i}" --post_date="${randate}" --post_status="Publish"
+done
 
-wp post create \
-  --post_title="Wedding" \
-  --post_type="events" \
-  --post_date="2014-10-12 15:13:41" --post_status="Publish" \
-  --post_content="Mawwiage. Mawwiage is why we are gathewed here today."
+
+# SWATCHES
+# https://en.wikipedia.org/wiki/List_of_colors:_A%E2%80%93F
+
+swatches=( 'Absolute Zero' 'Aero' 'Almond' 'Amazon' 'Amber' 'Antique Ruby' 'Barn Red' 'Bazaar'      \
+           'Bdazzled Blue' 'Black Olive' 'Blue' 'Blush' 'Bright Lilac' 'Bubble Gum' 'Byzantium'     \
+           'Canary Yellow' 'Candy Apple Red' 'Caribbean Green' 'Carrot Orange' 'Cerise' 'Cherry'    \
+           'Chestnut' 'Congo Pink' 'Cherry' 'Coquelicot' 'Cordovan' 'Crimson' 'Cyber Yellow'        \
+           'Daffodil' 'Dark Lava' 'Deep Champagne' 'Desert' 'Dollar Bill' 'Drab' 'Ecru' 'Eggplant'  \
+           'Electric Ultramarine' 'Emerald' 'Eminence' 'Eton Blue' 'Falu Red' 'Fandango' 'Feldgrau' )
+
+for i in "${swatches[@]}"
+do
+  wp post create --post_title="${i}" --post_type="swatches" --post_date="${randate}" --post_status="Publish"
+done
+
+
+# Cities (Probably based on Pokemon Cities, which are based on colors)
+# http://bulbapedia.bulbagarden.net/wiki/List_of_cities_and_towns
+
+cities=( 'Celadon City' 'Cerulean City' 'Cinnabar Island' 'Fuchsia City' 'Lavendar Town' \
+         'Pallet Town' 'Pewter City' 'Saffron City' 'Vermilion City' 'Viridian City'     )
+
+for i in "${cities[@]}"
+do
+  wp post create --post_title="${i}" --post_type="cities" --post_date="${randate}" --post_status="Publish"
+done
+
+
+# CRAYONS
+# https://en.wikipedia.org/wiki/List_of_Crayola_crayon_colors
+
+crayons=( 'Maximum Red' 'Light Venetian Red' 'Macaroni and Cheese' 'Mango Tango' 'Goldenrod'  \
+          'Maximum Yellow' 'Inchworm' 'Fern' 'Shamrock' 'Tropical Rain Forest' 'Outer Space' \
+          'Pacific Blue' 'Cornflower' 'Denim' 'Indigo' 'Royal Purple' 'Brilliant Rose'       )
+
+for i in "${crayons[@]}"
+do
+  wp post create --post_title="${i}" --post_type="crayons" --post_date="${randate}" --post_status="Publish"
+done

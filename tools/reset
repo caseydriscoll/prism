@@ -10,6 +10,3 @@ wp plugin activate prism rest-api
 wp option update blogdescription "A developer friendly, React & Backbone based plugin for fast, API centric WordPress application development"
 
 wp rewrite structure '/%postname%'
-
-curl http://loripsum.net/api/5 | wp post generate --post_content --count=10
-

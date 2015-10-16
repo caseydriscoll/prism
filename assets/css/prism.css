@@ -159,7 +159,7 @@ body > *:not(#prism) {
         width: calc( 100% - 10px ) !important;
         padding-bottom: 70px !important; }
       #prism #prism-tree #prism-branch ul#prism-leaves {
-        height: 100%;
+        height: calc( 100% - 65px );
         padding: 5px;
         margin: 0 1px 0 0;
         overflow-y: scroll; }

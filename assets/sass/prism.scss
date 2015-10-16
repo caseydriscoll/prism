@@ -259,7 +259,7 @@ body > *:not(#prism) { display: none; }
 
 			ul#prism-leaves {
 
-				height: 100%;
+				height: calc( 100% - #{$sub-header-height} );
 				padding: 5px; margin: 0 1px 0 0;
 
 				overflow-y: scroll;

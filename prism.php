@@ -23,27 +23,35 @@ class Prism {
 
 		$args = array(
 			'public' => true,
-			'label'  => 'Events',
+			'label'  => 'Swatches',
 			'show_in_rest' => true
 		);
 
-		register_post_type( 'events', $args );
+		register_post_type( 'swatches', $args );
 
 		$args = array(
 			'public' => true,
-			'label'  => 'Books',
+			'label'  => 'Crayons',
 			'show_in_rest' => true
 		);
 
-		register_post_type( 'books', $args );
+		register_post_type( 'crayons', $args );
 
 		$args = array(
 			'public' => true,
-			'label'  => 'Tasks',
+			'label'  => 'Cities',
 			'show_in_rest' => true
 		);
 
-		register_post_type( 'tasks', $args );
+		register_post_type( 'cities', $args );
+
+		$args = array(
+			'public' => true,
+			'label'  => 'Birds',
+			'show_in_rest' => true
+		);
+
+		register_post_type( 'birds', $args );
 
 	}
 
@@ -95,10 +103,11 @@ class Prism {
 	public static function localize() {
 
 		$branches = array(
-			array( 'title' => 'Posts',  'slug' => 'posts' ),
-			array( 'title' => 'Tasks',  'slug' => 'tasks' ),
-			array( 'title' => 'Books',  'slug' => 'books' ),
-			array( 'title' => 'Events', 'slug' => 'events' )
+			array( 'title' => 'Posts',    'slug' => 'posts' ),
+			array( 'title' => 'Swatches', 'slug' => 'swatches' ),
+			array( 'title' => 'Crayons',  'slug' => 'crayons' ),
+			array( 'title' => 'Cities',   'slug' => 'cities' ),
+			array( 'title' => 'Media',    'slug' => 'media' )
 		);
 
 		$meta = array(
