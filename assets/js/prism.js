@@ -316,15 +316,17 @@ var PrismTree = React.createClass({
 				var state = this.state;
 
 				var leaf = response;
-				var branch = state.branches[this.state.active.branch];
+				var branch = state.branches[state.active.branch];
 
 				leaf.metapanel = 'closed';
 
-				branch.leaf = leaf.id;
+				state.active.leaf = leaf.id;
 				branch.leaves[leaf.id] = leaf;
 
 				state.currentlyChanged = false;
 				state.isMetaPanelOpen = this.isMetaPanelOpen();
+
+				if (PRISM.newleaf) location.hash = "/" + this.state.active.branch + "/" + leaf.id;
 
 				this.setState(state);
 			}).bind(this),
