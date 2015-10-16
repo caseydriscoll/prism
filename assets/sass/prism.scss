@@ -305,7 +305,7 @@ body > *:not(#prism) { display: none; }
 
 					}
 
-					&.active span {
+					&.active a {
 						color: $black;
 						background: $highlight;
 						border-color: $black;

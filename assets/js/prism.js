@@ -120,7 +120,7 @@ var PrismTree = React.createClass({
 				this.changeBranch(branch.slug);
 			}).bind(this);
 			routerConfig[method] = (function (id) {
-				this.changeLeaf(id);
+				this.changeLeaf(branch.slug, id);
 			}).bind(this);
 		}, this);
 
@@ -168,7 +168,7 @@ var PrismTree = React.createClass({
 
 			var activeBranch = this.state.branches[this.state.active.branch];
 
-			if ('leaf' in activeBranch && activeBranch.leaf in activeBranch.leaves) hasActiveLeaf = true;
+			if (this.state.active.leaf !== null && this.state.active.leaf in activeBranch.leaves) hasActiveLeaf = true;
 		}
 
 		return hasActiveLeaf;
@@ -192,17 +192,19 @@ var PrismTree = React.createClass({
 		var isMetaPanelOpen = false;
 
 		var branch = state.active.branch;
-		var leaf = state.branches[branch].leaf;
+		var leaf = state.active.leaf;
 
 		if (state.lockMetaPanel == 'lock' || state.branches[branch].leaves[leaf].metapanel == 'open') isMetaPanelOpen = true;
 
 		return isMetaPanelOpen;
 	},
 
-	changeLeaf: function changeLeaf(leaf) {
+	changeLeaf: function changeLeaf(branch, leaf) {
+
 		var state = this.state;
 
-		state.branches[state.active.branch].leaf = leaf;
+		state.active.branch = branch;
+		state.active.leaf = leaf;
 
 		state.isMetaPanelOpen = this.isMetaPanelOpen();
 
@@ -254,7 +256,7 @@ var PrismTree = React.createClass({
 		var state = this.state;
 
 		var branch = state.active.branch;
-		var leaf = state.branches[branch].leaf;
+		var leaf = state.active.leaf;
 
 		if (state.branches[branch].leaves[leaf].metapanel == 'open') state.branches[branch].leaves[leaf].metapanel = 'closed';else state.branches[branch].leaves[leaf].metapanel = 'open';
 
@@ -269,7 +271,7 @@ var PrismTree = React.createClass({
 		var state = this.state;
 
 		var branch = state.active.branch;
-		var leaf = state.branches[branch].leaf;
+		var leaf = state.active.leaf;
 
 		if (state.lockMetaPanel == 'unlock') state.lockMetaPanel = 'lock';else state.lockMetaPanel = 'unlock';
 
@@ -381,8 +383,8 @@ var PrismTree = React.createClass({
 
 			branchData = {
 				title: branch,
+				leaf: this.state.active.leaf,
 				view: this.state.branches[branch].view,
-				leaf: this.state.branches[branch].leaf,
 				leaves: this.state.branches[branch].leaves
 			};
 		}
@@ -395,12 +397,13 @@ var PrismTree = React.createClass({
 		var leafData = {};
 
 		var branch = this.state.active.branch;
+		var leaf = this.state.active.leaf;
 
 		if (this.hasActiveBranch()) {
 
 			branch = this.state.branches[branch];
 
-			if (this.hasActiveLeaf()) leafData = branch.leaves[branch.leaf];
+			if (this.hasActiveLeaf()) leafData = branch.leaves[leaf];
 		}
 
 		leafData.lockMetaPanel = this.state.lockMetaPanel;
