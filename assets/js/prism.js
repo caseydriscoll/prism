@@ -224,7 +224,7 @@ var PrismTree = React.createClass({
 		var state = this.state;
 
 		var branch = state.branches[state.active.branch];
-		var leaf = branch.leaf;
+		var leaf = state.active.leaf;
 		var key = e.target.dataset.key;
 
 		if (key == 'title' || key == 'content') branch.leaves[leaf][key].rendered = e.target.value;else branch.leaves[leaf][key] = e.target.value;
