@@ -237,7 +237,7 @@ var PrismTree = React.createClass({
 	changeBranchView: function changeBranchView(e) {
 		e.preventDefault();
 
-		var view = e.nativeEvent.target.dataset('view');
+		var view = e.target.dataset.view;
 
 		var state = this.state;
 
