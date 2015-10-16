@@ -155,6 +155,15 @@ body > *:not(#prism) {
               color: #808080;
               border-color: #808080;
               background: #87fab3; }
+      #prism #prism-tree #prism-branch.grid .prism-leaf {
+        width: calc( 25% - 10px );
+        padding-bottom: calc( 25% - 10px ); }
+      #prism #prism-tree #prism-branch.half .prism-leaf {
+        width: calc( 50% - 10px );
+        padding-bottom: calc( 50% - 10px ); }
+      #prism #prism-tree #prism-branch.full .prism-leaf {
+        width: calc( 100% - 10px );
+        padding-bottom: calc( 100% - 10px ); }
       #prism #prism-tree #prism-branch.list .prism-leaf {
         width: calc( 100% - 10px ) !important;
         padding-bottom: 70px !important; }
@@ -170,12 +179,10 @@ body > *:not(#prism) {
           display: block;
           position: relative;
           float: left;
-          width: calc( 25% - 10px );
           height: auto;
-          padding-bottom: calc( 25% - 10px );
           margin: 5px; }
           #prism #prism-tree #prism-branch ul#prism-leaves .prism-leaf.media {
-            opacity: .3; }
+            opacity: .4; }
             #prism #prism-tree #prism-branch ul#prism-leaves .prism-leaf.media a {
               color: #000000;
               text-shadow: 0 0 2px #ffffff; }
@@ -185,7 +192,7 @@ body > *:not(#prism) {
                 border-color: #000000;
                 text-shadow: 0 0 2px #000000; }
             #prism #prism-tree #prism-branch ul#prism-leaves .prism-leaf.media:hover {
-              opacity: .6;
+              opacity: .8;
               box-shadow: 0 0 5px #333333; }
             #prism #prism-tree #prism-branch ul#prism-leaves .prism-leaf.media.active {
               opacity: 1;

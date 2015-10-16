@@ -40,8 +40,10 @@ var PrismBranchHeader = React.createClass( {
 		var data = this.props.data;
 		var func = this.props.func;
 
-		var grid = data.view == 'grid' ? ' fa-th active'   : ' fa-th';
-		var list = data.view == 'list' ? ' fa-list active' : ' fa-list';
+		var grid = data.view == 'grid' ? ' fa-th active'       : ' fa-th';
+		var half = data.view == 'half' ? ' fa-th-large active' : ' fa-th-large';
+		var full = data.view == 'full' ? ' fa-square active'   : ' fa-square';
+		var list = data.view == 'list' ? ' fa-list active'     : ' fa-list';
 
 		var classes = 'fa fa-border fa-pull-right fa-2x';
 
@@ -51,8 +53,10 @@ var PrismBranchHeader = React.createClass( {
 			<header id="prism-branch-header">
 				<h2>{data.title}</h2>
 				<div id="prism-branch-visual-controls">
-					<i id="prism-branch-rows" data-view="list" className={classes + list} onClick={func.changeView}></i>
-					<i id="prism-branch-grid" data-view="grid" className={classes + grid} onClick={func.changeView}></i>
+					<i id="prism-branch-view-rows" data-view="list" className={classes + list} onClick={func.changeView}></i>
+					<i id="prism-branch-view-full" data-view="full" className={classes + full} onClick={func.changeView}></i>
+					<i id="prism-branch-view-half" data-view="half" className={classes + half} onClick={func.changeView}></i>
+					<i id="prism-branch-view-grid" data-view="grid" className={classes + grid} onClick={func.changeView}></i>
 					{renderAddLeaf}
 				</div>
 			</header>

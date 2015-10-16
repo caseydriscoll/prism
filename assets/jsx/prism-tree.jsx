@@ -153,13 +153,11 @@ var PrismTree = React.createClass( {
 	changeBranchView : function(e) {
 		e.preventDefault();
 
-		var view = jQuery( e.nativeEvent.target ).data( 'view' );
+		var view = e.nativeEvent.target.dataset( 'view' );
 
 		var state = this.state;
 
 		if ( view == state.branches[state.active.branch].view ) return;
-
-		jQuery( '#prism-branch-visual-controls i' ).removeClass( 'active' );
 
 		state.branches[state.active.branch].view = view;
 
@@ -273,7 +271,8 @@ var PrismTree = React.createClass( {
 			url     : PRISM.url.rest + this.state.active.branch + '?filter[posts_per_page]=-1',
 			success : function( response ) {
 
-				var state = this.state;
+				var state  = this.state;
+				var branch = this.state.active.branch
 
 				var leaves = {};
 
@@ -285,7 +284,12 @@ var PrismTree = React.createClass( {
 					leaves[leaf.id] = leaf;
 				}
 
-				state.branches[this.state.active.branch] = { leaves: leaves, view: PRISM.view };
+				state.branches[branch] = { leaves: leaves };
+
+				if ( branch in PRISM.view )
+					state.branches[branch].view = PRISM.view[branch];
+				else
+					state.branches[branch].view = PRISM.view.default;
 
 				this.setState( state );
 

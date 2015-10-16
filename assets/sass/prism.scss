@@ -251,7 +251,26 @@ body > *:not(#prism) { display: none; }
 
 			}
 
-			&.grid .prism-leaf {}
+			$grid-size: 25%;
+			$half-size: 50%;
+			$full-size: 100%;
+			$list-size: 100%;
+
+			&.grid .prism-leaf {
+				width: calc( #{$grid-size} - 10px );
+				padding-bottom: calc( #{$grid-size} - 10px );
+			}
+
+			&.half .prism-leaf {
+				width: calc( #{$half-size} - 10px );
+				padding-bottom: calc( #{$half-size} - 10px );
+			}
+
+			&.full .prism-leaf {
+				width: calc( #{$full-size} - 10px );
+				padding-bottom: calc( #{$full-size} - 10px );
+			}
+
 			&.list .prism-leaf {
 				width: calc( 100% - 10px ) !important;
 				padding-bottom: 70px !important;
@@ -269,15 +288,12 @@ body > *:not(#prism) { display: none; }
 					background-color: transparent;
 				}
 
-				$leaf-size: 25%;
-
 				.prism-leaf {
 					display: block; position: relative; float: left;
-					width: calc( #{$leaf-size} - 10px ); height: auto;
-					padding-bottom: calc( #{$leaf-size} - 10px ); margin: 5px;
+					height: auto; margin: 5px;
 
 					&.media {
-							opacity: .3;
+						opacity: .4;
 
 						a {
 
@@ -294,7 +310,7 @@ body > *:not(#prism) { display: none; }
 						}
 
 						&:hover {
-							opacity: .6;
+							opacity: .8;
 							box-shadow: 0 0 5px $dark;
 						}
 

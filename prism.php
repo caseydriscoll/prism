@@ -133,7 +133,11 @@ class Prism {
 			    'width'           => 48,
 			    'height'          => 48
 			                   ),
-			'view'          => 'grid',
+			'view'          => array(
+			    'posts'           => 'list',
+			    'media'           => 'half',
+			    'default'         => 'grid'
+			                   ),
 			'branches'      => $branches,
 			'meta'          => $meta,
 			'lockMetaPanel' => 'lock',
