@@ -36,13 +36,21 @@ body > *:not(#prism) { display: none; }
 
 		border-bottom: $border;
 
-		h1 {
+		a {
+
 			display: inline-block; float: left;
-			margin: 5px 10px 0;
-			font: {
-				family: 'Kinescope';
-				size: 60px;
+			padding: 5px 10px 0;
+			cursor: pointer;
+			text-decoration: none;
+
+			h1 {
+				margin: 0;
+				font: {
+					family: 'Kinescope';
+					size: 60px;
+				}
 			}
+
 		}
 
 		#prism-rainbow-bar {

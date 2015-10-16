@@ -13,6 +13,33 @@ var PrismTree = React.createClass( {
 		return state;
 	},
 
+	componentDidMount: function() {
+
+		var routes = {};
+
+		PRISM.branches.map( function( branch, i ) {
+			routes[branch.slug] = branch.slug;
+		} );
+
+		var routerConfig = { routes : routes };
+
+		PRISM.branches.map( function( branch, i ) {
+			routerConfig[branch.slug] = this.setState.bind( this, { active : { branch : branch.slug } } )
+		}, this );
+
+		var Router = Backbone.Router.extend( routerConfig );
+
+		new Router();
+		Backbone.history.start();
+
+	},
+
+	componentDidUpdate: function() {
+		if ( this.state.active.branch == null ) return;
+
+		this.loadLeaves();
+	},
+
 	/**
 	 * Returns true if the value of this.state.active.branch is not null
 	 *    and if that value is a key in this.state.branches
@@ -104,8 +131,6 @@ var PrismTree = React.createClass( {
 		state.active.branch = jQuery( e.nativeEvent.target ).data( 'slug' );
 
 		this.setState( state );
-
-		this.loadLeaves();
 	},
 
 	changeValue : function(e) {
@@ -267,6 +292,17 @@ var PrismTree = React.createClass( {
 
 	},
 
+	trunkData: function() {
+
+		var trunkData = { branch : '' };
+
+		if ( this.hasActiveBranch() )
+			trunkData.branch = this.state.active.branch;
+
+		return trunkData;
+
+	},
+
 	branchData: function() {
 
 		var branchData = { leaves : [] };
@@ -343,7 +379,7 @@ var PrismTree = React.createClass( {
 			saveLeaf        : this.saveLeaf
 		}
 
-		var prismTrunk   = <PrismTrunk  func={trunkFunctions}  auth={auth} />
+		var prismTrunk   = <PrismTrunk  func={trunkFunctions}  auth={auth} data={this.trunkData()}  />
 		var prismBranch  = <PrismBranch func={branchFunctions} auth={auth} data={this.branchData()} />;
 		var prismLeaf    = <PrismLeaf   func={leafFunctions}   auth={auth} data={this.leafData()}   />;
 

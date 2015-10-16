@@ -8,7 +8,9 @@ var PrismHeader = React.createClass( {
 
 		return (
 			<header id="prism-header">
-				<h1 id="prism-title" className="title">{PRISM.title}</h1>
+				<a href={PRISM.url.root}>
+					<h1 id="prism-title" className="title">{PRISM.title}</h1>
+				</a>
 				<PrismRainbowBar  data={data} func={func} />
 				<PrismUserAccount data={data} auth={auth} />
 				<span className="description">{PRISM.description}</span>

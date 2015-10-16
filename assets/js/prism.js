@@ -13,9 +13,13 @@ var PrismHeader = React.createClass({
 			"header",
 			{ id: "prism-header" },
 			React.createElement(
-				"h1",
-				{ id: "prism-title", className: "title" },
-				PRISM.title
+				"a",
+				{ href: PRISM.url.root },
+				React.createElement(
+					"h1",
+					{ id: "prism-title", className: "title" },
+					PRISM.title
+				)
 			),
 			React.createElement(PrismRainbowBar, { data: data, func: func }),
 			React.createElement(PrismUserAccount, { data: data, auth: auth }),
@@ -98,6 +102,32 @@ var PrismTree = React.createClass({
 		};
 
 		return state;
+	},
+
+	componentDidMount: function componentDidMount() {
+
+		var routes = {};
+
+		PRISM.branches.map(function (branch, i) {
+			routes[branch.slug] = branch.slug;
+		});
+
+		var routerConfig = { routes: routes };
+
+		PRISM.branches.map(function (branch, i) {
+			routerConfig[branch.slug] = this.setState.bind(this, { active: { branch: branch.slug } });
+		}, this);
+
+		var Router = Backbone.Router.extend(routerConfig);
+
+		new Router();
+		Backbone.history.start();
+	},
+
+	componentDidUpdate: function componentDidUpdate() {
+		if (this.state.active.branch == null) return;
+
+		this.loadLeaves();
 	},
 
 	/**
@@ -185,8 +215,6 @@ var PrismTree = React.createClass({
 		state.active.branch = jQuery(e.nativeEvent.target).data('slug');
 
 		this.setState(state);
-
-		this.loadLeaves();
 	},
 
 	changeValue: function changeValue(e) {
@@ -334,6 +362,15 @@ var PrismTree = React.createClass({
 		});
 	},
 
+	trunkData: function trunkData() {
+
+		var trunkData = { branch: '' };
+
+		if (this.hasActiveBranch()) trunkData.branch = this.state.active.branch;
+
+		return trunkData;
+	},
+
 	branchData: function branchData() {
 
 		var branchData = { leaves: [] };
@@ -408,7 +445,7 @@ var PrismTree = React.createClass({
 			saveLeaf: this.saveLeaf
 		};
 
-		var prismTrunk = React.createElement(PrismTrunk, { func: trunkFunctions, auth: auth });
+		var prismTrunk = React.createElement(PrismTrunk, { func: trunkFunctions, auth: auth, data: this.trunkData() });
 		var prismBranch = React.createElement(PrismBranch, { func: branchFunctions, auth: auth, data: this.branchData() });
 		var prismLeaf = React.createElement(PrismLeaf, { func: leafFunctions, auth: auth, data: this.leafData() });
 
@@ -446,14 +483,13 @@ var PrismTrunk = React.createClass({
 
 	render: function render() {
 
-		var auth = this.props.auth;
-		var func = this.props.func;
+		var data = this.props.data;
 
 		return React.createElement(
 			"div",
 			{ id: "prism-trunk" },
 			React.createElement(PrismSearch, null),
-			React.createElement(PrismMenu, { func: func })
+			React.createElement(PrismMenu, { data: data })
 		);
 	}
 
@@ -478,15 +514,16 @@ var PrismMenu = React.createClass({
 
 	render: function render() {
 
-		var func = this.props.func;
-
 		var menuItems = PRISM.branches.map(function (branch, i) {
+
+			var classes = branch.slug == this.props.data.branch ? 'active' : '';
+
 			return React.createElement(
 				"li",
 				{ key: i },
 				React.createElement(
 					"a",
-					{ href: '#' + branch.slug, id: branch.slug, "data-slug": branch.slug, onClick: func.changeBranch },
+					{ href: '/#/' + branch.slug, id: branch.slug, className: classes, "data-slug": branch.slug },
 					branch.title
 				)
 			);

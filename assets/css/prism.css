@@ -17,12 +17,16 @@ body > *:not(#prism) {
     width: 100%;
     height: 80px;
     border-bottom: 2px solid #000000; }
-    #prism #prism-header h1 {
+    #prism #prism-header a {
       display: inline-block;
       float: left;
-      margin: 5px 10px 0;
-      font-family: 'Kinescope';
-      font-size: 60px; }
+      padding: 5px 10px 0;
+      cursor: pointer;
+      text-decoration: none; }
+      #prism #prism-header a h1 {
+        margin: 0;
+        font-family: 'Kinescope';
+        font-size: 60px; }
     #prism #prism-header #prism-rainbow-bar {
       display: inline-block;
       float: left;
