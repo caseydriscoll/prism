@@ -44,7 +44,12 @@ var PrismLeaf = React.createClass( {
 		var data = this.props.data;
 		var func = this.props.func;
 
-		var content = data.content.rendered;
+		var content;
+
+		if ( data.type == 'attachment' ) 
+			content = <img src={data.source_url} />;
+		else
+			content = data.content.rendered;
 
 		var editContent    = <textarea autoFocus id="prism-leaf-content" data-key="content" value={content} onBlur={this.toggleEdit} onFocus={this.autoSelect} onChange={func.changeValue} />;
 		var staticContent  = <pre id="prism-leaf-content" onDoubleClick={this.toggleEdit}>{content}</pre>;

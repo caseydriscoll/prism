@@ -72,3 +72,17 @@ for i in "${crayons[@]}"
 do
   wp post create --post_title="${i}" --post_type="crayons" --post_date="${randate}" --post_status="Publish"
 done
+
+
+# MEDIA
+# http://lorempixel.com/400/400/
+
+if [ ! -d "images" ]; then
+  mkdir images
+fi
+
+for ((i=1;i<=50;i++));
+do
+  wget http://lorempixel.com/400/400/ -O images/$i.jpg
+  wp media import images/$i.jpg
+done

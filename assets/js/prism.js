@@ -635,14 +635,23 @@ var PrismLeafNode = React.createClass({
 		var href = '/#/' + type + '/' + data.id;
 		var title = data.title.rendered;
 
+		var styles = {};
 		var classes = 'prism-leaf ' + data.active;
+
+		if (type == 'media' && data.media_type == 'image') {
+			var thumbnail = data.media_details.sizes.thumbnail.source_url;
+
+			styles.color = 'white';
+			styles.backgroundImage = 'url(' + thumbnail + ')';
+			styles.backgroundSize = 'cover';
+		}
 
 		return React.createElement(
 			'li',
 			{ id: id, className: classes, key: this.props.key },
 			React.createElement(
 				'a',
-				{ href: href, 'data-title': title, 'data-id': data.id },
+				{ href: href, 'data-title': title, 'data-id': data.id, style: styles },
 				title
 			)
 		);
@@ -696,7 +705,9 @@ var PrismLeaf = React.createClass({
 		var data = this.props.data;
 		var func = this.props.func;
 
-		var content = data.content.rendered;
+		var content;
+
+		if (data.type == 'attachment') content = React.createElement('img', { src: data.source_url });else content = data.content.rendered;
 
 		var editContent = React.createElement('textarea', { autoFocus: true, id: 'prism-leaf-content', 'data-key': 'content', value: content, onBlur: this.toggleEdit, onFocus: this.autoSelect, onChange: func.changeValue });
 		var staticContent = React.createElement(

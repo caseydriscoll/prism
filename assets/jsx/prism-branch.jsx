@@ -79,11 +79,20 @@ var PrismLeafNode = React.createClass( {
 		var href  = '/#/' + type + '/' + data.id;
 		var title = data.title.rendered;
 
+		var styles  = {};
 		var classes = 'prism-leaf ' + data.active;
+
+		if ( type == 'media' && data.media_type == 'image' ) {
+			var thumbnail  = data.media_details.sizes.thumbnail.source_url;
+
+			styles.color           = 'white';
+			styles.backgroundImage = 'url(' + thumbnail + ')';
+			styles.backgroundSize  = 'cover';
+		}
 
 		return (
 			<li id={id} className={classes} key={this.props.key}>
-				<a href={href} data-title={title} data-id={data.id}>{title}</a>
+				<a href={href} data-title={title} data-id={data.id} style={styles}>{title}</a>
 			</li>
 		)
 	}
