@@ -276,6 +276,41 @@ body > *:not(#prism) { display: none; }
 					width: calc( #{$leaf-size} - 10px ); height: auto;
 					padding-bottom: calc( #{$leaf-size} - 10px ); margin: 5px;
 
+					&.media {
+							opacity: .3;
+
+						a {
+
+							color: $black;
+							text-shadow: 0 0 2px $white;
+
+							&:hover {
+								color: $white;
+								background-color: transparent;
+								border-color: $black;
+								text-shadow: 0 0 2px $black;
+							}
+
+						}
+
+						&:hover {
+							opacity: .6;
+							box-shadow: 0 0 5px $dark;
+						}
+
+						&.active {
+							opacity: 1;
+							box-shadow: 0 0 10px $highlight;
+
+							a {
+								color: $white;
+								background: transparent;
+								text-shadow: 0 0 5px $black;
+							}
+						}
+
+					}
+
 					a {
 						display: block; position: absolute;
 						left: 0; right: 0;
@@ -295,7 +330,7 @@ body > *:not(#prism) { display: none; }
 						text-decoration: none;
 
 						border: $border;
-						border-color: $light;
+						border-color: $grey;
 
 						&:hover {
 							color: $black;
@@ -305,10 +340,15 @@ body > *:not(#prism) { display: none; }
 
 					}
 
-					&.active a {
-						color: $black;
-						background: $highlight;
-						border-color: $black;
+					&.active {
+
+						box-shadow: 0 0 10px $highlight;
+
+						a {
+							color: $black;
+							background: $highlight;
+							border-color: $black;
+						}
 					}
 
 				}

@@ -644,14 +644,16 @@ var PrismLeafNode = React.createClass({
 			styles.color = 'white';
 			styles.backgroundImage = 'url(' + thumbnail + ')';
 			styles.backgroundSize = 'cover';
+
+			classes += ' ' + type;
 		}
 
 		return React.createElement(
 			'li',
-			{ id: id, className: classes, key: this.props.key },
+			{ id: id, className: classes, key: this.props.key, style: styles },
 			React.createElement(
 				'a',
-				{ href: href, 'data-title': title, 'data-id': data.id, style: styles },
+				{ href: href, 'data-title': title, 'data-id': data.id },
 				title
 			)
 		);

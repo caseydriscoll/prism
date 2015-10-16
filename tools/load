@@ -29,7 +29,10 @@ posts=( 'You think Im an ignorant savage'                        \
 
 for i in "${posts[@]}"
 do
-  wp post create --post_title="${i}" --post_date="$(randate)" --post_status="Publish"
+  id=$(wp post create --post_title="${i}" --post_date="$(randate)" --post_status="Publish" --porcelain)
+
+  wget http://lorempixel.com/400/400/ -O images/${id}_image.jpg
+  wp media import images/${id}_image.jpg --post_id=$id --title="${i}" --featured_image
 done
 
 

@@ -174,6 +174,26 @@ body > *:not(#prism) {
           height: auto;
           padding-bottom: calc( 25% - 10px );
           margin: 5px; }
+          #prism #prism-tree #prism-branch ul#prism-leaves .prism-leaf.media {
+            opacity: .3; }
+            #prism #prism-tree #prism-branch ul#prism-leaves .prism-leaf.media a {
+              color: #000000;
+              text-shadow: 0 0 2px #ffffff; }
+              #prism #prism-tree #prism-branch ul#prism-leaves .prism-leaf.media a:hover {
+                color: #ffffff;
+                background-color: transparent;
+                border-color: #000000;
+                text-shadow: 0 0 2px #000000; }
+            #prism #prism-tree #prism-branch ul#prism-leaves .prism-leaf.media:hover {
+              opacity: .6;
+              box-shadow: 0 0 5px #333333; }
+            #prism #prism-tree #prism-branch ul#prism-leaves .prism-leaf.media.active {
+              opacity: 1;
+              box-shadow: 0 0 10px #87CEFA; }
+              #prism #prism-tree #prism-branch ul#prism-leaves .prism-leaf.media.active a {
+                color: #ffffff;
+                background: transparent;
+                text-shadow: 0 0 5px #000000; }
           #prism #prism-tree #prism-branch ul#prism-leaves .prism-leaf a {
             display: block;
             position: absolute;
@@ -190,15 +210,17 @@ body > *:not(#prism) {
             color: #808080;
             text-decoration: none;
             border: 2px solid #000000;
-            border-color: #dddddd; }
+            border-color: #808080; }
             #prism #prism-tree #prism-branch ul#prism-leaves .prism-leaf a:hover {
               color: #000000;
               background-color: #dddddd;
               border-color: #000000; }
-          #prism #prism-tree #prism-branch ul#prism-leaves .prism-leaf.active a {
-            color: #000000;
-            background: #87CEFA;
-            border-color: #000000; }
+          #prism #prism-tree #prism-branch ul#prism-leaves .prism-leaf.active {
+            box-shadow: 0 0 10px #87CEFA; }
+            #prism #prism-tree #prism-branch ul#prism-leaves .prism-leaf.active a {
+              color: #000000;
+              background: #87CEFA;
+              border-color: #000000; }
     #prism #prism-tree #prism-leaf {
       display: block;
       position: relative;
