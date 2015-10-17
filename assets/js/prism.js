@@ -225,9 +225,12 @@ var PrismTree = React.createClass({
 		state.isMetaPanelOpen = this.isMetaPanelOpen();
 
 		this.setState(state);
+
+		this.changeBranch(branch);
 	},
 
 	changeBranch: function changeBranch(branch) {
+		log('changeBranch');
 		var state = this.state;
 
 		state.active.branch = branch;

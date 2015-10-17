@@ -46,11 +46,10 @@ var PrismTree = React.createClass( {
 
 		}, this );
 
-		routes.search        = 'search';
+		routes.search       = 'search';
 		routerConfig.search = function() { this.changeBranch( 'search' ) }.bind( this );
 
 		routerConfig.routes = routes;
-
 
 		var Router = Backbone.Router.extend( routerConfig );
 
@@ -137,9 +136,12 @@ var PrismTree = React.createClass( {
 		state.isMetaPanelOpen = this.isMetaPanelOpen();
 
 		this.setState( state );
+
+		this.changeBranch( branch );
 	},
 
 	changeBranch: function( branch ) {
+		log( 'changeBranch' );
 		var state = this.state;
 
 		state.active.branch = branch;
