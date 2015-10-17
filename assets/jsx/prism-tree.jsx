@@ -116,8 +116,10 @@ var PrismTree = React.createClass( {
 		var branch    = state.active.branch;
 		var leaf      = state.active.leaf;
 
-		if ( state.lockMetaPanel == 'lock' || state.branches[branch].leaves[leaf].metapanel == 'open' )
-			isMetaPanelOpen = true;
+		if ( this.hasActiveLeaf() ) {
+			if ( state.lockMetaPanel == 'lock' || state.branches[branch].leaves[leaf].metapanel == 'open' )
+				isMetaPanelOpen = true;
+		} 
 
 		return isMetaPanelOpen;
 	},
