@@ -1132,7 +1132,12 @@ window.onkeyup = function (e) {
 	switch (key.code) {
 		case 13:
 			// Return
-			if (document.activeElement.tagName == 'INPUT') document.activeElement.blur();
+			if (document.activeElement.tagName == 'INPUT') {
+				document.activeElement.blur();
+			} else {
+				jQuery('#prism-add-leaf').click();
+			}
+
 			break;
 
 		case 27:
@@ -1146,7 +1151,11 @@ window.onkeyup = function (e) {
 
 		case 187:
 			// =/+
+			if (document.activeElement.tagName == 'INPUT') break;
+
 			if (e.shiftKey) jQuery('#prism-add-leaf').click();
+
+			break;
 
 		default:
 			break;

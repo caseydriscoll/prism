@@ -15,8 +15,12 @@ window.onkeyup = function(e) {
 
 	switch ( key.code ) {
 		case 13: // Return
-			if ( document.activeElement.tagName == 'INPUT' )
+			if ( document.activeElement.tagName == 'INPUT' ) {
 				document.activeElement.blur();
+			} else {
+				jQuery( '#prism-add-leaf' ).click();
+			}
+
 			break;
 
 		case 27: // Escape
@@ -28,8 +32,12 @@ window.onkeyup = function(e) {
 			break;
 
 		case 187: // =/+
-			if ( e.shiftKey ) 
-				jQuery( '#prism-add-leaf' ).click();
+			if ( document.activeElement.tagName == 'INPUT' )
+				break;
+
+			if ( e.shiftKey ) jQuery( '#prism-add-leaf' ).click();
+
+			break
 
 		default:
 			break;
