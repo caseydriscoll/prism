@@ -355,7 +355,7 @@ var PrismTree = React.createClass( {
 
 		// TODO: This is a temporary stop gap. Don't fetch the query if we already have them.
 		// Ultimately, we'll have to check for changes and all that.
-		if ( this.hasActiveBranch() && ! _.isEmpty( this.state.branches[branch].leaves ) ) return;
+		if ( this.hasActiveBranch() && branch != 'search' && ! _.isEmpty( this.state.branches[branch].leaves ) ) return;
 
 		var params = '?filter[posts_per_page]=-1';
 
