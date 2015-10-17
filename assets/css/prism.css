@@ -197,7 +197,7 @@ body > *:not(#prism) {
               opacity: .8;
               background-size: 105% !important;
               box-shadow: 0 0 5px #333333;
-              transition: background-size .2s; }
+              transition: background-size .1s; }
             #prism #prism-tree #prism-branch ul#prism-leaves .prism-leaf.media.active {
               opacity: 1;
               box-shadow: 0 0 10px #87CEFA; }
