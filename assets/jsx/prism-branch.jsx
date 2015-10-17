@@ -6,6 +6,8 @@ var PrismBranch = React.createClass( {
 		var data = this.props.data;
 		var func = this.props.func;
 
+		var style = { 'width' : data.width + '%' };
+
 		var prismLeafNodes = Object.keys( data.leaves ).reverse().map( function( key ) {
 
 			var leaf = data.leaves[key];
@@ -20,11 +22,12 @@ var PrismBranch = React.createClass( {
 		}, this );
 
 		return (
-			<div id="prism-branch" className={data.view}>
+			<div id="prism-branch" className={data.view} style={style} data-section="branch">
 				<PrismBranchHeader auth={auth} data={data} func={func} />
 				<ul id="prism-leaves">
 					{prismLeafNodes}
 				</ul>
+				<PrismResizeBar data={data} func={func} />
 			</div>
 		);
 	}

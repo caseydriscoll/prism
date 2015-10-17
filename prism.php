@@ -140,7 +140,7 @@ class Prism {
 			                   ),
 			'branches'      => $branches,
 			'meta'          => $meta,
-			'lockMetaPanel' => 'lock',
+			'lockMetaPanel' => 'unlock',
 			'newleaf'       => false,
 			'lastKey'       => array(
 			    'time'            => 0,

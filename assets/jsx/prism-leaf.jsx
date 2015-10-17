@@ -82,10 +82,12 @@ var PrismLeaf = React.createClass( {
 		func.prepLeaf = this.prepLeaf;
 		func.autoSelect = this.autoSelect;
 
+		var style = { 'width' : data.width + '%' };
+
 		var leafClasses = data.isMetaPanelOpen ? 'metapanel-open' : 'metapanel-closed';
 
 		return (
-			<div id="prism-leaf" className={leafClasses}>
+			<div id="prism-leaf" className={leafClasses} style={style}>
 				<PrismLeafHeader auth={auth} data={data} func={func} />
 				{this.renderContentPanel()}
 				{this.renderMetaPanel()}

@@ -86,10 +86,10 @@ var PrismUserAccount = React.createClass({
 
 });
 
-"use strict";
+'use strict';
 
 var PrismTree = React.createClass({
-	displayName: "PrismTree",
+	displayName: 'PrismTree',
 
 	getInitialState: function getInitialState() {
 
@@ -98,7 +98,13 @@ var PrismTree = React.createClass({
 			active: { branch: null },
 			lockMetaPanel: PRISM.lockMetaPanel,
 			isMetaPanelOpen: false,
-			currentlyChanged: false
+			currentlyChanged: false,
+			width: {
+				'default': { 'trunk': 17, 'branch': 33, 'leaf': 50 },
+				current: { 'trunk': 17, 'branch': 33, 'leaf': 50 },
+				minimum: { 'trunk': 10, 'branch': 25, 'leaf': 30 },
+				maximum: { 'trunk': 30, 'branch': 40, 'leaf': 65 }
+			}
 		};
 
 		return state;
@@ -106,6 +112,16 @@ var PrismTree = React.createClass({
 
 	componentDidMount: function componentDidMount() {
 
+		this.initRouter();
+	},
+
+	componentDidUpdate: function componentDidUpdate() {
+		if (this.state.active.branch == null) return;
+
+		this.loadLeaves();
+	},
+
+	initRouter: function initRouter() {
 		var routes = {};
 		var routerConfig = {};
 
@@ -130,12 +146,6 @@ var PrismTree = React.createClass({
 
 		new Router();
 		Backbone.history.start();
-	},
-
-	componentDidUpdate: function componentDidUpdate() {
-		if (this.state.active.branch == null) return;
-
-		this.loadLeaves();
 	},
 
 	/**
@@ -230,6 +240,46 @@ var PrismTree = React.createClass({
 		if (key == 'title' || key == 'content') branch.leaves[leaf][key].rendered = e.target.value;else branch.leaves[leaf][key] = e.target.value;
 
 		state.currentlyChanged = true;
+
+		this.setState(state);
+	},
+
+	changeWidth: function changeWidth(e) {
+
+		if (e.clientX == 0) return;
+
+		var state = this.state;
+
+		var section = {
+			name: e.target.parentElement.dataset.section,
+			left: e.target.parentElement.offsetLeft
+		};
+
+		var position = e.clientX - section.left;
+
+		// This could be more granular (currently at full percents),
+		// but there is a rendering jump at smaller decimals
+		section.width = parseInt(position / window.innerWidth * 100);
+
+		// The sibling to the parent
+		var partner = {};
+
+		if (section.name == 'trunk') partner.name = 'branch';
+		if (section.name == 'branch') partner.name = 'leaf';
+
+		var totalWidth = state.width.current[section.name] + state.width.current[partner.name];
+
+		partner.width = totalWidth - section.width;
+
+		console.log(totalWidth, partner.width, section.width);
+
+		if (section.width == state.width.current[section.name]) return;
+
+		if (section.width < state.width.minimum[section.name] || section.width > state.width.maximum[section.name]) return;
+		if (partner.width < state.width.minimum[partner.name] || partner.width > state.width.maximum[partner.name]) return;
+
+		state.width.current[section.name] = section.width;
+		state.width.current[partner.name] = partner.width;
 
 		this.setState(state);
 	},
@@ -360,7 +410,7 @@ var PrismTree = React.createClass({
 
 				state.branches[branch] = { leaves: leaves };
 
-				if (branch in PRISM.view) state.branches[branch].view = PRISM.view[branch];else state.branches[branch].view = PRISM.view["default"];
+				if (branch in PRISM.view) state.branches[branch].view = PRISM.view[branch];else state.branches[branch].view = PRISM.view['default'];
 
 				this.setState(state);
 			}).bind(this)
@@ -369,7 +419,7 @@ var PrismTree = React.createClass({
 
 	trunkData: function trunkData() {
 
-		var trunkData = { branch: '' };
+		var trunkData = { branch: '', width: this.state.width.current.trunk };
 
 		if (this.hasActiveBranch()) trunkData.branch = this.state.active.branch;
 
@@ -378,18 +428,16 @@ var PrismTree = React.createClass({
 
 	branchData: function branchData() {
 
-		var branchData = { leaves: [] };
+		var branchData = { leaves: [], width: this.state.width.current.branch };
 
 		if (this.hasActiveBranch()) {
 
 			var branch = this.state.active.branch;
 
-			branchData = {
-				title: branch,
-				leaf: this.state.active.leaf,
-				view: this.state.branches[branch].view,
-				leaves: this.state.branches[branch].leaves
-			};
+			branchData.title = branch;
+			branchData.leaf = this.state.active.leaf;
+			branchData.view = this.state.branches[branch].view;
+			branchData.leaves = this.state.branches[branch].leaves;
 		}
 
 		return branchData;
@@ -409,6 +457,7 @@ var PrismTree = React.createClass({
 			if (this.hasActiveLeaf()) leafData = branch.leaves[leaf];
 		}
 
+		leafData.width = this.state.width.current.leaf;
 		leafData.lockMetaPanel = this.state.lockMetaPanel;
 		leafData.isMetaPanelOpen = this.state.isMetaPanelOpen;
 		leafData.currentlyChanged = this.state.currentlyChanged;
@@ -435,12 +484,14 @@ var PrismTree = React.createClass({
 		var auth = this.props.auth;
 
 		var trunkFunctions = {
-			changeBranch: this.changeBranch
+			changeBranch: this.changeBranch,
+			changeWidth: this.changeWidth
 		};
 
 		var branchFunctions = {
 			changeLeaf: this.changeLeaf,
 			changeView: this.changeBranchView,
+			changeWidth: this.changeWidth,
 			addLeaf: this.addLeaf
 		};
 
@@ -460,8 +511,8 @@ var PrismTree = React.createClass({
 		var renderLeaf = this.hasActiveLeaf() ? prismLeaf : null;
 
 		return React.createElement(
-			"div",
-			{ id: "prism-tree" },
+			'div',
+			{ id: 'prism-tree' },
 			renderTrunk,
 			renderBranch,
 			renderLeaf
@@ -482,41 +533,45 @@ var PrismFooter = React.createClass({
 
 });
 
-"use strict";
+'use strict';
 
 var PrismTrunk = React.createClass({
-	displayName: "PrismTrunk",
+	displayName: 'PrismTrunk',
 
 	render: function render() {
 
 		var data = this.props.data;
+		var func = this.props.func;
+
+		var style = { 'width': data.width + '%' };
 
 		return React.createElement(
-			"div",
-			{ id: "prism-trunk" },
+			'div',
+			{ id: 'prism-trunk', style: style, 'data-section': 'trunk' },
 			React.createElement(PrismSearch, null),
-			React.createElement(PrismMenu, { data: data })
+			React.createElement(PrismMenu, { data: data }),
+			React.createElement(PrismResizeBar, { data: data, func: func })
 		);
 	}
 
 });
 
 var PrismSearch = React.createClass({
-	displayName: "PrismSearch",
+	displayName: 'PrismSearch',
 
 	render: function render() {
 
 		return React.createElement(
-			"div",
-			{ id: "prism-search" },
-			React.createElement("input", { type: "text", placeholder: "Search" })
+			'div',
+			{ id: 'prism-search' },
+			React.createElement('input', { type: 'text', placeholder: 'Search' })
 		);
 	}
 
 });
 
 var PrismMenu = React.createClass({
-	displayName: "PrismMenu",
+	displayName: 'PrismMenu',
 
 	render: function render() {
 
@@ -525,21 +580,21 @@ var PrismMenu = React.createClass({
 			var classes = branch.slug == this.props.data.branch ? 'active' : '';
 
 			return React.createElement(
-				"li",
+				'li',
 				{ key: i },
 				React.createElement(
-					"a",
-					{ href: '/#/' + branch.slug, id: branch.slug, className: classes, "data-slug": branch.slug },
+					'a',
+					{ href: '/#/' + branch.slug, id: branch.slug, className: classes, 'data-slug': branch.slug },
 					branch.title
 				)
 			);
 		}, this);
 
 		return React.createElement(
-			"menu",
-			{ id: "prism-menu" },
+			'menu',
+			{ id: 'prism-menu' },
 			React.createElement(
-				"ul",
+				'ul',
 				null,
 				menuItems
 			)
@@ -559,6 +614,8 @@ var PrismBranch = React.createClass({
 		var data = this.props.data;
 		var func = this.props.func;
 
+		var style = { 'width': data.width + '%' };
+
 		var prismLeafNodes = Object.keys(data.leaves).reverse().map(function (key) {
 
 			var leaf = data.leaves[key];
@@ -570,13 +627,14 @@ var PrismBranch = React.createClass({
 
 		return React.createElement(
 			'div',
-			{ id: 'prism-branch', className: data.view },
+			{ id: 'prism-branch', className: data.view, style: style, 'data-section': 'branch' },
 			React.createElement(PrismBranchHeader, { auth: auth, data: data, func: func }),
 			React.createElement(
 				'ul',
 				{ id: 'prism-leaves' },
 				prismLeafNodes
-			)
+			),
+			React.createElement(PrismResizeBar, { data: data, func: func })
 		);
 	}
 
@@ -744,11 +802,13 @@ var PrismLeaf = React.createClass({
 		func.prepLeaf = this.prepLeaf;
 		func.autoSelect = this.autoSelect;
 
+		var style = { 'width': data.width + '%' };
+
 		var leafClasses = data.isMetaPanelOpen ? 'metapanel-open' : 'metapanel-closed';
 
 		return React.createElement(
 			'div',
-			{ id: 'prism-leaf', className: leafClasses },
+			{ id: 'prism-leaf', className: leafClasses, style: style },
 			React.createElement(PrismLeafHeader, { auth: auth, data: data, func: func }),
 			this.renderContentPanel(),
 			this.renderMetaPanel()
@@ -961,6 +1021,33 @@ var PrismLeafMetaPanelPiece = React.createClass({
 	}
 
 });
+
+/**
+ * Utilities used in all parts of the application
+ */
+
+"use strict";
+
+var PrismResizeBar = React.createClass({
+	displayName: "PrismResizeBar",
+
+	handleClick: function handleClick() {
+		log('click');
+	},
+
+	render: function render() {
+
+		var data = this.props.data;
+		var func = this.props.func;
+
+		return React.createElement("div", { draggable: "true", className: "prism-resize-bar", onClick: this.handleClick, onDrag: func.changeWidth });
+	}
+
+});
+
+var log = function log(message) {
+	console.log(message);
+};
 
 'use strict';
 

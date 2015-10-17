@@ -7,7 +7,13 @@ var PrismTree = React.createClass( {
 			active           : { branch : null },
 			lockMetaPanel    : PRISM.lockMetaPanel,
 			isMetaPanelOpen  : false,
-			currentlyChanged : false
+			currentlyChanged : false,
+			width            : {
+				default : { 'trunk' : 17, 'branch' : 33, 'leaf' : 50 },
+				current : { 'trunk' : 17, 'branch' : 33, 'leaf' : 50 },
+				minimum : { 'trunk' : 10, 'branch' : 25, 'leaf' : 30 },
+				maximum : { 'trunk' : 30, 'branch' : 40, 'leaf' : 65 }
+			}
 		};
 
 		return state;
@@ -15,6 +21,17 @@ var PrismTree = React.createClass( {
 
 	componentDidMount: function() {
 
+		this.initRouter();
+
+	},
+
+	componentDidUpdate: function() {
+		if ( this.state.active.branch == null ) return;
+
+		this.loadLeaves();
+	},
+
+	initRouter: function() {
 		var routes = {};
 		var routerConfig = {};
 
@@ -25,7 +42,7 @@ var PrismTree = React.createClass( {
 			routes[branch.slug]          = branch.slug;
 			routes[branch.slug + "/:id"] = method;
 
-			routerConfig[branch.slug]    = function() { this.changeBranch(branch.slug) }.bind( this );
+			routerConfig[branch.slug]    = function()   { this.changeBranch(branch.slug)   }.bind( this );
 			routerConfig[method]         = function(id) { this.changeLeaf(branch.slug, id) }.bind( this );
 
 		}, this );
@@ -36,13 +53,6 @@ var PrismTree = React.createClass( {
 
 		new Router();
 		Backbone.history.start();
-
-	},
-
-	componentDidUpdate: function() {
-		if ( this.state.active.branch == null ) return;
-
-		this.loadLeaves();
 	},
 
 	/**
@@ -146,6 +156,46 @@ var PrismTree = React.createClass( {
 			branch.leaves[leaf][key] = e.target.value;
 
 		state.currentlyChanged = true;
+
+		this.setState( state );
+	},
+
+	changeWidth : function(e) {
+
+		if ( e.clientX == 0 ) return;
+
+		var state      = this.state;
+
+		var section    = {
+			name : e.target.parentElement.dataset.section,
+			left : e.target.parentElement.offsetLeft
+		};
+
+		var position   = e.clientX - section.left;
+
+		// This could be more granular (currently at full percents), 
+		// but there is a rendering jump at smaller decimals
+		section.width  = parseInt( position / window.innerWidth * 100 );
+
+		// The sibling to the parent
+		var partner    = {};
+
+		if ( section.name == 'trunk'  ) partner.name = 'branch';
+		if ( section.name == 'branch' ) partner.name = 'leaf';
+
+		var totalWidth = state.width.current[section.name] + state.width.current[partner.name];
+
+		partner.width  = totalWidth - section.width;
+
+		console.log( totalWidth, partner.width, section.width );
+
+		if ( section.width == state.width.current[section.name] ) return;
+
+		if ( section.width < state.width.minimum[section.name] || section.width > state.width.maximum[section.name] ) return;
+		if ( partner.width < state.width.minimum[partner.name] || partner.width > state.width.maximum[partner.name] ) return;
+
+		state.width.current[section.name] = section.width;
+		state.width.current[partner.name] = partner.width;
 
 		this.setState( state );
 	},
@@ -300,7 +350,7 @@ var PrismTree = React.createClass( {
 
 	trunkData: function() {
 
-		var trunkData = { branch : '' };
+		var trunkData = { branch : '', width : this.state.width.current.trunk };
 
 		if ( this.hasActiveBranch() )
 			trunkData.branch = this.state.active.branch;
@@ -311,18 +361,16 @@ var PrismTree = React.createClass( {
 
 	branchData: function() {
 
-		var branchData = { leaves : [] };
+		var branchData = { leaves : [], width : this.state.width.current.branch };
 
 		if ( this.hasActiveBranch() ) {
 
 			var branch = this.state.active.branch;
 
-			branchData = {
-				title : branch,
-				leaf  : this.state.active.leaf,
-				view  : this.state.branches[branch].view,
-				leaves: this.state.branches[branch].leaves
-			}
+			branchData.title  = branch;
+			branchData.leaf   = this.state.active.leaf;
+			branchData.view   = this.state.branches[branch].view;
+			branchData.leaves = this.state.branches[branch].leaves;
 
 		}
 
@@ -345,6 +393,7 @@ var PrismTree = React.createClass( {
 
 		}
 
+		leafData.width            = this.state.width.current.leaf;
 		leafData.lockMetaPanel    = this.state.lockMetaPanel;
 		leafData.isMetaPanelOpen  = this.state.isMetaPanelOpen;
 		leafData.currentlyChanged = this.state.currentlyChanged;
@@ -371,13 +420,15 @@ var PrismTree = React.createClass( {
 		var auth = this.props.auth;
 
 		var trunkFunctions  = {
-			changeBranch : this.changeBranch
+			changeBranch : this.changeBranch,
+			changeWidth  : this.changeWidth
 		};
 
 		var branchFunctions = {
-			changeLeaf : this.changeLeaf,
-			changeView : this.changeBranchView,
-			addLeaf    : this.addLeaf
+			changeLeaf  : this.changeLeaf,
+			changeView  : this.changeBranchView,
+			changeWidth : this.changeWidth,
+			addLeaf     : this.addLeaf
 		};
 
 		var leafFunctions   = {

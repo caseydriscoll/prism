@@ -58,6 +58,8 @@ module.exports = function( grunt ) {
 					'assets/js/prism-leaf-header.js'    : 'assets/jsx/prism-leaf/header.jsx',
 					'assets/js/prism-leaf-metapanel.js' : 'assets/jsx/prism-leaf/metapanel.jsx',
 
+					'assets/js/prism-utils.js'          : 'assets/jsx/prism-utils.jsx',
+
 					'assets/js/keyboard.js'             : 'assets/jsx/keyboard.jsx'
 				}
 			}
@@ -75,6 +77,8 @@ module.exports = function( grunt ) {
 					'assets/js/prism-leaf.js',
 					'assets/js/prism-leaf-header.js',
 					'assets/js/prism-leaf-metapanel.js',
+
+					'assets/js/prism-utils.js',
 
 					'assets/js/keyboard.js',
 
@@ -95,6 +99,8 @@ module.exports = function( grunt ) {
 				'assets/js/prism-leaf.js',
 				'assets/js/prism-leaf-header.js',
 				'assets/js/prism-leaf-metapanel.js',
+
+				'assets/js/prism-utils.js',
 
 				'assets/js/keyboard.js'
 		],
