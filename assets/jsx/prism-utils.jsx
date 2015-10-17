@@ -5,17 +5,13 @@
 
 var PrismResizeBar = React.createClass( {
 
-	handleClick: function() {
-		log( 'click' );
-	},
-
 	render: function() {
 
 		var data = this.props.data;
 		var func = this.props.func;
 
 		return(
-			<div draggable="true" className="prism-resize-bar" onClick={this.handleClick} onDrag={func.changeWidth}></div>
+			<div draggable="true" className="prism-resize-bar" onDoubleClick={func.resetWidth} onDrag={func.changeWidth}></div>
 		)
 	}
 

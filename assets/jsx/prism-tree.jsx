@@ -187,8 +187,6 @@ var PrismTree = React.createClass( {
 
 		partner.width  = totalWidth - section.width;
 
-		console.log( totalWidth, partner.width, section.width );
-
 		if ( section.width == state.width.current[section.name] ) return;
 
 		if ( section.width < state.width.minimum[section.name] || section.width > state.width.maximum[section.name] ) return;
@@ -212,6 +210,18 @@ var PrismTree = React.createClass( {
 		state.branches[state.active.branch].view = view;
 
 		this.setState( state );
+	},
+
+	resetWidth : function(e) {
+
+		var state      = this.state;
+
+		state.width.current.trunk  = state.width.default.trunk;
+		state.width.current.branch = state.width.default.branch;
+		state.width.current.leaf   = state.width.default.leaf;
+
+		this.setState( state );
+
 	},
 
 	toggleMetaPanel : function(e) {
@@ -421,13 +431,15 @@ var PrismTree = React.createClass( {
 
 		var trunkFunctions  = {
 			changeBranch : this.changeBranch,
-			changeWidth  : this.changeWidth
+			changeWidth  : this.changeWidth,
+			resetWidth   : this.resetWidth
 		};
 
 		var branchFunctions = {
 			changeLeaf  : this.changeLeaf,
 			changeView  : this.changeBranchView,
 			changeWidth : this.changeWidth,
+			resetWidth  : this.resetWidth,
 			addLeaf     : this.addLeaf
 		};
 
@@ -435,6 +447,7 @@ var PrismTree = React.createClass( {
 			lockMetaPanel   : this.lockMetaPanel,
 			toggleMetaPanel : this.toggleMetaPanel,
 			changeValue     : this.changeValue,
+			resetWidth      : this.resetWidth,
 			saveLeaf        : this.saveLeaf
 		}
 
