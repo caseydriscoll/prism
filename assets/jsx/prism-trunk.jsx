@@ -9,7 +9,7 @@ var PrismTrunk = React.createClass( {
 
 		return (
 			<div id="prism-trunk" style={style} data-section='trunk'>
-				<PrismSearch />
+				<PrismSearch    data={data} func={func} />
 				<PrismMenu      data={data} />
 				<PrismResizeBar data={data} func={func} />
 			</div>
@@ -21,11 +21,21 @@ var PrismTrunk = React.createClass( {
 
 var PrismSearch = React.createClass( {
 
+	changeBranch: function() {
+		this.props.func.changeBranch( 'search' );
+	},
+
 	render: function() {
 
+		var data = this.props.data;
+		var func = this.props.func;
+
+		var focus    = data.branch == 'search' ? true : false;
+		var classes  = data.branch == 'search' ? 'active' : '';
+
 		return (
-			<div id="prism-search">
-				<input type="text" placeholder="Search" />
+			<div id="prism-search" className={classes}>
+				<input type="text" placeholder="Search" onClick={this.changeBranch} onBlur={func.search} autoFocus={focus} />
 			</div>
 		);
 

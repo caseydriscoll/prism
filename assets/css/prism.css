@@ -96,12 +96,19 @@ body > *:not(#prism) {
         padding: 10px;
         border-bottom: 2px solid #000000;
         font-size: 24px; }
+        #prism #prism-tree #prism-trunk #prism-search.active {
+          background: #87CEFA;
+          color: #000000;
+          border-color: #000000; }
         #prism #prism-tree #prism-trunk #prism-search input {
           width: 100%;
           padding: 2px 10px;
           border: 2px solid #000000;
           border-color: #808080;
-          background: transparent; }
+          background: #ffffff; }
+          #prism #prism-tree #prism-trunk #prism-search input:focus {
+            background: #ffffff !important;
+            outline: none !important; }
       #prism #prism-tree #prism-trunk menu {
         padding: 0;
         margin: 0; }

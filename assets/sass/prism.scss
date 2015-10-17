@@ -152,13 +152,24 @@ body > *:not(#prism) { display: none; }
 
 				font-size: 24px;
 
+				&.active {
+					background: $highlight;
+					color: $black;
+					border-color: $black;
+				}
+
 				input {
 					width: 100%;
 					padding: 2px 10px;
 
 					border: $border;
 					border-color: $grey;
-					background: transparent;
+					background: $white;
+
+					&:focus {
+						background: $white !important;
+						outline: none !important;
+					}
 				}
 			}
 

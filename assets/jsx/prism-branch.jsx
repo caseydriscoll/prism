@@ -50,7 +50,7 @@ var PrismBranchHeader = React.createClass( {
 
 		var classes = 'fa fa-border fa-pull-right fa-2x';
 
-		var renderAddLeaf = auth ? <i id="prism-add-leaf" className={classes + ' fa-plus'} onClick={func.addLeaf}></i> : null;
+		var renderAddLeaf = auth && data.title !== 'search' ? <i id="prism-add-leaf" className={classes + ' fa-plus'} onClick={func.addLeaf}></i> : null;
 
 		return (
 			<header id="prism-branch-header">

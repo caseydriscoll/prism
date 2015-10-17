@@ -95,7 +95,12 @@ var PrismTree = React.createClass({
 
 		var state = {
 			branches: {},
-			active: { branch: null },
+			active: {
+				branch: null
+			},
+			search: {
+				query: ''
+			},
 			lockMetaPanel: PRISM.lockMetaPanel,
 			isMetaPanelOpen: false,
 			currentlyChanged: false,
@@ -113,12 +118,6 @@ var PrismTree = React.createClass({
 	componentDidMount: function componentDidMount() {
 
 		this.initRouter();
-	},
-
-	componentDidUpdate: function componentDidUpdate() {
-		if (this.state.active.branch == null) return;
-
-		this.loadLeaves();
 	},
 
 	initRouter: function initRouter() {
@@ -139,6 +138,11 @@ var PrismTree = React.createClass({
 				this.changeLeaf(branch.slug, id);
 			}).bind(this);
 		}, this);
+
+		routes.search = 'search';
+		routerConfig.search = (function () {
+			this.changeBranch('search');
+		}).bind(this);
 
 		routerConfig.routes = routes;
 
@@ -229,6 +233,8 @@ var PrismTree = React.createClass({
 		state.active.branch = branch;
 
 		this.setState(state);
+
+		if (branch != 'search') this.loadLeaves();
 	},
 
 	changeValue: function changeValue(e) {
@@ -337,6 +343,21 @@ var PrismTree = React.createClass({
 		this.setState(state);
 	},
 
+	search: function search(e) {
+
+		var state = this.state;
+
+		state.search.query = e.target.value;
+
+		if (state.search.query == '') return;
+
+		this.setState(state);
+
+		window.location = '/#/search?query=' + state.search.query;
+
+		this.loadLeaves();
+	},
+
 	addLeaf: function addLeaf() {
 
 		var data = {
@@ -395,15 +416,28 @@ var PrismTree = React.createClass({
 		});
 	},
 
+	/**
+  * loadLeaves is only called from changeBranch
+  * 
+  * 
+  */
 	loadLeaves: function loadLeaves() {
+
+		var branch = this.state.active.branch;
 
 		// TODO: This is a temporary stop gap. Don't fetch the query if we already have them.
 		// Ultimately, we'll have to check for changes and all that.
-		if (this.state.active.branch in this.state.branches) return;
+		if (this.hasActiveBranch() && !_.isEmpty(this.state.branches[branch].leaves)) return;
+
+		var params = '?filter[posts_per_page]=-1';
+
+		var url = PRISM.url.rest;
+
+		if (branch == 'search') url += 'posts' + params + '&filter[post_type]=any&filter[s]=' + this.state.search.query;else url += branch + params;
 
 		jQuery.ajax({
 			method: 'GET',
-			url: PRISM.url.rest + this.state.active.branch + '?filter[posts_per_page]=-1',
+			url: url,
 			success: (function (response) {
 
 				var state = this.state;
@@ -430,7 +464,13 @@ var PrismTree = React.createClass({
 
 	trunkData: function trunkData() {
 
-		var trunkData = { branch: '', width: this.state.width.current.trunk };
+		var state = this.state;
+
+		var trunkData = {
+			branch: '',
+			width: state.width.current.trunk,
+			search: state.search
+		};
 
 		if (this.hasActiveBranch()) trunkData.branch = this.state.active.branch;
 
@@ -439,7 +479,10 @@ var PrismTree = React.createClass({
 
 	branchData: function branchData() {
 
-		var branchData = { leaves: [], width: this.state.width.current.branch };
+		var branchData = {
+			leaves: [],
+			width: this.state.width.current.branch
+		};
 
 		if (this.hasActiveBranch()) {
 
@@ -497,7 +540,8 @@ var PrismTree = React.createClass({
 		var trunkFunctions = {
 			changeBranch: this.changeBranch,
 			changeWidth: this.changeWidth,
-			resetWidth: this.resetWidth
+			resetWidth: this.resetWidth,
+			search: this.search
 		};
 
 		var branchFunctions = {
@@ -562,7 +606,7 @@ var PrismTrunk = React.createClass({
 		return React.createElement(
 			'div',
 			{ id: 'prism-trunk', style: style, 'data-section': 'trunk' },
-			React.createElement(PrismSearch, null),
+			React.createElement(PrismSearch, { data: data, func: func }),
 			React.createElement(PrismMenu, { data: data }),
 			React.createElement(PrismResizeBar, { data: data, func: func })
 		);
@@ -573,12 +617,22 @@ var PrismTrunk = React.createClass({
 var PrismSearch = React.createClass({
 	displayName: 'PrismSearch',
 
+	changeBranch: function changeBranch() {
+		this.props.func.changeBranch('search');
+	},
+
 	render: function render() {
+
+		var data = this.props.data;
+		var func = this.props.func;
+
+		var focus = data.branch == 'search' ? true : false;
+		var classes = data.branch == 'search' ? 'active' : '';
 
 		return React.createElement(
 			'div',
-			{ id: 'prism-search' },
-			React.createElement('input', { type: 'text', placeholder: 'Search' })
+			{ id: 'prism-search', className: classes },
+			React.createElement('input', { type: 'text', placeholder: 'Search', onClick: this.changeBranch, onBlur: func.search, autoFocus: focus })
 		);
 	}
 
@@ -670,7 +724,7 @@ var PrismBranchHeader = React.createClass({
 
 		var classes = 'fa fa-border fa-pull-right fa-2x';
 
-		var renderAddLeaf = auth ? React.createElement('i', { id: 'prism-add-leaf', className: classes + ' fa-plus', onClick: func.addLeaf }) : null;
+		var renderAddLeaf = auth && data.title !== 'search' ? React.createElement('i', { id: 'prism-add-leaf', className: classes + ' fa-plus', onClick: func.addLeaf }) : null;
 
 		return React.createElement(
 			'header',
