@@ -1122,17 +1122,19 @@ window.onkeyup = function (e) {
 		time: new Date()
 	};
 
+	var input = document.activeElement.tagName == 'INPUT';
+
 	var doubleKeyTime = key.time - PRISM.lastKey.time < PRISM.doubleKey.time;
 	var doubleKeyCode = key.code == PRISM.doubleKey.code && PRISM.lastKey.code == PRISM.doubleKey.code;
 
 	if (doubleKeyTime && doubleKeyCode) document.getElementById('prism-rainbow-bar').focus();
 
-	console.log(key.code);
+	// console.log( key.code );
 
 	switch (key.code) {
 		case 13:
 			// Return
-			if (document.activeElement.tagName == 'INPUT') {
+			if (input) {
 				document.activeElement.blur();
 			} else {
 				jQuery('#prism-add-leaf').click();
@@ -1149,11 +1151,14 @@ window.onkeyup = function (e) {
 			// Spacebar
 			break;
 
+		case 80:
+			// p - for panel
+			if (!input) jQuery('.metapanel-control').click();
+			break;
+
 		case 187:
 			// =/+
-			if (document.activeElement.tagName == 'INPUT') break;
-
-			if (e.shiftKey) jQuery('#prism-add-leaf').click();
+			if (!input) if (e.shiftKey) jQuery('#prism-add-leaf').click();
 
 			break;
 
