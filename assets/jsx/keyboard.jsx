@@ -11,7 +11,7 @@ window.onkeyup = function(e) {
 	if ( doubleKeyTime && doubleKeyCode ) 
 		document.getElementById( 'prism-rainbow-bar' ).focus();
 
-	// console.log( key.code );
+	console.log( key.code );
 
 	switch ( key.code ) {
 		case 13: // Return
@@ -26,6 +26,10 @@ window.onkeyup = function(e) {
 
 		case 32: // Spacebar
 			break;
+
+		case 187: // =/+
+			if ( e.shiftKey ) 
+				jQuery( '#prism-add-leaf' ).click();
 
 		default:
 			break;
