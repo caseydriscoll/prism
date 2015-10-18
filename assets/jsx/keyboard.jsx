@@ -60,7 +60,8 @@ window.onkeyup = function(e) {
 			break;
 
 		case 76: // l - for lock
-			if ( ! input ) jQuery( '.lock-meta' ).click();
+			if ( ! input )
+				stateChange = { 'lockMeta' : true };
 
 			if ( ! input && keyMode == 'v' )
 				stateChange = { 'view' : 'list' };

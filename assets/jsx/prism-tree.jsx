@@ -32,6 +32,9 @@ var PrismTree = React.createClass( {
 			if ( 'view' in changeState )
 				this.changeView( changeState.view );
 
+			if ( 'lockMeta' in changeState )
+				this.lockMeta();
+
 		};
 
 		this.initRouter();
@@ -178,13 +181,9 @@ var PrismTree = React.createClass( {
 		this.setState( state );
 	},
 
-	lockMeta : function(e) {
-		e.preventDefault();
+	lockMeta : function() {
 
-		var state     = this.state;
-
-		var branch    = state.active.branch;
-		var leaf      = state.active.leaf;
+		var state  = this.state;
 
 		if ( state.lockMeta == 'unlock' )
 			state.lockMeta = 'lock';
