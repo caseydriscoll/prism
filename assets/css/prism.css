@@ -174,18 +174,38 @@ body > *:not(#prism) {
               color: #808080;
               border-color: #808080;
               background: #87fab3; }
-      #prism #prism-tree #prism-branch.grid .prism-leaf {
+      #prism #prism-tree #prism-branch.grid ul#prism-leaves .prism-leaf {
         width: calc( 25% - 10px );
         padding-bottom: calc( 25% - 10px ); }
-      #prism #prism-tree #prism-branch.half .prism-leaf {
+      #prism #prism-tree #prism-branch.half ul#prism-leaves .prism-leaf {
         width: calc( 50% - 10px );
         padding-bottom: calc( 50% - 10px ); }
-      #prism #prism-tree #prism-branch.full .prism-leaf {
+      #prism #prism-tree #prism-branch.full ul#prism-leaves .prism-leaf {
         width: calc( 100% - 10px );
         padding-bottom: calc( 100% - 10px ); }
-      #prism #prism-tree #prism-branch.list .prism-leaf {
+      #prism #prism-tree #prism-branch.list ul#prism-leaves .prism-leaf, #prism #prism-tree #prism-branch.list ul#prism-leaves .prism-leaf.media:hover {
         width: calc( 100% - 10px ) !important;
-        padding-bottom: 70px !important; }
+        padding-bottom: 100px !important;
+        background-position: left center !important;
+        background-size: 100px !important;
+        background-repeat: no-repeat;
+        background-color: #dddddd;
+        opacity: 1 !important; }
+        #prism #prism-tree #prism-branch.list ul#prism-leaves .prism-leaf:hover, #prism #prism-tree #prism-branch.list ul#prism-leaves .prism-leaf.media:hover:hover {
+          background-color: #dddddd !important; }
+        #prism #prism-tree #prism-branch.list ul#prism-leaves .prism-leaf.active, #prism #prism-tree #prism-branch.list ul#prism-leaves .prism-leaf.media:hover.active {
+          background-color: #87CEFA !important; }
+        #prism #prism-tree #prism-branch.list ul#prism-leaves .prism-leaf.media a, #prism #prism-tree #prism-branch.list ul#prism-leaves .prism-leaf.media:hover.media a {
+          padding-left: 110px; }
+        #prism #prism-tree #prism-branch.list ul#prism-leaves .prism-leaf a, #prism #prism-tree #prism-branch.list ul#prism-leaves .prism-leaf.media:hover a {
+          background-color: #ffffff;
+          text-shadow: none;
+          font-size: 16px;
+          font-weight: bold;
+          line-height: 20px;
+          background: none;
+          cursor: pointer;
+          color: #808080; }
       #prism #prism-tree #prism-branch ul#prism-leaves {
         height: calc( 100% - 65px );
         padding: 5px;

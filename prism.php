@@ -135,7 +135,7 @@ class Prism {
 			                   ),
 			'view'          => array(
 			    'posts'           => 'list',
-			    'media'           => 'half',
+			    'media'           => 'grid',
 			    'search'          => 'list',
 			    'default'         => 'grid'
 			                   ),
