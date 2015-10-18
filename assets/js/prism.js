@@ -927,8 +927,6 @@ var PrismLeaf = React.createClass({
 
 });
 
-'use strict';
-
 var PrismLeafHeader = React.createClass({
 	displayName: 'PrismLeafHeader',
 
