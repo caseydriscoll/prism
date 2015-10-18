@@ -55,6 +55,19 @@ window.onkeyup = function(e) {
 				stateChange = { 'view' : 'half' };
 			break;
 
+		case 73: // i
+			break;
+
+		case 74: // j - for 'down' (vim style)
+			if ( ! input )
+				stateChange = { 'move' : 'down' };
+			break;
+
+		case 75: // k - for 'up' (vim style)
+			if ( ! input )
+				stateChange = { 'move' : 'up' };
+			break;
+
 		case 76: // L - for lock
 			if ( ! input && e.shiftKey )
 				stateChange = { 'lockMeta' : true };

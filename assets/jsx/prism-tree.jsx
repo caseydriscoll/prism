@@ -27,6 +27,9 @@ var PrismTree = React.createClass( {
 			if ( 'view'       in changeState )
 				this.changeView( changeState.view );
 
+			if ( 'move'       in changeState )
+				this.move( changeState.move );
+
 			if ( 'lockMeta'   in changeState )
 				this.lockMeta();
 
@@ -40,6 +43,26 @@ var PrismTree = React.createClass( {
 
 		this.initRouter();
 
+	},
+
+	move: function( direction ) {
+
+		if ( this.hasActiveLeaf() ) {
+			var leaf   = this.state.active.leaf;
+			var branch = this.state.active.branch;
+
+			var id     = branch + '/' + leaf;
+
+			var next;
+
+			if ( direction == 'up' ) 
+				next = document.getElementById( id ).previousSibling;
+			else
+				next = document.getElementById( id ).nextSibling;
+
+			if ( next != null ) window.location = '/#/' + next.id;
+
+		}
 	},
 
 	initRouter: function() {

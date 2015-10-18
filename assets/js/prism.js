@@ -118,6 +118,8 @@ var PrismTree = React.createClass({
 
 			if ('view' in changeState) _this.changeView(changeState.view);
 
+			if ('move' in changeState) _this.move(changeState.move);
+
 			if ('lockMeta' in changeState) _this.lockMeta();
 
 			if ('changeMeta' in changeState) _this.changeMeta();
@@ -126,6 +128,22 @@ var PrismTree = React.createClass({
 		};
 
 		this.initRouter();
+	},
+
+	move: function move(direction) {
+
+		if (this.hasActiveLeaf()) {
+			var leaf = this.state.active.leaf;
+			var branch = this.state.active.branch;
+
+			var id = branch + '/' + leaf;
+
+			var next;
+
+			if (direction == 'up') next = document.getElementById(id).previousSibling;else next = document.getElementById(id).nextSibling;
+
+			if (next != null) window.location = '/#/' + next.id;
+		}
 	},
 
 	initRouter: function initRouter() {
@@ -799,7 +817,13 @@ var PrismLeafNode = React.createClass({
 	displayName: 'PrismLeafNode',
 
 	id: function id() {
-		return this.props.data.type + "-" + this.props.data.id;
+		var id = this.props.data.type;
+
+		if (id.slice(-1) != 's') id += 's';
+
+		id += "/" + this.props.data.id;
+
+		return id;
 	},
 
 	render: function render() {
@@ -1255,6 +1279,20 @@ window.onkeyup = function (e) {
 		case 72:
 			// h - for 'half' (with 'v' keyMode)
 			if (!input && key.mode == 'v') stateChange = { 'view': 'half' };
+			break;
+
+		case 73:
+			// i
+			break;
+
+		case 74:
+			// j - for 'down' (vim style)
+			if (!input) stateChange = { 'move': 'down' };
+			break;
+
+		case 75:
+			// k - for 'up' (vim style)
+			if (!input) stateChange = { 'move': 'up' };
 			break;
 
 		case 76:

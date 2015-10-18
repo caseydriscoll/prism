@@ -80,7 +80,14 @@ var PrismBranchHeader = React.createClass( {
 var PrismLeafNode = React.createClass( {
 
 	id : function() {
-		return this.props.data.type + "-" + this.props.data.id;
+		var id = this.props.data.type;
+
+		if ( id.slice(-1) != 's' )
+			id += 's';
+
+		id += "/" + this.props.data.id;
+
+		return id;
 	},
 
 	render: function() {
