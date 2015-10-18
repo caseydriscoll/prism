@@ -33,6 +33,9 @@ var PrismTree = React.createClass( {
 			if ( 'changeMeta' in changeState )
 				this.changeMeta();
 
+			if ( 'addLeaf'    in changeState )
+				this.addLeaf();
+
 		};
 
 		this.initRouter();

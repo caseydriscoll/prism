@@ -121,6 +121,8 @@ var PrismTree = React.createClass({
 			if ('lockMeta' in changeState) _this.lockMeta();
 
 			if ('changeMeta' in changeState) _this.changeMeta();
+
+			if ('addLeaf' in changeState) _this.addLeaf();
 		};
 
 		this.initRouter();
@@ -1228,11 +1230,7 @@ window.onkeyup = function (e) {
 	switch (key.code) {
 		case 13:
 			// Return
-			if (input) {
-				document.activeElement.blur();
-			} else {
-				jQuery('#prism-add-leaf').click();
-			}
+			if (input) document.activeElement.blur();else stateChange = { 'addLeaf': true };
 
 			break;
 
@@ -1274,17 +1272,12 @@ window.onkeyup = function (e) {
 
 		case 86:
 			// v - for view
-			if (!input) {
-				if (keyMode == false) {
-					PRISM.keyMode = 'v';
-				}
-			}
+			if (!input && keyMode == false) PRISM.keyMode = 'v';
 			break;
 
 		case 187:
 			// =/+
-			if (!input) if (e.shiftKey) jQuery('#prism-add-leaf').click();
-
+			if (!input && e.shiftKey) stateChange = { 'addLeaf': true };
 			break;
 
 		default:
