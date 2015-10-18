@@ -141,7 +141,6 @@ var PrismTree = React.createClass( {
 	},
 
 	changeBranch: function( branch ) {
-		log( 'changeBranch' );
 		var state = this.state;
 
 		state.active.branch = branch;

@@ -230,7 +230,6 @@ var PrismTree = React.createClass({
 	},
 
 	changeBranch: function changeBranch(branch) {
-		log('changeBranch');
 		var state = this.state;
 
 		state.active.branch = branch;
@@ -763,7 +762,13 @@ var PrismLeafNode = React.createClass({
 		var auth = this.props.auth;
 		var data = this.props.data;
 		var func = this.props.func;
-		var type = this.props.type;
+		var type = this.props.data.type;
+
+		// TODO: Don't do this.
+		// This is an UGLY stop gap to get around the post/posts problem
+		if (type.slice(-1) != 's') type += 's';
+
+		if (this.props.type == 'media') type = this.props.type;
 
 		var id = this.id();
 		var href = '/#/' + type + '/' + data.id;
