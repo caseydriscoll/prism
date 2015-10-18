@@ -1258,8 +1258,8 @@ window.onkeyup = function (e) {
 			break;
 
 		case 76:
-			// l - for lock
-			if (!input) stateChange = { 'lockMeta': true };
+			// L - for lock
+			if (!input && e.shiftKey) stateChange = { 'lockMeta': true };
 
 			if (!input && key.mode == 'v') stateChange = { 'view': 'list' };
 			break;

@@ -55,8 +55,8 @@ window.onkeyup = function(e) {
 				stateChange = { 'view' : 'half' };
 			break;
 
-		case 76: // l - for lock
-			if ( ! input )
+		case 76: // L - for lock
+			if ( ! input && e.shiftKey )
 				stateChange = { 'lockMeta' : true };
 
 			if ( ! input && key.mode == 'v' )
