@@ -189,7 +189,6 @@ body > *:not(#prism) {
         background-position: left center !important;
         background-size: 100px !important;
         background-repeat: no-repeat;
-        background-color: #dddddd;
         opacity: 1 !important; }
         #prism #prism-tree #prism-branch.list ul#prism-leaves .prism-leaf:hover, #prism #prism-tree #prism-branch.list ul#prism-leaves .prism-leaf.media:hover:hover {
           background-color: #dddddd !important; }
