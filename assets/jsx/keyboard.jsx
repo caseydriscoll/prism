@@ -68,7 +68,8 @@ window.onkeyup = function(e) {
 			break;
 
 		case 80: // p - for panel
-			if ( ! input ) jQuery( '.toggle-meta' ).click();
+			if ( ! input ) 
+				stateChange = { 'changeMeta' : true };
 			break;
 
 		case 86: // v - for view

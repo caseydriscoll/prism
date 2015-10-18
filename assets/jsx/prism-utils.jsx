@@ -25,6 +25,12 @@ var PrismLeafMetaIcon = React.createClass( {
 		this.props.func.lockMeta();
 	},
 
+	changeMeta: function(e) {
+		e.preventDefault();
+
+		this.props.func.changeMeta();
+	},
+
 	render: function() {
 
 		var auth = this.props.auth;
@@ -39,7 +45,7 @@ var PrismLeafMetaIcon = React.createClass( {
 		toggleClasses    += data.metaActive ? ' fa-toggle-right active' : ' fa-toggle-left';
 
 		var classes     = this.props.type == 'lock' ? lockClasses : toggleClasses;
-		var handleClick = this.props.type == 'lock' ? this.lockMeta : func.changeMeta;
+		var handleClick = this.props.type == 'lock' ? this.lockMeta : this.changeMeta;
 
 		return (
 			<i className={classes} onClick={handleClick}></i>

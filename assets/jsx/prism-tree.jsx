@@ -29,11 +29,14 @@ var PrismTree = React.createClass( {
 
 		PrismKeyHandler = ( changeState ) => {
 
-			if ( 'view' in changeState )
+			if ( 'view'       in changeState )
 				this.changeView( changeState.view );
 
-			if ( 'lockMeta' in changeState )
+			if ( 'lockMeta'   in changeState )
 				this.lockMeta();
+
+			if ( 'changeMeta' in changeState )
+				this.changeMeta();
 
 		};
 
@@ -161,9 +164,7 @@ var PrismTree = React.createClass( {
 		this.changeBranch( branch );
 	},
 
-	changeMeta : function(e) {
-		e.preventDefault();
-
+	changeMeta : function() {
 		var state     = this.state;
 
 		if ( state.lockMeta == 'lock' ) return;

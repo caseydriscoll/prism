@@ -124,6 +124,8 @@ var PrismTree = React.createClass({
 			if ('view' in changeState) _this.changeView(changeState.view);
 
 			if ('lockMeta' in changeState) _this.lockMeta();
+
+			if ('changeMeta' in changeState) _this.changeMeta();
 		};
 
 		this.initRouter();
@@ -247,9 +249,7 @@ var PrismTree = React.createClass({
 		this.changeBranch(branch);
 	},
 
-	changeMeta: function changeMeta(e) {
-		e.preventDefault();
-
+	changeMeta: function changeMeta() {
 		var state = this.state;
 
 		if (state.lockMeta == 'lock') return;
@@ -1172,6 +1172,12 @@ var PrismLeafMetaIcon = React.createClass({
 		this.props.func.lockMeta();
 	},
 
+	changeMeta: function changeMeta(e) {
+		e.preventDefault();
+
+		this.props.func.changeMeta();
+	},
+
 	render: function render() {
 
 		var auth = this.props.auth;
@@ -1186,7 +1192,7 @@ var PrismLeafMetaIcon = React.createClass({
 		toggleClasses += data.metaActive ? ' fa-toggle-right active' : ' fa-toggle-left';
 
 		var classes = this.props.type == 'lock' ? lockClasses : toggleClasses;
-		var handleClick = this.props.type == 'lock' ? this.lockMeta : func.changeMeta;
+		var handleClick = this.props.type == 'lock' ? this.lockMeta : this.changeMeta;
 
 		return React.createElement("i", { className: classes, onClick: handleClick });
 	}
@@ -1270,7 +1276,7 @@ window.onkeyup = function (e) {
 
 		case 80:
 			// p - for panel
-			if (!input) jQuery('.toggle-meta').click();
+			if (!input) stateChange = { 'changeMeta': true };
 			break;
 
 		case 86:
