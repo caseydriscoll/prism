@@ -17,7 +17,7 @@ var PrismResizeBar = React.createClass( {
 
 } );
 
-var PrismLeafMetaIcon = React.createClass( {
+var PrismIcon = React.createClass( {
 
 	lockMeta: function(e) {
 		e.preventDefault();

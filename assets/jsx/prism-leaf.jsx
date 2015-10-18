@@ -100,7 +100,7 @@ var PrismLeafHeader = React.createClass( {
 		return (
 			<header id="prism-leaf-header">
 				<PrismLeafTitle auth={auth} data={data.title.rendered} func={func} />
-				<PrismLeafMetaIcon type='toggle' data={data} func={func} />
+				<PrismIcon type='toggle' data={data} func={func} />
 			</header>
 		)
 

@@ -1001,7 +1001,7 @@ var PrismLeafHeader = React.createClass({
 			'header',
 			{ id: 'prism-leaf-header' },
 			React.createElement(PrismLeafTitle, { auth: auth, data: data.title.rendered, func: func }),
-			React.createElement(PrismLeafMetaIcon, { type: 'toggle', data: data, func: func })
+			React.createElement(PrismIcon, { type: 'toggle', data: data, func: func })
 		);
 	}
 });
@@ -1123,7 +1123,7 @@ var PrismMeta = React.createClass({
 					null,
 					'Post Meta'
 				),
-				React.createElement(PrismLeafMetaIcon, { type: 'lock', data: data, func: func })
+				React.createElement(PrismIcon, { type: 'lock', data: data, func: func })
 			),
 			React.createElement(
 				'ul',
@@ -1217,8 +1217,8 @@ var PrismResizeBar = React.createClass({
 
 });
 
-var PrismLeafMetaIcon = React.createClass({
-	displayName: "PrismLeafMetaIcon",
+var PrismIcon = React.createClass({
+	displayName: "PrismIcon",
 
 	lockMeta: function lockMeta(e) {
 		e.preventDefault();

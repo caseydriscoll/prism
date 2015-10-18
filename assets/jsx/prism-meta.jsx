@@ -47,7 +47,7 @@ var PrismMeta = React.createClass( {
 			<div id="prism-meta" style={style}>
 				<header id="prism-meta-header">
 					<h3>Post Meta</h3>
-					<PrismLeafMetaIcon type='lock' data={data} func={func} />
+					<PrismIcon type='lock' data={data} func={func} />
 				</header>
 				<ul id="prism-meta-info">
 					{renderMetaInfo}
