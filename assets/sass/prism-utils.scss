@@ -1,0 +1,14 @@
+.prism-resize-bar {
+	display: block; position: absolute;
+	width: 4px; height: 100%;
+	right: -3px; top: 0; bottom: 0;
+	background: transparent;
+
+	cursor: col-resize;
+	z-index: 100;
+
+	&:hover {
+		background-color: $highlight;
+		opacity: .75;
+	}
+}

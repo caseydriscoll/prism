@@ -1,0 +1,208 @@
+#prism-branch {
+	display: block; position: relative; float: left;
+	height: 100%;
+
+	border-right: $border;
+
+	header#prism-branch-header {
+
+		height: $sub-header-height;
+		padding: 10px;
+		border-bottom: $border;
+
+		h2 {
+			padding: 5px; margin: 0;
+			text-transform: capitalize;
+		}
+
+		div#prism-branch-visual-controls {
+
+			display: block; position: absolute;
+			right: 0; top: 0;
+
+			i.fa {
+				margin: 10px 10px 0 0;
+
+				color: $light;
+				cursor: pointer;
+
+				border-color: $light;
+
+				&:hover {
+					color: $highlight;
+					border-color: $highlight;
+				}
+
+				&.active {
+					color: $grey;
+					border-color: $grey;
+					background-color: $light;
+				}
+			}
+
+			i#prism-add-leaf {
+
+				margin-right: 25px;
+
+				&:hover {
+					color: $grey;
+					border-color: $grey;
+					background: $green;
+				}
+			}
+		}
+
+	}
+
+	$grid-size: 25%;
+	$half-size: 50%;
+	$full-size: 100%;
+	$list-size: 100%;
+
+	&.grid ul#prism-leaves .prism-leaf {
+		width: calc( #{$grid-size} - 10px );
+		padding-bottom: calc( #{$grid-size} - 10px );
+	}
+
+	&.half ul#prism-leaves .prism-leaf {
+		width: calc( #{$half-size} - 10px );
+		padding-bottom: calc( #{$half-size} - 10px );
+	}
+
+	&.full ul#prism-leaves .prism-leaf {
+		width: calc( #{$full-size} - 10px );
+		padding-bottom: calc( #{$full-size} - 10px );
+	}
+
+	&.list ul#prism-leaves .prism-leaf,
+	&.list ul#prism-leaves .prism-leaf.media:hover {
+		width: calc( 100% - 10px ) !important;
+		padding-bottom: 100px !important;
+		background: {
+			position: left center !important;
+			size: 100px !important;
+			repeat: no-repeat;
+		}
+		opacity: 1 !important;
+
+		&:hover  { background-color: $light !important; }
+		&.active { background-color: $highlight !important; }
+
+		&.media a { padding-left: 110px; }
+
+		a {
+			background-color: $white;
+
+			text-shadow: none;
+			font-size: 16px;
+			font-weight: bold;
+			line-height: 20px;
+
+			background: none;
+
+			cursor: pointer;
+
+			color: $grey;
+		}
+	}
+
+	ul#prism-leaves {
+
+		height: calc( 100% - #{$sub-header-height} );
+		padding: 5px; margin: 0 1px 0 0;
+
+		overflow-y: scroll;
+
+		&::-webkit-scrollbar-track {
+			-webkit-box-shadow: none;
+			background-color: transparent;
+		}
+
+		.prism-leaf {
+			display: block; position: relative; float: left;
+			height: auto; margin: 5px;
+
+			&.media {
+				opacity: .4;
+				background-position: center center;
+				background-size: 100%;
+
+				a {
+
+					color: $black;
+					text-shadow: 0 0 2px $white;
+
+					&:hover {
+						color: $white;
+						background-color: transparent;
+						border-color: $black;
+						text-shadow: 0 0 2px $black;
+					}
+
+				}
+
+				&:hover {
+					opacity: .8;
+					background-size: 105% !important;
+					box-shadow: 0 0 5px $dark;
+
+					transition: background-size .1s;
+				}
+
+				&.active {
+					opacity: 1;
+					box-shadow: 0 0 10px $highlight;
+
+					a {
+						color: $white;
+						background: transparent;
+						text-shadow: 0 0 5px $black;
+					}
+				}
+
+			}
+
+			a {
+				display: block; position: absolute;
+				left: 0; right: 0;
+				top: 0; bottom: 0;
+				padding: 10px;
+
+				font-size: 16px;
+				font-weight: bold;
+				line-height: 20px;
+
+				background: none;
+
+				cursor: pointer;
+
+				color: $grey;
+
+				text-decoration: none;
+
+				border: $border;
+				border-color: $grey;
+
+				&:hover {
+					color: $black;
+					background-color: $light;
+					border-color: $black;
+				}
+
+			}
+
+			&.active {
+
+				box-shadow: 0 0 10px $highlight;
+
+				a {
+					color: $black;
+					background: $highlight;
+					border-color: $black;
+				}
+			}
+
+		}
+
+	}
+}

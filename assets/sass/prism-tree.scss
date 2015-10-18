@@ -1,0 +1,6 @@
+#prism-tree {
+
+	display: block; position: relative;
+	width: 100%; height: calc( 100vh - #{$header-height} );
+
+}

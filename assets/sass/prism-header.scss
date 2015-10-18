@@ -1,0 +1,85 @@
+#prism-header {
+	display: block; position: relative;
+	width: 100%; height: $header-height;
+
+	border-bottom: $border;
+
+	a {
+
+		display: inline-block; float: left;
+		padding: 5px 10px 0;
+		cursor: pointer;
+		text-decoration: none;
+
+		h1 {
+			margin: 0;
+			font: {
+				family: 'Kinescope';
+				size: 60px;
+			}
+		}
+
+	}
+
+	#prism-rainbow-bar {
+		display: inline-block; float: left;
+		padding: 5px 10px; margin: 12px 20px 0;
+		font: {
+			size: 32px;
+		}
+		border: 0;
+		color: $light;
+
+		&:focus {
+			color: $dark;
+			background: $white !important;
+		}
+	}
+
+	span.description {
+		display: block; position: relative; float: right;
+		max-width: 420px;
+		padding: 16px 20px;
+		
+		color: $grey;
+		
+		font: {
+			family: 'Gibson', sans-serif;
+			size: 14px;
+			style: italic;
+		}
+
+		text: {
+			align: right;
+		}
+	}
+
+
+	#prism-user-account {
+		float: right;
+		margin: 12px 10px 0 0;
+
+		cursor: pointer;
+
+		i.fa-user {
+			border: {
+				radius: 50%;
+				color: $grey;
+			}
+
+			color: $grey;
+
+			&:hover {
+				color: $highlight;
+				border-color: $highlight;
+			}
+		}
+
+		img {
+			margin-top: -2px;
+			border-radius: 50%;
+		}
+
+	}
+
+}
