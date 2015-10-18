@@ -14,12 +14,7 @@ var PrismTree = React.createClass( {
 			},
 			lockMeta         : PRISM.lockMeta,
 			currentlyChanged : false,
-			width            : {
-				default : { 'trunk' : 17, 'branch' : 33, 'leaf' : 35, 'meta' :  15 },
-				current : { 'trunk' : 17, 'branch' : 33, 'leaf' : 35, 'meta' :  15 },
-				minimum : { 'trunk' : 10, 'branch' : 25, 'leaf' : 30, 'meta' :  10 },
-				maximum : { 'trunk' : 30, 'branch' : 40, 'leaf' : 65, 'meta' :  30 }
-			}
+			width            : PRISM.width
 		};
 
 		return state;
