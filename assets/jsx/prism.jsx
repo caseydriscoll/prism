@@ -97,8 +97,8 @@ var Prism = React.createClass( {
 		return (
 			<div id="prism" className={classes}>
 				<PrismHeader auth={auth} data={data} func={func} />
-				<PrismTree   auth={auth} data={data} />
-				<PrismFooter />
+				<PrismTree   auth={auth} data={data} func={func} />
+				<PrismFooter func={func} />
 			</div>
 		);
 	}

@@ -117,6 +117,12 @@ var PrismTree = React.createClass({
 	},
 
 	componentDidMount: function componentDidMount() {
+		var _this = this;
+
+		PrismKeyHandler = function (changeState) {
+
+			if ('view' in changeState) _this.changeView(changeState.view);
+		};
 
 		this.initRouter();
 	},
@@ -325,10 +331,7 @@ var PrismTree = React.createClass({
 		this.setState(state);
 	},
 
-	changeBranchView: function changeBranchView(e) {
-		e.preventDefault();
-
-		var view = e.target.dataset.view;
+	changeView: function changeView(view) {
 
 		var state = this.state;
 
@@ -454,7 +457,7 @@ var PrismTree = React.createClass({
 				for (var i = 0; i < response.length; i++) {
 					var leaf = response[i];
 
-					leaf.metapanel = 'closed';
+					leaf.metapanel = this.state.active.meta ? 'open' : 'closed';
 
 					leaves[leaf.id] = leaf;
 				}
@@ -578,7 +581,7 @@ var PrismTree = React.createClass({
 
 		var branchFunctions = {
 			changeLeaf: this.changeLeaf,
-			changeView: this.changeBranchView,
+			changeView: this.changeView,
 			changeWidth: this.changeWidth,
 			resetWidth: this.resetWidth,
 			addLeaf: this.addLeaf
@@ -594,7 +597,8 @@ var PrismTree = React.createClass({
 
 		var metaFunctions = {
 			changeValue: this.changeValue,
-			lockMeta: this.lockMeta
+			lockMeta: this.lockMeta,
+			saveLeaf: this.saveLeaf
 		};
 
 		var prismTrunk = React.createElement(PrismTrunk, { func: trunkFunctions, auth: auth, data: this.trunkData() });
@@ -751,6 +755,14 @@ var PrismBranch = React.createClass({
 var PrismBranchHeader = React.createClass({
 	displayName: 'PrismBranchHeader',
 
+	changeView: function changeView(e) {
+		e.preventDefault();
+
+		var view = e.target.dataset.view;
+
+		this.props.func.changeView(view);
+	},
+
 	render: function render() {
 
 		var auth = this.props.auth;
@@ -777,10 +789,10 @@ var PrismBranchHeader = React.createClass({
 			React.createElement(
 				'div',
 				{ id: 'prism-branch-visual-controls' },
-				React.createElement('i', { id: 'prism-branch-view-rows', 'data-view': 'list', className: classes + list, onClick: func.changeView }),
-				React.createElement('i', { id: 'prism-branch-view-full', 'data-view': 'full', className: classes + full, onClick: func.changeView }),
-				React.createElement('i', { id: 'prism-branch-view-half', 'data-view': 'half', className: classes + half, onClick: func.changeView }),
-				React.createElement('i', { id: 'prism-branch-view-grid', 'data-view': 'grid', className: classes + grid, onClick: func.changeView }),
+				React.createElement('i', { id: 'prism-branch-view-rows', 'data-view': 'list', className: classes + list, onClick: this.changeView }),
+				React.createElement('i', { id: 'prism-branch-view-full', 'data-view': 'full', className: classes + full, onClick: this.changeView }),
+				React.createElement('i', { id: 'prism-branch-view-half', 'data-view': 'half', className: classes + half, onClick: this.changeView }),
+				React.createElement('i', { id: 'prism-branch-view-grid', 'data-view': 'grid', className: classes + grid, onClick: this.changeView }),
 				renderAddLeaf
 			)
 		);
@@ -1026,11 +1038,18 @@ var PrismMeta = React.createClass({
 		func.saveLeaf('update', data);
 	},
 
+	autoSelect: function autoSelect(e) {
+		e.nativeEvent.target.select();
+	},
+
 	render: function render() {
 
 		var auth = this.props.auth;
 		var data = this.props.data;
 		var func = this.props.func;
+
+		func.prepMeta = this.prepMeta;
+		func.autoSelect = this.autoSelect;
 
 		var metaInfoToDisplay = data.type in PRISM.meta ? data.type : 'default';
 
@@ -1076,6 +1095,7 @@ var PrismMetaInfo = React.createClass({
 		var key = e.target.dataset.key;
 		var auth = this.props.auth;
 		var data = this.props.data;
+		var func = this.props.func;
 		var value = e.target.value;
 
 		// If not authenticated, don't all to edit
@@ -1089,7 +1109,7 @@ var PrismMetaInfo = React.createClass({
 		// It is toggling from static to edit
 		if (value == undefined) return;
 
-		this.props.func.prepMeta(e);
+		func.prepMeta(e);
 	},
 
 	render: function render() {
@@ -1182,6 +1202,17 @@ window.onkeyup = function (e) {
 		time: new Date()
 	};
 
+	var keyMode;
+
+	var stateChange;
+
+	if (PRISM.keyMode == false) {
+		keyMode = false;
+	} else {
+		keyMode = PRISM.keyMode;
+		PRISM.keyMode = false;
+	}
+
 	var input = document.activeElement.tagName == 'INPUT';
 
 	var doubleKeyTime = key.time - PRISM.lastKey.time < PRISM.doubleKey.time;
@@ -1211,14 +1242,40 @@ window.onkeyup = function (e) {
 			// Spacebar
 			break;
 
+		case 70:
+			// f - for 'full' (with 'v' keyMode)
+			if (!input && keyMode == 'v') stateChange = { 'view': 'full' };
+			break;
+
+		case 71:
+			// g - for 'grid' (with 'v' keyMode)
+			if (!input && keyMode == 'v') stateChange = { 'view': 'grid' };
+			break;
+
+		case 72:
+			// h - for 'half' (with 'v' keyMode)
+			if (!input && keyMode == 'v') stateChange = { 'view': 'half' };
+			break;
+
 		case 76:
 			// l - for lock
 			if (!input) jQuery('.lock-meta').click();
+
+			if (!input && keyMode == 'v') stateChange = { 'view': 'list' };
 			break;
 
 		case 80:
 			// p - for panel
 			if (!input) jQuery('.toggle-meta').click();
+			break;
+
+		case 86:
+			// v - for view
+			if (!input) {
+				if (keyMode == false) {
+					PRISM.keyMode = 'v';
+				}
+			}
 			break;
 
 		case 187:
@@ -1232,7 +1289,11 @@ window.onkeyup = function (e) {
 	}
 
 	PRISM.lastKey = key;
+
+	if (stateChange != null) PrismKeyHandler(stateChange);
 };
+
+var PrismKeyHandler = function PrismKeyHandler(data) {};
 
 var RainbowBarHandler = {
 	'add post': function addPost() {
@@ -1337,8 +1398,8 @@ var Prism = React.createClass({
 			'div',
 			{ id: 'prism', className: classes },
 			React.createElement(PrismHeader, { auth: auth, data: data, func: func }),
-			React.createElement(PrismTree, { auth: auth, data: data }),
-			React.createElement(PrismFooter, null)
+			React.createElement(PrismTree, { auth: auth, data: data, func: func }),
+			React.createElement(PrismFooter, { func: func })
 		);
 	}
 

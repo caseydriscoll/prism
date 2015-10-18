@@ -143,6 +143,7 @@ class Prism {
 			'meta'          => $meta,
 			'lockMeta'      => 'unlock',
 			'newleaf'       => false,
+			'keyMode'       => false,
 			'lastKey'       => array(
 			    'time'            => 0,
 			                   ),

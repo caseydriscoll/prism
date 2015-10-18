@@ -18,11 +18,18 @@ var PrismMeta = React.createClass( {
 
 	},
 
+	autoSelect: function(e) {
+		e.nativeEvent.target.select();
+	},
+
 	render: function() {
 
 		var auth = this.props.auth;
 		var data = this.props.data;
 		var func = this.props.func;
+
+		func.prepMeta   = this.prepMeta;
+		func.autoSelect = this.autoSelect;
 
 		var metaInfoToDisplay = data.type in PRISM.meta ? data.type : 'default';
 
@@ -64,6 +71,7 @@ var PrismMetaInfo = React.createClass( {
 		var key   = e.target.dataset.key;
 		var auth  = this.props.auth;
 		var data  = this.props.data;
+		var func  = this.props.func;
 		var value = e.target.value;
 
 		// If not authenticated, don't all to edit
@@ -77,7 +85,7 @@ var PrismMetaInfo = React.createClass( {
 		// It is toggling from static to edit
 		if ( value == undefined ) return;
 
-		this.props.func.prepMeta(e);
+		func.prepMeta(e);
 
 	},
 

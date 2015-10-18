@@ -27,6 +27,13 @@ var PrismTree = React.createClass( {
 
 	componentDidMount: function() {
 
+		PrismKeyHandler = ( changeState ) => {
+
+			if ( 'view' in changeState )
+				this.changeView( changeState.view );
+
+		};
+
 		this.initRouter();
 
 	},
@@ -246,10 +253,7 @@ var PrismTree = React.createClass( {
 		this.setState( state );
 	},
 
-	changeBranchView : function(e) {
-		e.preventDefault();
-
-		var view = e.target.dataset.view;
+	changeView : function( view ) {
 
 		var state = this.state;
 
@@ -384,7 +388,7 @@ var PrismTree = React.createClass( {
 				for ( var i = 0; i < response.length; i++ ) {
 					var leaf = response[i];
 
-					leaf.metapanel = 'closed';
+					leaf.metapanel = this.state.active.meta ? 'open' : 'closed';
 
 					leaves[leaf.id] = leaf;
 				}
@@ -520,7 +524,7 @@ var PrismTree = React.createClass( {
 
 		var branchFunctions = {
 			changeLeaf  : this.changeLeaf,
-			changeView  : this.changeBranchView,
+			changeView  : this.changeView,
 			changeWidth : this.changeWidth,
 			resetWidth  : this.resetWidth,
 			addLeaf     : this.addLeaf
@@ -536,7 +540,8 @@ var PrismTree = React.createClass( {
 
 		var metaFunctions   = {
 			changeValue : this.changeValue,
-			lockMeta    : this.lockMeta
+			lockMeta    : this.lockMeta,
+			saveLeaf    : this.saveLeaf
 		};
 
 		var prismTrunk   = <PrismTrunk  func={trunkFunctions}  auth={auth} data={this.trunkData()}  />;

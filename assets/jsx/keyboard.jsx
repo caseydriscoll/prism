@@ -5,6 +5,17 @@ window.onkeyup = function(e) {
 		time : new Date()
 	}
 
+	var keyMode;
+
+	var stateChange;
+
+	if ( PRISM.keyMode == false ) {
+		keyMode = false;
+	} else {
+		keyMode = PRISM.keyMode;
+		PRISM.keyMode = false;
+	}
+
 	var input = document.activeElement.tagName == 'INPUT';
 
 	var doubleKeyTime = key.time - PRISM.lastKey.time < PRISM.doubleKey.time;
@@ -33,19 +44,45 @@ window.onkeyup = function(e) {
 		case 32: // Spacebar
 			break;
 
+		case 70: // f - for 'full' (with 'v' keyMode)
+			if ( ! input && keyMode == 'v' )
+				stateChange = { 'view' : 'full' };
+			break;
+
+		case 71: // g - for 'grid' (with 'v' keyMode)
+			if ( ! input && keyMode == 'v' )
+				stateChange = { 'view' : 'grid' };
+			break;
+
+		case 72: // h - for 'half' (with 'v' keyMode)
+			if ( ! input && keyMode == 'v' )
+				stateChange = { 'view' : 'half' };
+			break;
+
 		case 76: // l - for lock
 			if ( ! input ) jQuery( '.lock-meta' ).click();
-				break;
+
+			if ( ! input && keyMode == 'v' )
+				stateChange = { 'view' : 'list' };
+			break;
 
 		case 80: // p - for panel
 			if ( ! input ) jQuery( '.toggle-meta' ).click();
-				break;
+			break;
+
+		case 86: // v - for view
+			if ( ! input ) {
+				if ( keyMode == false ) {
+					PRISM.keyMode = 'v';
+				}
+			}
+			break;
 
 		case 187: // =/+
 			if ( ! input ) 
 				if ( e.shiftKey ) jQuery( '#prism-add-leaf' ).click();
 
-			break
+			break;
 
 		default:
 			break;
@@ -53,7 +90,11 @@ window.onkeyup = function(e) {
 
 	PRISM.lastKey = key;
 
+	if ( stateChange != null ) PrismKeyHandler( stateChange );
+
 }
+
+var PrismKeyHandler = function(data) { }
 
 var RainbowBarHandler = {
 	'add post' : function() { jQuery( '#posts' ).click(); jQuery( '#prism-add-leaf' ).click(); }

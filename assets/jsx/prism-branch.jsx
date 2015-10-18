@@ -37,6 +37,14 @@ var PrismBranch = React.createClass( {
 
 var PrismBranchHeader = React.createClass( {
 
+	changeView: function(e) {
+		e.preventDefault();
+
+		var view = e.target.dataset.view;
+
+		this.props.func.changeView( view );
+	},
+
 	render: function() {
 
 		var auth = this.props.auth;
@@ -56,10 +64,10 @@ var PrismBranchHeader = React.createClass( {
 			<header id="prism-branch-header">
 				<h2>{data.title}</h2>
 				<div id="prism-branch-visual-controls">
-					<i id="prism-branch-view-rows" data-view="list" className={classes + list} onClick={func.changeView}></i>
-					<i id="prism-branch-view-full" data-view="full" className={classes + full} onClick={func.changeView}></i>
-					<i id="prism-branch-view-half" data-view="half" className={classes + half} onClick={func.changeView}></i>
-					<i id="prism-branch-view-grid" data-view="grid" className={classes + grid} onClick={func.changeView}></i>
+					<i id="prism-branch-view-rows" data-view="list" className={classes + list} onClick={this.changeView}></i>
+					<i id="prism-branch-view-full" data-view="full" className={classes + full} onClick={this.changeView}></i>
+					<i id="prism-branch-view-half" data-view="half" className={classes + half} onClick={this.changeView}></i>
+					<i id="prism-branch-view-grid" data-view="grid" className={classes + grid} onClick={this.changeView}></i>
 					{renderAddLeaf}
 				</div>
 			</header>
