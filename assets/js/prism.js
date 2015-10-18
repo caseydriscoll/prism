@@ -96,19 +96,20 @@ var PrismTree = React.createClass({
 		var state = {
 			branches: {},
 			active: {
-				branch: null
+				branch: null,
+				leaf: null,
+				meta: false
 			},
 			search: {
 				query: ''
 			},
-			lockMetaPanel: PRISM.lockMetaPanel,
-			isMetaPanelOpen: false,
+			lockMeta: PRISM.lockMeta,
 			currentlyChanged: false,
 			width: {
-				'default': { 'trunk': 17, 'branch': 33, 'leaf': 50 },
-				current: { 'trunk': 17, 'branch': 33, 'leaf': 50 },
-				minimum: { 'trunk': 10, 'branch': 25, 'leaf': 30 },
-				maximum: { 'trunk': 30, 'branch': 40, 'leaf': 65 }
+				'default': { 'trunk': 17, 'branch': 33, 'leaf': 35, 'meta': 15 },
+				current: { 'trunk': 17, 'branch': 33, 'leaf': 35, 'meta': 15 },
+				minimum: { 'trunk': 10, 'branch': 25, 'leaf': 30, 'meta': 10 },
+				maximum: { 'trunk': 30, 'branch': 40, 'leaf': 65, 'meta': 30 }
 			}
 		};
 
@@ -189,44 +190,30 @@ var PrismTree = React.createClass({
 	},
 
 	/**
-  * The PrismLeafMetaPanel in PrismLeaf is open on two conditions:
+  * The PrismLeafMeta is open on two conditions:
   *     The global state is 'locked' open for all leaves
   *     The local state is 'open' for that particular leaf
   *
-  * This condition is checked on toggleMetaPanel and lockMetaPanel
+  * This condition is checked on toggleMeta and lockMeta
   *
   * This needed to be attached to state because it wasn't updating otherwise.
   * 
   * @return {Boolean} [description]
   */
-	isMetaPanelOpen: function isMetaPanelOpen() {
+	hasActiveMeta: function hasActiveMeta() {
 
 		var state = this.state;
-
-		var isMetaPanelOpen = false;
 
 		var branch = state.active.branch;
 		var leaf = state.active.leaf;
 
+		var meta = false;
+
 		if (this.hasActiveLeaf()) {
-			if (state.lockMetaPanel == 'lock' || state.branches[branch].leaves[leaf].metapanel == 'open') isMetaPanelOpen = true;
+			if (state.lockMeta == 'lock' || state.branches[branch].leaves[leaf].metapanel == 'open') meta = true;
 		}
 
-		return isMetaPanelOpen;
-	},
-
-	changeLeaf: function changeLeaf(branch, leaf) {
-
-		var state = this.state;
-
-		state.active.branch = branch;
-		state.active.leaf = leaf;
-
-		state.isMetaPanelOpen = this.isMetaPanelOpen();
-
-		this.setState(state);
-
-		this.changeBranch(branch);
+		return meta;
 	},
 
 	changeBranch: function changeBranch(branch) {
@@ -237,6 +224,51 @@ var PrismTree = React.createClass({
 		this.setState(state);
 
 		if (branch != 'search') this.loadLeaves();
+	},
+
+	changeLeaf: function changeLeaf(branch, leaf) {
+
+		var state = this.state;
+
+		state.active.branch = branch;
+		state.active.leaf = leaf;
+		state.active.meta = this.hasActiveMeta();
+
+		this.setState(state);
+
+		this.changeBranch(branch);
+	},
+
+	changeMeta: function changeMeta(e) {
+		e.preventDefault();
+
+		var state = this.state;
+
+		if (state.lockMeta == 'lock') return;
+
+		var branch = state.active.branch;
+		var leaf = state.active.leaf;
+
+		if (state.branches[branch].leaves[leaf].metapanel == 'open') state.branches[branch].leaves[leaf].metapanel = 'closed';else state.branches[branch].leaves[leaf].metapanel = 'open';
+
+		state.active.meta = this.hasActiveMeta();
+
+		this.setState(state);
+	},
+
+	lockMeta: function lockMeta(e) {
+		e.preventDefault();
+
+		var state = this.state;
+
+		var branch = state.active.branch;
+		var leaf = state.active.leaf;
+
+		if (state.lockMeta == 'unlock') state.lockMeta = 'lock';else state.lockMeta = 'unlock';
+
+		state.active.meta = this.hasActiveMeta();
+
+		this.setState(state);
 	},
 
 	changeValue: function changeValue(e) {
@@ -276,6 +308,7 @@ var PrismTree = React.createClass({
 
 		if (section.name == 'trunk') partner.name = 'branch';
 		if (section.name == 'branch') partner.name = 'leaf';
+		if (section.name == 'leaf') partner.name = 'meta';
 
 		var totalWidth = state.width.current[section.name] + state.width.current[partner.name];
 
@@ -313,34 +346,6 @@ var PrismTree = React.createClass({
 		state.width.current.trunk = state.width['default'].trunk;
 		state.width.current.branch = state.width['default'].branch;
 		state.width.current.leaf = state.width['default'].leaf;
-
-		this.setState(state);
-	},
-
-	toggleMetaPanel: function toggleMetaPanel(e) {
-		e.preventDefault();
-
-		var state = this.state;
-
-		var branch = state.active.branch;
-		var leaf = state.active.leaf;
-
-		if (state.branches[branch].leaves[leaf].metapanel == 'open') state.branches[branch].leaves[leaf].metapanel = 'closed';else state.branches[branch].leaves[leaf].metapanel = 'open';
-
-		state.isMetaPanelOpen = this.isMetaPanelOpen();
-
-		this.setState(state);
-	},
-
-	lockMetaPanel: function lockMetaPanel(e) {
-		e.preventDefault();
-
-		var state = this.state;
-
-		var branch = state.active.branch;
-		var leaf = state.active.leaf;
-
-		if (state.lockMetaPanel == 'unlock') state.lockMetaPanel = 'lock';else state.lockMetaPanel = 'unlock';
 
 		this.setState(state);
 	},
@@ -406,7 +411,6 @@ var PrismTree = React.createClass({
 				branch.leaves[leaf.id] = leaf;
 
 				state.currentlyChanged = false;
-				state.isMetaPanelOpen = this.isMetaPanelOpen();
 
 				if (PRISM.newleaf) location.hash = "/" + this.state.active.branch + "/" + leaf.id;
 
@@ -513,12 +517,38 @@ var PrismTree = React.createClass({
 			if (this.hasActiveLeaf()) leafData = branch.leaves[leaf];
 		}
 
-		leafData.width = this.state.width.current.leaf;
-		leafData.lockMetaPanel = this.state.lockMetaPanel;
-		leafData.isMetaPanelOpen = this.state.isMetaPanelOpen;
+		leafData.width = this.state.width.current;
+		leafData.metaActive = this.state.active.meta;
 		leafData.currentlyChanged = this.state.currentlyChanged;
 
 		return leafData;
+	},
+
+	metaData: function metaData() {
+
+		var metaData = {};
+
+		var branch = this.state.active.branch;
+		var leaf = this.state.active.leaf;
+
+		if (this.hasActiveBranch()) {
+
+			branch = this.state.branches[branch];
+
+			if (this.hasActiveLeaf()) {
+
+				PRISM.meta['default'].map(function (key, i) {
+					metaData[key] = branch.leaves[leaf][key];
+				}, this);
+			}
+		}
+
+		metaData.width = this.state.width.current.meta;
+		metaData.metaActive = this.state.active.meta;
+		metaData.lockMeta = this.state.lockMeta;
+		metaData.currentlyChanged = this.state.currentlyChanged;
+
+		return metaData;
 	},
 
 	/**
@@ -555,27 +585,35 @@ var PrismTree = React.createClass({
 		};
 
 		var leafFunctions = {
-			lockMetaPanel: this.lockMetaPanel,
-			toggleMetaPanel: this.toggleMetaPanel,
+			changeMeta: this.changeMeta,
 			changeValue: this.changeValue,
+			changeWidth: this.changeWidth,
 			resetWidth: this.resetWidth,
 			saveLeaf: this.saveLeaf
+		};
+
+		var metaFunctions = {
+			changeValue: this.changeValue,
+			lockMeta: this.lockMeta
 		};
 
 		var prismTrunk = React.createElement(PrismTrunk, { func: trunkFunctions, auth: auth, data: this.trunkData() });
 		var prismBranch = React.createElement(PrismBranch, { func: branchFunctions, auth: auth, data: this.branchData() });
 		var prismLeaf = React.createElement(PrismLeaf, { func: leafFunctions, auth: auth, data: this.leafData() });
+		var prismMeta = React.createElement(PrismMeta, { func: metaFunctions, auth: auth, data: this.metaData() });
 
 		var renderTrunk = prismTrunk; // For code consistency
 		var renderBranch = this.hasActiveBranch() ? prismBranch : null;
 		var renderLeaf = this.hasActiveLeaf() ? prismLeaf : null;
+		var renderMeta = this.hasActiveMeta() ? prismMeta : null;
 
 		return React.createElement(
 			'div',
 			{ id: 'prism-tree' },
 			renderTrunk,
 			renderBranch,
-			renderLeaf
+			renderLeaf,
+			renderMeta
 		);
 	}
 
@@ -860,15 +898,6 @@ var PrismLeaf = React.createClass({
 		return renderContent;
 	},
 
-	renderMetaPanel: function renderMetaPanel() {
-
-		var auth = this.props.auth;
-		var data = this.props.data;
-		var func = this.props.func;
-
-		if (data.isMetaPanelOpen) return React.createElement(PrismLeafMetaPanel, { auth: auth, data: data, func: func });else return null;
-	},
-
 	render: function render() {
 
 		var auth = this.props.auth;
@@ -878,25 +907,25 @@ var PrismLeaf = React.createClass({
 		func.prepLeaf = this.prepLeaf;
 		func.autoSelect = this.autoSelect;
 
-		var style = { 'width': data.width + '%' };
+		var style = {};
 
-		var leafClasses = data.isMetaPanelOpen ? 'metapanel-open' : 'metapanel-closed';
+		if (data.metaActive) style.width = data.width.leaf + '%';else style.width = 100 - (data.width.trunk + data.width.branch) + '%';
 
 		return React.createElement(
 			'div',
-			{ id: 'prism-leaf', className: leafClasses, style: style },
+			{ id: 'prism-leaf', 'data-section': 'leaf', style: style },
 			React.createElement(PrismLeafHeader, { auth: auth, data: data, func: func }),
 			this.renderContentPanel(),
-			this.renderMetaPanel()
+			React.createElement(PrismResizeBar, { data: data, func: func })
 		);
 	}
 
 });
 
-"use strict";
+'use strict';
 
 var PrismLeafHeader = React.createClass({
-	displayName: "PrismLeafHeader",
+	displayName: 'PrismLeafHeader',
 
 	render: function render() {
 
@@ -905,26 +934,16 @@ var PrismLeafHeader = React.createClass({
 		var func = this.props.func;
 
 		return React.createElement(
-			"header",
-			{ id: "prism-leaf-header" },
+			'header',
+			{ id: 'prism-leaf-header' },
 			React.createElement(PrismLeafTitle, { auth: auth, data: data.title.rendered, func: func }),
-			React.createElement(
-				"div",
-				{ id: "prism-leaf-meta-controls" },
-				React.createElement(PrismLeafMetaControlIcon, { type: "lock", data: data, func: func }),
-				React.createElement(PrismLeafMetaControlIcon, { type: "toggle", data: data, func: func }),
-				React.createElement(
-					"h3",
-					null,
-					"Post Meta"
-				)
-			)
+			React.createElement(PrismLeafMetaIcon, { type: 'toggle', data: data, func: func })
 		);
 	}
 });
 
 var PrismLeafTitle = React.createClass({
-	displayName: "PrismLeafTitle",
+	displayName: 'PrismLeafTitle',
 
 	getInitialState: function getInitialState() {
 		return { edit: false };
@@ -946,9 +965,9 @@ var PrismLeafTitle = React.createClass({
 		var data = this.props.data;
 		var func = this.props.func;
 
-		var editTitle = React.createElement("input", { autoFocus: true, "data-key": "title", type: "text", value: data, onBlur: this.toggleEdit, onFocus: func.autoSelect, onChange: func.changeValue });
+		var editTitle = React.createElement('input', { autoFocus: true, 'data-key': 'title', type: 'text', value: data, onBlur: this.toggleEdit, onFocus: func.autoSelect, onChange: func.changeValue });
 		var staticTitle = React.createElement(
-			"div",
+			'div',
 			{ onClick: this.toggleEdit },
 			data
 		);
@@ -977,7 +996,7 @@ var PrismLeafTitle = React.createClass({
 	render: function render() {
 
 		return React.createElement(
-			"h2",
+			'h2',
 			null,
 			this.renderTitle()
 		);
@@ -985,34 +1004,27 @@ var PrismLeafTitle = React.createClass({
 
 });
 
-var PrismLeafMetaControlIcon = React.createClass({
-	displayName: "PrismLeafMetaControlIcon",
+'use strict';
 
-	render: function render() {
+var PrismMeta = React.createClass({
+	displayName: 'PrismMeta',
 
-		var auth = this.props.auth;
+	prepMeta: function prepMeta(e) {
+
 		var data = this.props.data;
 		var func = this.props.func;
 
-		var lockIcon = data.lockMetaPanel == 'lock' ? 'lock' : 'unlock-alt';
+		if (!data.currentlyChanged) return;
 
-		var lockClasses = "fa fa-lg fa-border fa-pull-right fa-" + lockIcon;
-		var toggleClasses = "fa fa-3x fa-pull-left metapanel-control";
+		data = {
+			'id': data.id,
+			'status': 'publish'
+		};
 
-		toggleClasses += data.isMetaPanelOpen ? ' fa-toggle-right' : ' fa-toggle-left';
+		data[e.target.dataset.key] = e.target.value;
 
-		var classes = this.props.type == 'lock' ? lockClasses : toggleClasses;
-		var handleClick = this.props.type == 'lock' ? func.lockMetaPanel : func.toggleMetaPanel;
-
-		return React.createElement("i", { className: classes, onClick: handleClick });
-	}
-
-});
-
-'use strict';
-
-var PrismLeafMetaPanel = React.createClass({
-	displayName: 'PrismLeafMetaPanel',
+		func.saveLeaf('update', data);
+	},
 
 	render: function render() {
 
@@ -1022,22 +1034,38 @@ var PrismLeafMetaPanel = React.createClass({
 
 		var metaInfoToDisplay = data.type in PRISM.meta ? data.type : 'default';
 
-		var renderMetaPanel = PRISM.meta[metaInfoToDisplay].map(function (key, i) {
+		var renderMetaInfo = PRISM.meta[metaInfoToDisplay].map(function (key, i) {
 
-			return React.createElement(PrismLeafMetaPanelPiece, { auth: auth, data: data[key], func: func, key: i, label: key });
+			return React.createElement(PrismMetaInfo, { auth: auth, data: data[key], func: func, key: i, label: key });
 		}, this);
 
+		var style = { 'width': data.width + '%' };
+
 		return React.createElement(
-			'ul',
-			{ id: 'prism-leaf-meta-panel' },
-			renderMetaPanel
+			'div',
+			{ id: 'prism-meta', style: style },
+			React.createElement(
+				'header',
+				{ id: 'prism-meta-header' },
+				React.createElement(
+					'h3',
+					null,
+					'Post Meta'
+				),
+				React.createElement(PrismLeafMetaIcon, { type: 'lock', data: data, func: func })
+			),
+			React.createElement(
+				'ul',
+				{ id: 'prism-meta-info' },
+				renderMetaInfo
+			)
 		);
 	}
 
 });
 
-var PrismLeafMetaPanelPiece = React.createClass({
-	displayName: 'PrismLeafMetaPanelPiece',
+var PrismMetaInfo = React.createClass({
+	displayName: 'PrismMetaInfo',
 
 	getInitialState: function getInitialState() {
 		return { edit: false };
@@ -1061,7 +1089,7 @@ var PrismLeafMetaPanelPiece = React.createClass({
 		// It is toggling from static to edit
 		if (value == undefined) return;
 
-		this.props.func.prepLeaf(e);
+		this.props.func.prepMeta(e);
 	},
 
 	render: function render() {
@@ -1117,6 +1145,30 @@ var PrismResizeBar = React.createClass({
 
 });
 
+var PrismLeafMetaIcon = React.createClass({
+	displayName: "PrismLeafMetaIcon",
+
+	render: function render() {
+
+		var auth = this.props.auth;
+		var data = this.props.data;
+		var func = this.props.func;
+
+		var lockIcon = data.lockMeta == 'lock' ? 'lock' : 'unlock-alt';
+
+		var lockClasses = "fa fa-2x fa-pull-right lock-meta fa-" + lockIcon;
+		var toggleClasses = "fa fa-3x fa-pull-left toggle-meta";
+
+		toggleClasses += data.metaActive ? ' fa-toggle-right active' : ' fa-toggle-left';
+
+		var classes = this.props.type == 'lock' ? lockClasses : toggleClasses;
+		var handleClick = this.props.type == 'lock' ? func.lockMeta : func.changeMeta;
+
+		return React.createElement("i", { className: classes, onClick: handleClick });
+	}
+
+});
+
 var log = function log(message) {
 	console.log(message);
 };
@@ -1159,9 +1211,14 @@ window.onkeyup = function (e) {
 			// Spacebar
 			break;
 
+		case 76:
+			// l - for lock
+			if (!input) jQuery('.lock-meta').click();
+			break;
+
 		case 80:
 			// p - for panel
-			if (!input) jQuery('.metapanel-control').click();
+			if (!input) jQuery('.toggle-meta').click();
 			break;
 
 		case 187:

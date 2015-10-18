@@ -9,11 +9,7 @@ var PrismLeafHeader = React.createClass( {
 		return (
 			<header id="prism-leaf-header">
 				<PrismLeafTitle auth={auth} data={data.title.rendered} func={func} />
-				<div id="prism-leaf-meta-controls">
-					<PrismLeafMetaControlIcon type='lock'   data={data} func={func} />
-					<PrismLeafMetaControlIcon type='toggle' data={data} func={func} />
-					<h3>Post Meta</h3>
-				</div>
+				<PrismLeafMetaIcon type='toggle' data={data} func={func} />
 			</header>
 		)
 
@@ -72,32 +68,6 @@ var PrismLeafTitle = React.createClass( {
 			<h2>{this.renderTitle()}</h2>
 		)
 
-	}
-
-} );
-
-
-var PrismLeafMetaControlIcon = React.createClass( {
-
-	render: function() {
-
-		var auth = this.props.auth;
-		var data = this.props.data;
-		var func = this.props.func;
-
-		var lockIcon      = data.lockMetaPanel  == 'lock' ? 'lock' : 'unlock-alt';
-
-		var lockClasses   = "fa fa-lg fa-border fa-pull-right fa-" + lockIcon;
-		var toggleClasses = "fa fa-3x fa-pull-left metapanel-control";
-
-		toggleClasses    += data.isMetaPanelOpen ? ' fa-toggle-right' : ' fa-toggle-left';
-
-		var classes     = this.props.type == 'lock' ? lockClasses : toggleClasses;
-		var handleClick = this.props.type == 'lock' ? func.lockMetaPanel : func.toggleMetaPanel;
-
-		return (
-			<i className={classes} onClick={handleClick}></i>
-		)
 	}
 
 } );

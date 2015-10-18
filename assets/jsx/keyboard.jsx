@@ -33,8 +33,12 @@ window.onkeyup = function(e) {
 		case 32: // Spacebar
 			break;
 
+		case 76: // l - for lock
+			if ( ! input ) jQuery( '.lock-meta' ).click();
+				break;
+
 		case 80: // p - for panel
-			if ( ! input ) jQuery( '.metapanel-control' ).click();
+			if ( ! input ) jQuery( '.toggle-meta' ).click();
 				break;
 
 		case 187: // =/+

@@ -56,7 +56,7 @@ module.exports = function( grunt ) {
 					'assets/js/prism-branch.js'         : 'assets/jsx/prism-branch.jsx',
 					'assets/js/prism-leaf.js'           : 'assets/jsx/prism-leaf.jsx',
 					'assets/js/prism-leaf-header.js'    : 'assets/jsx/prism-leaf/header.jsx',
-					'assets/js/prism-leaf-metapanel.js' : 'assets/jsx/prism-leaf/metapanel.jsx',
+					'assets/js/prism-meta.js'           : 'assets/jsx/prism-meta.jsx',
 
 					'assets/js/prism-utils.js'          : 'assets/jsx/prism-utils.jsx',
 
@@ -76,7 +76,7 @@ module.exports = function( grunt ) {
 					'assets/js/prism-branch.js',
 					'assets/js/prism-leaf.js',
 					'assets/js/prism-leaf-header.js',
-					'assets/js/prism-leaf-metapanel.js',
+					'assets/js/prism-meta.js',
 
 					'assets/js/prism-utils.js',
 
@@ -98,7 +98,7 @@ module.exports = function( grunt ) {
 				'assets/js/prism-branch.js',
 				'assets/js/prism-leaf.js',
 				'assets/js/prism-leaf-header.js',
-				'assets/js/prism-leaf-metapanel.js',
+				'assets/js/prism-meta.js',
 
 				'assets/js/prism-utils.js',
 

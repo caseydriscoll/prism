@@ -17,6 +17,31 @@ var PrismResizeBar = React.createClass( {
 
 } );
 
+var PrismLeafMetaIcon = React.createClass( {
+
+	render: function() {
+
+		var auth = this.props.auth;
+		var data = this.props.data;
+		var func = this.props.func;
+
+		var lockIcon      = data.lockMeta == 'lock' ? 'lock' : 'unlock-alt';
+
+		var lockClasses   = "fa fa-2x fa-pull-right lock-meta fa-" + lockIcon;
+		var toggleClasses = "fa fa-3x fa-pull-left toggle-meta";
+
+		toggleClasses    += data.metaActive ? ' fa-toggle-right active' : ' fa-toggle-left';
+
+		var classes     = this.props.type == 'lock' ? lockClasses : toggleClasses;
+		var handleClick = this.props.type == 'lock' ? func.lockMeta : func.changeMeta;
+
+		return (
+			<i className={classes} onClick={handleClick}></i>
+		)
+	}
+
+} );
+
 var log = function( message ) {
 	console.log( message );
 }

@@ -60,18 +60,6 @@ var PrismLeaf = React.createClass( {
 
 	},
 
-	renderMetaPanel: function() {
-
-		var auth = this.props.auth;
-		var data = this.props.data;
-		var func = this.props.func;
-
-		if ( data.isMetaPanelOpen )
-			return <PrismLeafMetaPanel auth={auth} data={data} func={func} />;
-		else
-			return null;
-
-	},
 
 	render: function() {
 
@@ -82,15 +70,18 @@ var PrismLeaf = React.createClass( {
 		func.prepLeaf = this.prepLeaf;
 		func.autoSelect = this.autoSelect;
 
-		var style = { 'width' : data.width + '%' };
+		var style = {};
 
-		var leafClasses = data.isMetaPanelOpen ? 'metapanel-open' : 'metapanel-closed';
+		if ( data.metaActive )
+			style.width = data.width.leaf + '%';
+		else
+			style.width = 100 - ( data.width.trunk + data.width.branch ) + '%';
 
 		return (
-			<div id="prism-leaf" className={leafClasses} style={style}>
+			<div id="prism-leaf" data-section='leaf' style={style}>
 				<PrismLeafHeader auth={auth} data={data} func={func} />
 				{this.renderContentPanel()}
-				{this.renderMetaPanel()}
+				<PrismResizeBar data={data} func={func} />
 			</div>
 		);
 	}

@@ -1,4 +1,22 @@
-var PrismLeafMetaPanel = React.createClass( {
+var PrismMeta = React.createClass( {
+
+	prepMeta: function(e) {
+
+		var data = this.props.data;
+		var func = this.props.func;
+
+		if ( ! data.currentlyChanged ) return;
+
+		data = {
+			'id'     : data.id,
+			'status' : 'publish'
+		};
+
+		data[e.target.dataset.key] = e.target.value;
+
+		func.saveLeaf( 'update', data );
+
+	},
 
 	render: function() {
 
@@ -8,18 +26,26 @@ var PrismLeafMetaPanel = React.createClass( {
 
 		var metaInfoToDisplay = data.type in PRISM.meta ? data.type : 'default';
 
-		var renderMetaPanel = PRISM.meta[metaInfoToDisplay].map( function( key, i ) {
+		var renderMetaInfo = PRISM.meta[metaInfoToDisplay].map( function( key, i ) {
 
 			return (
-				<PrismLeafMetaPanelPiece auth={auth} data={data[key]} func={func} key={i} label={key} />
+				<PrismMetaInfo auth={auth} data={data[key]} func={func} key={i} label={key} />
 			)
 
 		}, this );
 
+		var style = { 'width' : data.width + '%' };
+
 		return (
-			<ul id="prism-leaf-meta-panel">
-				{renderMetaPanel}
-			</ul>
+			<div id="prism-meta" style={style}>
+				<header id="prism-meta-header">
+					<h3>Post Meta</h3>
+					<PrismLeafMetaIcon type='lock' data={data} func={func} />
+				</header>
+				<ul id="prism-meta-info">
+					{renderMetaInfo}
+				</ul>
+			</div>
 		)
 
 	}
@@ -27,7 +53,7 @@ var PrismLeafMetaPanel = React.createClass( {
 } );
 
 
-var PrismLeafMetaPanelPiece = React.createClass( {
+var PrismMetaInfo = React.createClass( {
 
 	getInitialState : function() {
 		return { edit : false }
@@ -51,7 +77,7 @@ var PrismLeafMetaPanelPiece = React.createClass( {
 		// It is toggling from static to edit
 		if ( value == undefined ) return;
 
-		this.props.func.prepLeaf(e);
+		this.props.func.prepMeta(e);
 
 	},
 

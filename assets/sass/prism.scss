@@ -434,58 +434,7 @@ body > *:not(#prism) { display: none; }
 			display: block; position: relative; float: left;
 			height: 100%;
 
-			&.metapanel-open {
-
-				div#prism-leaf-meta-controls {
-					width: $metapanel-width;
-					border-left: $border;
-					border-bottom: $border;
-					background: $light;
-
-					i.fa.metapanel-control {
-						color: $black !important;
-					}
-
-					i.fa-lock,
-					i.fa-unlock,
-					i.fa-unlock-alt {
-						display: block !important; position: absolute;
-						right: 20px; top: 20px;
-
-						cursor: pointer;
-
-						border-color: transparent;
-
-						color: $black;
-
-					}
-
-					i.fa-lock {
-					}
-
-					i.fa-unlock-alt {
-						color: $grey;
-
-						&:hover {
-							color: $highlight;
-						}
-					}
-
-					h3 {
-						display: block !important;
-						padding-left: 78px;
-					}
-				}
-
-				#prism-leaf-content {
-					width: calc( 100% - #{$metapanel-width} - 20px );
-				}
-
-				ul#prism-leaf-meta-panel {
-					width: $metapanel-width;
-				}
-
-			}
+			border-right: $border;
 
 			header#prism-leaf-header {
 
@@ -514,37 +463,22 @@ body > *:not(#prism) { display: none; }
 					}
 				}
 
-				div#prism-leaf-meta-controls {
+				i.fa {
 					display: block; position: absolute;
-					min-width: 50px; height: $sub-header-height;
 					right: 0; top: 0;
+					margin: 10px;
+					cursor: pointer;
 					color: $light;
 
-					&:hover i.fa.metapanel-control {
+					&:hover {
 						color: $highlight;
 					}
 
-					i.fa.metapanel-control {
-						margin: 10px;
-						cursor: pointer;
-					}
-
-					i.fa-lock,
-					i.fa-unlock-alt {
-						display: none;
-					}
-
-					h3 {
-						display: none;
-						margin-top: 17px;
+					&.active {
 						color: $black;
-						text: {
-							transform: uppercase;
-						}
-						font-weight: bold;
 					}
-				}
 
+				}
 			}
 
 			#prism-leaf-content {
@@ -557,13 +491,50 @@ body > *:not(#prism) { display: none; }
 
 			}
 
-			ul#prism-leaf-meta-panel {
+		}
 
-				display: block; position: relative; float: left;
-				height: calc( 100% - #{$sub-header-height} );
+		#prism-meta {
+
+			display: block; position: relative; float: left;
+			height: 100%;
+			background-color: $light;
+
+			header#prism-meta-header {
+
+				height: $sub-header-height;
 				padding: 10px;
-				border-left: $border;
-				background-color: $light;
+				border-bottom: $border;
+
+				h3 {
+					margin: 8px 0 0 0;
+					color: $black;
+					text: {
+						transform: capitalize;
+					}
+					font-weight: bold;
+				}
+
+				i.fa {
+					display: block; position: absolute;
+					right: 0; top: 0;
+					margin: 18px 15px;
+					cursor: pointer;
+					color: $grey;
+					border: none;
+
+					&:hover {
+						color: $highlight;
+					}
+
+					&.fa-lock {
+						color: $black;
+					}
+				}
+			}
+
+			ul#prism-meta-info {
+
+				padding: 10px; margin: 0;
 
 				li {
 					display: block; position: relative;
