@@ -53,6 +53,9 @@ window.onkeyup = function(e) {
 		case 72: // h - for 'half' (with 'v' keyMode)
 			if ( ! input && key.mode == 'v' )
 				stateChange = { 'view' : 'half' };
+			else if ( ! input )
+				stateChange = { 'move' : 'left' };
+
 			break;
 
 		case 73: // i
@@ -68,12 +71,15 @@ window.onkeyup = function(e) {
 				stateChange = { 'move' : 'up' };
 			break;
 
-		case 76: // L - for lock
+		case 76: // l - for 'right' (vim style)
+
 			if ( ! input && e.shiftKey )
 				stateChange = { 'lockMeta' : true };
-
-			if ( ! input && key.mode == 'v' )
+			else if( ! input && key.mode == 'v' )
 				stateChange = { 'view' : 'list' };
+			else if ( ! input )
+				stateChange = { 'move' : 'right' };
+
 			break;
 
 		case 80: // p - for panel

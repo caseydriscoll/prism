@@ -85,6 +85,9 @@ var PrismLeafNode = React.createClass( {
 		if ( id.slice(-1) != 's' )
 			id += 's';
 
+		if ( this.props.data.type == 'attachment' )
+			id = 'media';
+
 		id += "/" + this.props.data.id;
 
 		return id;

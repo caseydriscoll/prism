@@ -136,11 +136,44 @@ var PrismTree = React.createClass({
 			var leaf = this.state.active.leaf;
 			var branch = this.state.active.branch;
 
+			var view = this.state.branches[branch].view;
+
 			var id = branch + '/' + leaf;
 
 			var next;
 
-			if (direction == 'up') next = document.getElementById(id).previousSibling;else next = document.getElementById(id).nextSibling;
+			var k = 0;
+			var e = document.getElementById(id);
+			while (e = e.previousSibling) {
+				++k;
+			}
+
+			if (view == 'grid') {
+
+				if (direction == 'left' && k % 4 != 0) next = document.getElementById(id).previousSibling;else if (direction == 'down') {
+					next = document.getElementById(id).nextSibling;
+					if (next != null) next = next.nextSibling;
+					if (next != null) next = next.nextSibling;
+					if (next != null) next = next.nextSibling;
+				} else if (direction == 'up') {
+					next = document.getElementById(id).previousSibling;
+					if (next != null) next = next.previousSibling;
+					if (next != null) next = next.previousSibling;
+					if (next != null) next = next.previousSibling;
+				} else if (direction == 'right' && k % 4 != 3) next = document.getElementById(id).nextSibling;
+			} else if (view == 'half') {
+
+				if (direction == 'left' && k % 2 != 0) next = document.getElementById(id).previousSibling;else if (direction == 'down') {
+					next = document.getElementById(id).nextSibling;
+					if (next != null) next = next.nextSibling;
+				} else if (direction == 'up') {
+					next = document.getElementById(id).previousSibling;
+					if (next != null) next = next.previousSibling;
+				} else if (direction == 'right' && k % 2 != 1) next = document.getElementById(id).nextSibling;
+			} else {
+
+				if (direction == 'up') next = document.getElementById(id).previousSibling;else if (direction == 'down') next = document.getElementById(id).nextSibling;
+			}
 
 			if (next != null) window.location = '/#/' + next.id;
 		}
@@ -821,6 +854,8 @@ var PrismLeafNode = React.createClass({
 
 		if (id.slice(-1) != 's') id += 's';
 
+		if (this.props.data.type == 'attachment') id = 'media';
+
 		id += "/" + this.props.data.id;
 
 		return id;
@@ -1278,7 +1313,8 @@ window.onkeyup = function (e) {
 
 		case 72:
 			// h - for 'half' (with 'v' keyMode)
-			if (!input && key.mode == 'v') stateChange = { 'view': 'half' };
+			if (!input && key.mode == 'v') stateChange = { 'view': 'half' };else if (!input) stateChange = { 'move': 'left' };
+
 			break;
 
 		case 73:
@@ -1296,10 +1332,10 @@ window.onkeyup = function (e) {
 			break;
 
 		case 76:
-			// L - for lock
-			if (!input && e.shiftKey) stateChange = { 'lockMeta': true };
+			// l - for 'right' (vim style)
 
-			if (!input && key.mode == 'v') stateChange = { 'view': 'list' };
+			if (!input && e.shiftKey) stateChange = { 'lockMeta': true };else if (!input && key.mode == 'v') stateChange = { 'view': 'list' };else if (!input) stateChange = { 'move': 'right' };
+
 			break;
 
 		case 80:
