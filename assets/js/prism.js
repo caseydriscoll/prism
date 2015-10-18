@@ -1204,24 +1204,23 @@ window.onkeyup = function (e) {
 
 	var key = {
 		code: e.keyCode ? e.keyCode : e.which,
-		time: new Date()
+		time: new Date(),
+		mode: ''
 	};
-
-	var keyMode;
 
 	var stateChange;
 
-	if (PRISM.keyMode == false) {
-		keyMode = false;
+	if (PRISM.key.mode == false) {
+		key.mode = false;
 	} else {
-		keyMode = PRISM.keyMode;
-		PRISM.keyMode = false;
+		key.mode = PRISM.key.mode;
+		PRISM.key.mode = false;
 	}
 
 	var input = document.activeElement.tagName == 'INPUT';
 
-	var doubleKeyTime = key.time - PRISM.lastKey.time < PRISM.doubleKey.time;
-	var doubleKeyCode = key.code == PRISM.doubleKey.code && PRISM.lastKey.code == PRISM.doubleKey.code;
+	var doubleKeyTime = key.time - PRISM.key.last.time < PRISM.key.double.time;
+	var doubleKeyCode = key.code == PRISM.key.double.code && PRISM.key.last.code == PRISM.key.double.code;
 
 	if (doubleKeyTime && doubleKeyCode) document.getElementById('prism-rainbow-bar').focus();
 
@@ -1245,24 +1244,24 @@ window.onkeyup = function (e) {
 
 		case 70:
 			// f - for 'full' (with 'v' keyMode)
-			if (!input && keyMode == 'v') stateChange = { 'view': 'full' };
+			if (!input && key.mode == 'v') stateChange = { 'view': 'full' };
 			break;
 
 		case 71:
 			// g - for 'grid' (with 'v' keyMode)
-			if (!input && keyMode == 'v') stateChange = { 'view': 'grid' };
+			if (!input && key.mode == 'v') stateChange = { 'view': 'grid' };
 			break;
 
 		case 72:
 			// h - for 'half' (with 'v' keyMode)
-			if (!input && keyMode == 'v') stateChange = { 'view': 'half' };
+			if (!input && key.mode == 'v') stateChange = { 'view': 'half' };
 			break;
 
 		case 76:
 			// l - for lock
 			if (!input) stateChange = { 'lockMeta': true };
 
-			if (!input && keyMode == 'v') stateChange = { 'view': 'list' };
+			if (!input && key.mode == 'v') stateChange = { 'view': 'list' };
 			break;
 
 		case 80:
@@ -1272,7 +1271,7 @@ window.onkeyup = function (e) {
 
 		case 86:
 			// v - for view
-			if (!input && keyMode == false) PRISM.keyMode = 'v';
+			if (!input && key.mode == false) PRISM.key.mode = 'v';
 			break;
 
 		case 187:
@@ -1284,7 +1283,8 @@ window.onkeyup = function (e) {
 			break;
 	}
 
-	PRISM.lastKey = key;
+	PRISM.key.last.code = key.code;
+	PRISM.key.last.time = key.time;
 
 	if (stateChange != null) PrismKeyHandler(stateChange);
 };

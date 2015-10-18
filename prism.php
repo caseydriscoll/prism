@@ -143,13 +143,10 @@ class Prism {
 			'meta'          => $meta,
 			'lockMeta'      => 'unlock',
 			'newleaf'       => false,
-			'keyMode'       => false,
-			'lastKey'       => array(
-			    'time'            => 0,
-			                   ),
-			'doubleKey'     => array(
-			    'time'            => 200,
-			    'code'            => 32   // 32: Spacebar
+			'key'           => array(
+			    'mode'            => false,
+			    'last'            => array( 'code' =>  0, 'time' => 0   ),
+			    'double'          => array( 'code' => 32, 'time' => 200 )
 			                   ),
 			'rainbowbar'    => array(
 			    'name'            => 'Rainbow Bar!'
