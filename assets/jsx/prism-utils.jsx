@@ -54,6 +54,6 @@ var PrismIcon = React.createClass( {
 
 } );
 
-var log = function( message ) {
-	console.log( message );
+var log = function( level, message ) {
+	if ( parseInt( PRISM.debug ) <= level ) console.log( _.now(), message );
 }

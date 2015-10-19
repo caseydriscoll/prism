@@ -24,19 +24,31 @@ var Prism = React.createClass( {
 
 	getInitialState: function() {
 
+		log( 1, 'beg Prism.getInitialState()' );
+
 		var state = {
 			rainbowBar : false
 		};
+
+		log( 2, 'end Prism.getInitialState()' );
 
 		return state;
 
 	},
 
-	componentDidMount: function() {
+	componentWillMount: function() {
+
+		log( 1, 'beg Prism.componentWillMount()' );
+
 		this.getUser();
+
+		log( 2, 'end Prism.componentWillMount()' );
+
 	},
 
 	getUser: function() {
+
+		log( 1, 'beg Prism.getUser()' );
 
 		jQuery.ajax( {
 			method  : 'GET',
@@ -45,6 +57,8 @@ var Prism = React.createClass( {
 				xhr.setRequestHeader( 'X-WP-Nonce', PRISM.nonce );
 			},
 			success : function( response ) {
+
+				log( 10, 'success Prism.getUser()' );
 
 				var state = this.state;
 
@@ -56,6 +70,8 @@ var Prism = React.createClass( {
 			}.bind( this ),
 			error   : function( response ) {
 
+				log( 10, 'error Prism.getUser()' );
+
 				var state = this.state;
 
 				state.auth = false;
@@ -66,24 +82,38 @@ var Prism = React.createClass( {
 			}.bind( this )
 		} );
 
+		log( 2, 'end Prism.getUser()' );
+
 	},
 
 	toggleRainbowBar: function() {
+
+		log( 1, 'beg Prism.toggleRainbowBar()' );
+
 		var state = this.state;
 
 		state.rainbowBar = state.rainbowBar ? false : true;
 
 		this.setState( state );
+
+		log( 2, 'end Prism.toggleRainbowBar()' );
+
 	},
 
 	executeRainbow: function(value) {
 
+		log( 1, 'beg Prism.executeRainbow()' );
+
 		if ( value in RainbowBarHandler )
 			RainbowBarHandler[value]();
+
+		log( 2, 'end Prism.executeRainbow()' );
 
 	},
 
 	render: function() {
+
+		log( 1, 'beg Prism.render()' );
 
 		var auth = this.state.auth;
 		var data = this.state;
@@ -93,6 +123,8 @@ var Prism = React.createClass( {
 		func.executeRainbow   = this.executeRainbow;
 
 		var classes = data.rainbowBar ? 'rainbow' : '';
+
+		log( 2, 'end Prism.render()' );
 
 		return (
 			<div id="prism" className={classes}>

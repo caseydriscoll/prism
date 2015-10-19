@@ -2,6 +2,8 @@ var PrismTree = React.createClass( {
 
 	getInitialState: function() {
 
+		log( 1, 'beg PrismTree.getInitialState()' );
+
 		var state = { 
 			branches         : {},
 			active           : { 
@@ -17,10 +19,14 @@ var PrismTree = React.createClass( {
 			width            : PRISM.width
 		};
 
+		log( 2, 'end PrismTree.getInitialState()' );
+
 		return state;
 	},
 
-	componentDidMount: function() {
+	componentWillMount: function() {
+
+		log( 1, 'beg PrismTree.componentWillMount()' );
 
 		PrismKeyHandler = ( changeState ) => {
 
@@ -43,9 +49,13 @@ var PrismTree = React.createClass( {
 
 		this.initRouter();
 
+		log( 2, 'end PrismTree.componentWillMount()' );
+
 	},
 
 	move: function( direction ) {
+
+		log( 1, 'beg PrismTree.move()' );
 
 		if ( this.hasActiveLeaf() ) {
 			var leaf   = this.state.active.leaf;
@@ -104,9 +114,14 @@ var PrismTree = React.createClass( {
 			if ( next != null ) window.location = '/#/' + next.id;
 
 		}
+
+		log( 2, 'end PrismTree.move()' );
 	},
 
 	initRouter: function() {
+
+		log( 1, 'beg PrismTree.initRouter()' );
+
 		var routes = {};
 		var routerConfig = {};
 
@@ -131,6 +146,8 @@ var PrismTree = React.createClass( {
 
 		new Router();
 		Backbone.history.start();
+
+		log( 2, 'end PrismTree.initRouter()' );
 	},
 
 	/**
@@ -141,10 +158,14 @@ var PrismTree = React.createClass( {
 	 */
 	hasActiveBranch: function() {
 
+		log( 1, 'beg PrismTree.hasActiveBranch()' );
+
 		var hasActiveBranch = false;
 
 		if ( this.state.active.branch !== null && this.state.active.branch in this.state.branches )
 			hasActiveBranch = true;
+
+		log( 2, 'end PrismTree.hasActiveBranch()' );
 
 		return hasActiveBranch;
 
@@ -159,6 +180,8 @@ var PrismTree = React.createClass( {
 	 */
 	hasActiveLeaf: function() {
 
+		log( 1, 'beg PrismTree.hasActiveLeaf()' );
+
 		var hasActiveLeaf = false;
 
 		if ( this.hasActiveBranch() ) {
@@ -169,6 +192,8 @@ var PrismTree = React.createClass( {
 				hasActiveLeaf = true;
 
 		}
+
+		log( 2, 'end PrismTree.hasActiveLeaf()' );
 
 		return hasActiveLeaf;
 
@@ -187,6 +212,8 @@ var PrismTree = React.createClass( {
 	 */
 	hasActiveMeta: function() {
 
+		log( 1, 'beg PrismTree.hasActiveMeta()' );
+
 		var state  = this.state;
 
 		var branch = state.active.branch;
@@ -199,10 +226,23 @@ var PrismTree = React.createClass( {
 				meta = true;
 		}
 
+		log( 2, 'end PrismTree.hasActiveMeta()' );
+
 		return meta;
 	},
 
+	/**
+	 * Previously, changeBranch was manually called from the PrismTrunk branch links.
+	 *
+	 * Now, with Backbone.js routing, changeBranch is only called from the route controller.
+	 * 
+	 * @param  {[type]} branch [description]
+	 * @return {[type]}        [description]
+	 */
 	changeBranch: function( branch ) {
+
+		log( 1, 'beg PrismTree.changeBranch()' );
+
 		var state = this.state;
 
 		state.active.branch = branch;
@@ -211,9 +251,14 @@ var PrismTree = React.createClass( {
 
 		if ( branch != 'search' )
 			this.loadLeaves();
+
+		log( 2, 'end PrismTree.changeBranch()' );
+
 	},
 
 	changeLeaf: function( branch, leaf ) {
+
+		log( 1, 'beg PrismTree.changeLeaf()' );
 
 		var state = this.state;
 
@@ -223,10 +268,14 @@ var PrismTree = React.createClass( {
 
 		this.setState( state );
 
-		this.changeBranch( branch );
+		log( 2, 'end PrismTree.changeLeaf()' );
+
 	},
 
 	changeMeta : function() {
+
+		log( 1, 'beg PrismTree.changeMeta()' );
+
 		var state     = this.state;
 
 		if ( state.lockMeta == 'lock' ) return;
@@ -242,9 +291,13 @@ var PrismTree = React.createClass( {
 		state.active.meta = this.hasActiveMeta();
 
 		this.setState( state );
+
+		log( 2, 'end PrismTree.changeMeta()' );
 	},
 
 	lockMeta : function() {
+
+		log( 1, 'beg PrismTree.lockMeta()' );
 
 		var state  = this.state;
 
@@ -256,9 +309,14 @@ var PrismTree = React.createClass( {
 		state.active.meta = this.hasActiveMeta();
 
 		this.setState( state );
+
+		log( 2, 'end PrismTree.lockMeta()' );
+
 	},
 
 	changeValue : function(e) {
+
+		log( 1, 'beg PrismTree.changeValue()' );
 
 		var state  = this.state;
 
@@ -274,9 +332,14 @@ var PrismTree = React.createClass( {
 		state.currentlyChanged = true;
 
 		this.setState( state );
+
+		log( 2, 'end PrismTree.changeValue()' );
+
 	},
 
 	changeWidth : function(e) {
+
+		log( 1, 'beg PrismTree.changeWidth()' );
 
 		if ( e.clientX == 0 ) return;
 
@@ -313,9 +376,14 @@ var PrismTree = React.createClass( {
 		state.width.current[partner.name] = partner.width;
 
 		this.setState( state );
+
+		log( 2, 'end PrismTree.changeWidth()' );
+
 	},
 
 	changeView : function( view ) {
+
+		log( 1, 'beg PrismTree.changeView()' );
 
 		var state = this.state;
 
@@ -324,9 +392,14 @@ var PrismTree = React.createClass( {
 		state.branches[state.active.branch].view = view;
 
 		this.setState( state );
+
+		log( 2, 'end PrismTree.changeView()' );
+
 	},
 
 	resetWidth : function(e) {
+
+		log( 1, 'beg PrismTree.resetWidth()' );
 
 		var state      = this.state;
 
@@ -336,9 +409,13 @@ var PrismTree = React.createClass( {
 
 		this.setState( state );
 
+		log( 2, 'end PrismTree.changeView()' );
+
 	},
 
 	search: function(e) {
+
+		log( 1, 'beg PrismTree.search()' );
 
 		var state = this.state;
 
@@ -352,9 +429,13 @@ var PrismTree = React.createClass( {
 
 		this.loadLeaves();
 
+		log( 2, 'end PrismTree.search()' );
+
 	},
 
 	addLeaf: function() {
+
+		log( 1, 'beg PrismTree.addLeaf()' );
 
 		var data = { 
 			title   : '',
@@ -363,6 +444,8 @@ var PrismTree = React.createClass( {
 		};
 
 		this.saveLeaf( 'create', data );
+
+		log( 2, 'end PrismTree.addLeaf()' );
 
 	},
 
@@ -374,6 +457,8 @@ var PrismTree = React.createClass( {
 	 *   cause maybe the user can switch it real fast
 	 */
 	saveLeaf : function( type, data ) {
+
+		log( 1, 'beg PrismTree.saveLeaf()' );
 
 		var url = PRISM.url.rest + this.state.active.branch;
 
@@ -413,14 +498,16 @@ var PrismTree = React.createClass( {
 			}.bind( this )
 		} );
 
+		log( 2, 'end PrismTree.saveLeaf()' );
+
 	},
 
 	/**
 	 * loadLeaves is only called from changeBranch
-	 * 
-	 * 
 	 */
 	loadLeaves: function() {
+
+		log( 1, 'beg PrismTree.loadLeaves()' );
 
 		var branch = this.state.active.branch;
 
@@ -467,9 +554,13 @@ var PrismTree = React.createClass( {
 			}.bind( this )
 		} );
 
+		log( 2, 'end PrismTree.loadLeaves()' );
+
 	},
 
 	trunkData: function() {
+
+		log( 1, 'beg PrismTree.trunkData()' );
 
 		var state = this.state;
 
@@ -482,11 +573,15 @@ var PrismTree = React.createClass( {
 		if ( this.hasActiveBranch() )
 			trunkData.branch = this.state.active.branch;
 
+		log( 2, 'end PrismTree.trunkData()' );
+
 		return trunkData;
 
 	},
 
 	branchData: function() {
+
+		log( 1, 'beg PrismTree.branchData()' );
 
 		var branchData = { 
 			leaves : [], 
@@ -504,10 +599,14 @@ var PrismTree = React.createClass( {
 
 		}
 
+		log( 2, 'end PrismTree.branchData()' );
+
 		return branchData;
 	},
 
 	leafData: function() {
+
+		log( 1, 'beg PrismTree.leafData()' );
 
 		var leafData = {};
 
@@ -527,10 +626,14 @@ var PrismTree = React.createClass( {
 		leafData.metaActive       = this.state.active.meta;
 		leafData.currentlyChanged = this.state.currentlyChanged;
 
+		log( 2, 'end PrismTree.leafData()' );
+
 		return leafData;
 	},
 
 	metaData: function() {
+
+		log( 1, 'beg PrismTree.metaData()' );
 
 		var metaData = {};
 
@@ -556,6 +659,8 @@ var PrismTree = React.createClass( {
 		metaData.lockMeta         = this.state.lockMeta;
 		metaData.currentlyChanged = this.state.currentlyChanged;
 
+		log( 2, 'end PrismTree.metaData()' );
+
 		return metaData;
 	},
 
@@ -574,6 +679,8 @@ var PrismTree = React.createClass( {
 	 * 
 	 */
 	render: function() {
+
+		log( 1, 'beg PrismTree.render()' );
 
 		var auth = this.props.auth;
 
@@ -615,6 +722,8 @@ var PrismTree = React.createClass( {
 		var renderBranch = this.hasActiveBranch() ? prismBranch : null;
 		var renderLeaf   = this.hasActiveLeaf()   ? prismLeaf   : null;
 		var renderMeta   = this.hasActiveMeta()   ? prismMeta   : null;
+
+		log( 2, 'end PrismTree.render()' );
 
 		return (
 

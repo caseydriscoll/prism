@@ -93,6 +93,8 @@ var PrismTree = React.createClass({
 
 	getInitialState: function getInitialState() {
 
+		log(1, 'beg PrismTree.getInitialState()');
+
 		var state = {
 			branches: {},
 			active: {
@@ -108,11 +110,15 @@ var PrismTree = React.createClass({
 			width: PRISM.width
 		};
 
+		log(2, 'end PrismTree.getInitialState()');
+
 		return state;
 	},
 
-	componentDidMount: function componentDidMount() {
+	componentWillMount: function componentWillMount() {
 		var _this = this;
+
+		log(1, 'beg PrismTree.componentWillMount()');
 
 		PrismKeyHandler = function (changeState) {
 
@@ -128,9 +134,13 @@ var PrismTree = React.createClass({
 		};
 
 		this.initRouter();
+
+		log(2, 'end PrismTree.componentWillMount()');
 	},
 
 	move: function move(direction) {
+
+		log(1, 'beg PrismTree.move()');
 
 		if (this.hasActiveLeaf()) {
 			var leaf = this.state.active.leaf;
@@ -177,9 +187,14 @@ var PrismTree = React.createClass({
 
 			if (next != null) window.location = '/#/' + next.id;
 		}
+
+		log(2, 'end PrismTree.move()');
 	},
 
 	initRouter: function initRouter() {
+
+		log(1, 'beg PrismTree.initRouter()');
+
 		var routes = {};
 		var routerConfig = {};
 
@@ -209,6 +224,8 @@ var PrismTree = React.createClass({
 
 		new Router();
 		Backbone.history.start();
+
+		log(2, 'end PrismTree.initRouter()');
 	},
 
 	/**
@@ -219,9 +236,13 @@ var PrismTree = React.createClass({
   */
 	hasActiveBranch: function hasActiveBranch() {
 
+		log(1, 'beg PrismTree.hasActiveBranch()');
+
 		var hasActiveBranch = false;
 
 		if (this.state.active.branch !== null && this.state.active.branch in this.state.branches) hasActiveBranch = true;
+
+		log(2, 'end PrismTree.hasActiveBranch()');
 
 		return hasActiveBranch;
 	},
@@ -235,6 +256,8 @@ var PrismTree = React.createClass({
   */
 	hasActiveLeaf: function hasActiveLeaf() {
 
+		log(1, 'beg PrismTree.hasActiveLeaf()');
+
 		var hasActiveLeaf = false;
 
 		if (this.hasActiveBranch()) {
@@ -243,6 +266,8 @@ var PrismTree = React.createClass({
 
 			if (this.state.active.leaf !== null && this.state.active.leaf in activeBranch.leaves) hasActiveLeaf = true;
 		}
+
+		log(2, 'end PrismTree.hasActiveLeaf()');
 
 		return hasActiveLeaf;
 	},
@@ -260,6 +285,8 @@ var PrismTree = React.createClass({
   */
 	hasActiveMeta: function hasActiveMeta() {
 
+		log(1, 'beg PrismTree.hasActiveMeta()');
+
 		var state = this.state;
 
 		var branch = state.active.branch;
@@ -271,10 +298,23 @@ var PrismTree = React.createClass({
 			if (state.lockMeta == 'lock' || state.branches[branch].leaves[leaf].metapanel == 'open') meta = true;
 		}
 
+		log(2, 'end PrismTree.hasActiveMeta()');
+
 		return meta;
 	},
 
+	/**
+  * Previously, changeBranch was manually called from the PrismTrunk branch links.
+  *
+  * Now, with Backbone.js routing, changeBranch is only called from the route controller.
+  * 
+  * @param  {[type]} branch [description]
+  * @return {[type]}        [description]
+  */
 	changeBranch: function changeBranch(branch) {
+
+		log(1, 'beg PrismTree.changeBranch()');
+
 		var state = this.state;
 
 		state.active.branch = branch;
@@ -282,9 +322,13 @@ var PrismTree = React.createClass({
 		this.setState(state);
 
 		if (branch != 'search') this.loadLeaves();
+
+		log(2, 'end PrismTree.changeBranch()');
 	},
 
 	changeLeaf: function changeLeaf(branch, leaf) {
+
+		log(1, 'beg PrismTree.changeLeaf()');
 
 		var state = this.state;
 
@@ -294,10 +338,13 @@ var PrismTree = React.createClass({
 
 		this.setState(state);
 
-		this.changeBranch(branch);
+		log(2, 'end PrismTree.changeLeaf()');
 	},
 
 	changeMeta: function changeMeta() {
+
+		log(1, 'beg PrismTree.changeMeta()');
+
 		var state = this.state;
 
 		if (state.lockMeta == 'lock') return;
@@ -310,9 +357,13 @@ var PrismTree = React.createClass({
 		state.active.meta = this.hasActiveMeta();
 
 		this.setState(state);
+
+		log(2, 'end PrismTree.changeMeta()');
 	},
 
 	lockMeta: function lockMeta() {
+
+		log(1, 'beg PrismTree.lockMeta()');
 
 		var state = this.state;
 
@@ -321,9 +372,13 @@ var PrismTree = React.createClass({
 		state.active.meta = this.hasActiveMeta();
 
 		this.setState(state);
+
+		log(2, 'end PrismTree.lockMeta()');
 	},
 
 	changeValue: function changeValue(e) {
+
+		log(1, 'beg PrismTree.changeValue()');
 
 		var state = this.state;
 
@@ -336,9 +391,13 @@ var PrismTree = React.createClass({
 		state.currentlyChanged = true;
 
 		this.setState(state);
+
+		log(2, 'end PrismTree.changeValue()');
 	},
 
 	changeWidth: function changeWidth(e) {
+
+		log(1, 'beg PrismTree.changeWidth()');
 
 		if (e.clientX == 0) return;
 
@@ -375,9 +434,13 @@ var PrismTree = React.createClass({
 		state.width.current[partner.name] = partner.width;
 
 		this.setState(state);
+
+		log(2, 'end PrismTree.changeWidth()');
 	},
 
 	changeView: function changeView(view) {
+
+		log(1, 'beg PrismTree.changeView()');
 
 		var state = this.state;
 
@@ -386,9 +449,13 @@ var PrismTree = React.createClass({
 		state.branches[state.active.branch].view = view;
 
 		this.setState(state);
+
+		log(2, 'end PrismTree.changeView()');
 	},
 
 	resetWidth: function resetWidth(e) {
+
+		log(1, 'beg PrismTree.resetWidth()');
 
 		var state = this.state;
 
@@ -397,9 +464,13 @@ var PrismTree = React.createClass({
 		state.width.current.leaf = state.width['default'].leaf;
 
 		this.setState(state);
+
+		log(2, 'end PrismTree.changeView()');
 	},
 
 	search: function search(e) {
+
+		log(1, 'beg PrismTree.search()');
 
 		var state = this.state;
 
@@ -412,9 +483,13 @@ var PrismTree = React.createClass({
 		window.location = '/#/search?query=' + state.search.query;
 
 		this.loadLeaves();
+
+		log(2, 'end PrismTree.search()');
 	},
 
 	addLeaf: function addLeaf() {
+
+		log(1, 'beg PrismTree.addLeaf()');
 
 		var data = {
 			title: '',
@@ -423,6 +498,8 @@ var PrismTree = React.createClass({
 		};
 
 		this.saveLeaf('create', data);
+
+		log(2, 'end PrismTree.addLeaf()');
 	},
 
 	/**
@@ -433,6 +510,8 @@ var PrismTree = React.createClass({
   *   cause maybe the user can switch it real fast
   */
 	saveLeaf: function saveLeaf(type, data) {
+
+		log(1, 'beg PrismTree.saveLeaf()');
 
 		var url = PRISM.url.rest + this.state.active.branch;
 
@@ -469,14 +548,16 @@ var PrismTree = React.createClass({
 				console.log('error: ', response);
 			}).bind(this)
 		});
+
+		log(2, 'end PrismTree.saveLeaf()');
 	},
 
 	/**
   * loadLeaves is only called from changeBranch
-  * 
-  * 
   */
 	loadLeaves: function loadLeaves() {
+
+		log(1, 'beg PrismTree.loadLeaves()');
 
 		var branch = this.state.active.branch;
 
@@ -515,9 +596,13 @@ var PrismTree = React.createClass({
 				this.setState(state);
 			}).bind(this)
 		});
+
+		log(2, 'end PrismTree.loadLeaves()');
 	},
 
 	trunkData: function trunkData() {
+
+		log(1, 'beg PrismTree.trunkData()');
 
 		var state = this.state;
 
@@ -529,10 +614,14 @@ var PrismTree = React.createClass({
 
 		if (this.hasActiveBranch()) trunkData.branch = this.state.active.branch;
 
+		log(2, 'end PrismTree.trunkData()');
+
 		return trunkData;
 	},
 
 	branchData: function branchData() {
+
+		log(1, 'beg PrismTree.branchData()');
 
 		var branchData = {
 			leaves: [],
@@ -549,10 +638,14 @@ var PrismTree = React.createClass({
 			branchData.leaves = this.state.branches[branch].leaves;
 		}
 
+		log(2, 'end PrismTree.branchData()');
+
 		return branchData;
 	},
 
 	leafData: function leafData() {
+
+		log(1, 'beg PrismTree.leafData()');
 
 		var leafData = {};
 
@@ -570,10 +663,14 @@ var PrismTree = React.createClass({
 		leafData.metaActive = this.state.active.meta;
 		leafData.currentlyChanged = this.state.currentlyChanged;
 
+		log(2, 'end PrismTree.leafData()');
+
 		return leafData;
 	},
 
 	metaData: function metaData() {
+
+		log(1, 'beg PrismTree.metaData()');
 
 		var metaData = {};
 
@@ -597,6 +694,8 @@ var PrismTree = React.createClass({
 		metaData.lockMeta = this.state.lockMeta;
 		metaData.currentlyChanged = this.state.currentlyChanged;
 
+		log(2, 'end PrismTree.metaData()');
+
 		return metaData;
 	},
 
@@ -615,6 +714,8 @@ var PrismTree = React.createClass({
   * 
   */
 	render: function render() {
+
+		log(1, 'beg PrismTree.render()');
 
 		var auth = this.props.auth;
 
@@ -656,6 +757,8 @@ var PrismTree = React.createClass({
 		var renderBranch = this.hasActiveBranch() ? prismBranch : null;
 		var renderLeaf = this.hasActiveLeaf() ? prismLeaf : null;
 		var renderMeta = this.hasActiveMeta() ? prismMeta : null;
+
+		log(2, 'end PrismTree.render()');
 
 		return React.createElement(
 			'div',
@@ -1253,8 +1356,8 @@ var PrismIcon = React.createClass({
 
 });
 
-var log = function log(message) {
-	console.log(message);
+var log = function log(level, message) {
+	if (parseInt(PRISM.debug) <= level) console.log(_.now(), message);
 };
 
 'use strict';
@@ -1400,18 +1503,29 @@ var Prism = React.createClass({
 
 	getInitialState: function getInitialState() {
 
+		log(1, 'beg Prism.getInitialState()');
+
 		var state = {
 			rainbowBar: false
 		};
 
+		log(2, 'end Prism.getInitialState()');
+
 		return state;
 	},
 
-	componentDidMount: function componentDidMount() {
+	componentWillMount: function componentWillMount() {
+
+		log(1, 'beg Prism.componentWillMount()');
+
 		this.getUser();
+
+		log(2, 'end Prism.componentWillMount()');
 	},
 
 	getUser: function getUser() {
+
+		log(1, 'beg Prism.getUser()');
 
 		jQuery.ajax({
 			method: 'GET',
@@ -1420,6 +1534,8 @@ var Prism = React.createClass({
 				xhr.setRequestHeader('X-WP-Nonce', PRISM.nonce);
 			},
 			success: (function (response) {
+
+				log(10, 'success Prism.getUser()');
 
 				var state = this.state;
 
@@ -1430,6 +1546,8 @@ var Prism = React.createClass({
 			}).bind(this),
 			error: (function (response) {
 
+				log(10, 'error Prism.getUser()');
+
 				var state = this.state;
 
 				state.auth = false;
@@ -1438,22 +1556,35 @@ var Prism = React.createClass({
 				this.setState(state);
 			}).bind(this)
 		});
+
+		log(2, 'end Prism.getUser()');
 	},
 
 	toggleRainbowBar: function toggleRainbowBar() {
+
+		log(1, 'beg Prism.toggleRainbowBar()');
+
 		var state = this.state;
 
 		state.rainbowBar = state.rainbowBar ? false : true;
 
 		this.setState(state);
+
+		log(2, 'end Prism.toggleRainbowBar()');
 	},
 
 	executeRainbow: function executeRainbow(value) {
 
+		log(1, 'beg Prism.executeRainbow()');
+
 		if (value in RainbowBarHandler) RainbowBarHandler[value]();
+
+		log(2, 'end Prism.executeRainbow()');
 	},
 
 	render: function render() {
+
+		log(1, 'beg Prism.render()');
 
 		var auth = this.state.auth;
 		var data = this.state;
@@ -1463,6 +1594,8 @@ var Prism = React.createClass({
 		func.executeRainbow = this.executeRainbow;
 
 		var classes = data.rainbowBar ? 'rainbow' : '';
+
+		log(2, 'end Prism.render()');
 
 		return React.createElement(
 			'div',
