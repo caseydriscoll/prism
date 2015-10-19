@@ -12,6 +12,7 @@ var PrismTree = React.createClass( {
 				meta    : false
 			},
 			search           : {
+				last    : '',
 				query   : ''
 			},
 			lockMeta         : PRISM.lockMeta,
@@ -133,12 +134,12 @@ var PrismTree = React.createClass( {
 			routes[branch.slug + "/:id"] = method;
 
 			routerConfig[branch.slug]    = function()   { this.changeBranch(branch.slug)   }.bind( this );
-			routerConfig[method]         = function(id) { this.changeBranch(branch.slug); this.changeLeaf(branch.slug, id) }.bind( this );
+			routerConfig[method]         = function(id) { this.changeLeaf(branch.slug, id) }.bind( this );
 
 		}, this );
 
 		routes.search       = 'search';
-		routerConfig.search = function() { this.changeBranch( 'search' ) }.bind( this );
+		routerConfig.search = function() { this.changeSearch() }.bind( this );
 
 		routerConfig.routes = routes;
 
@@ -247,10 +248,9 @@ var PrismTree = React.createClass( {
 
 		state.active.branch = branch;
 
-		this.setState( state );
+		if ( ! ( branch in state.branches ) ) state.branches[branch] = { leaves : {} };
 
-		if ( branch != 'search' )
-			this.loadLeaves();
+		this.setState( state );
 
 		log( 2, 'end PrismTree.changeBranch()' );
 
@@ -269,6 +269,31 @@ var PrismTree = React.createClass( {
 		this.setState( state );
 
 		log( 2, 'end PrismTree.changeLeaf()' );
+
+	},
+
+	/**
+	 * A special case for dealing with search
+	 * @param  {[type]} branch [description]
+	 * @param  {[type]} leaf   [description]
+	 * @return {[type]}        [description]
+	 */
+	changeSearch: function() {
+
+		log( 1, 'beg PrismTree.changeSearch()' );
+
+		var state  = this.state;
+		var branch = 'search';
+
+		state.active.branch = branch;
+		state.search.last   = state.search.query;
+		state.search.query  = window.location.hash.slice( '#/search?query'.length + 1 );
+
+		if ( ! ( branch in state.branches ) ) state.branches[branch] = { leaves : {} };
+
+		this.setState( state );
+
+		log( 2, 'end PrismTree.changeSearch()' );
 
 	},
 
@@ -413,26 +438,6 @@ var PrismTree = React.createClass( {
 
 	},
 
-	search: function(e) {
-
-		log( 1, 'beg PrismTree.search()' );
-
-		var state = this.state;
-
-		state.search.query  = e.target.value;
-
-		if ( state.search.query == '' ) return;
-
-		this.setState( state );
-
-		window.location = '/#/search?query=' + state.search.query;
-
-		this.loadLeaves();
-
-		log( 2, 'end PrismTree.search()' );
-
-	},
-
 	addLeaf: function() {
 
 		log( 1, 'beg PrismTree.addLeaf()' );
@@ -503,33 +508,22 @@ var PrismTree = React.createClass( {
 	},
 
 	/**
-	 * loadLeaves is only called from changeBranch
+	 * There is a difference between loading the branch with local data a doing an ajax run.
+	 *
+	 * This function should only be called from the PrismBranch itself after mounting/updating.
 	 */
-	loadLeaves: function() {
+	loadBranch: function( branch, params ) {
 
-		log( 1, 'beg PrismTree.loadLeaves()' );
+		log( 1, 'beg PrismTree.loadBranch()' );
 
-		var branch = this.state.active.branch;
-
-		// TODO: This is a temporary stop gap. Don't fetch the query if we already have them.
-		// Ultimately, we'll have to check for changes and all that.
-		if ( this.hasActiveBranch() && branch != 'search' && ! _.isEmpty( this.state.branches[branch].leaves ) ) return;
-
-		var params = '?filter[posts_per_page]=-1';
-
-		var url    = PRISM.url.rest;
-
-		if ( branch == 'search' )
-			url += 'posts' + params + '&filter[post_type]=any&filter[s]=' + this.state.search.query;
-		else
-			url += branch + params;
+		var url = PRISM.url.rest + branch + params;
 
 		jQuery.ajax( {
 			method  : 'GET',
 			url     : url,
 			success : function( response ) {
 
-				log( 10, 'success PrismTree.loadLeaves()' );
+				log( 10, 'success PrismTree.loadBranch()' );
 
 				var state  = this.state;
 				var branch = this.state.active.branch
@@ -546,6 +540,10 @@ var PrismTree = React.createClass( {
 
 				state.branches[branch] = { leaves: leaves };
 
+				// TODO: Temp stop gap to prevent constant updating loop in PrismBranch.componentWillUpdate/loadBranch
+				if ( branch == 'search' )
+					state.search.last = state.search.query;
+
 				if ( branch in PRISM.view )
 					state.branches[branch].view = PRISM.view[branch];
 				else
@@ -556,7 +554,7 @@ var PrismTree = React.createClass( {
 			}.bind( this )
 		} );
 
-		log( 2, 'end PrismTree.loadLeaves()' );
+		log( 2, 'end PrismTree.loadBranch()' );
 
 	},
 
@@ -587,7 +585,8 @@ var PrismTree = React.createClass( {
 
 		var branchData = { 
 			leaves : [], 
-			width : this.state.width.current.branch
+			width  : this.state.width.current.branch,
+			search : this.state.search
 		};
 
 		if ( this.hasActiveBranch() ) {
@@ -687,13 +686,13 @@ var PrismTree = React.createClass( {
 		var auth = this.props.auth;
 
 		var trunkFunctions  = {
-			changeBranch : this.changeBranch,
 			changeWidth  : this.changeWidth,
 			resetWidth   : this.resetWidth,
 			search       : this.search
 		};
 
 		var branchFunctions = {
+			loadBranch  : this.loadBranch,
 			changeLeaf  : this.changeLeaf,
 			changeView  : this.changeView,
 			changeWidth : this.changeWidth,
@@ -726,6 +725,7 @@ var PrismTree = React.createClass( {
 		var renderMeta   = this.hasActiveMeta()   ? prismMeta   : null;
 
 		log( 2, 'end PrismTree.render()' );
+		log( 2, '----------------------' );
 
 		return (
 

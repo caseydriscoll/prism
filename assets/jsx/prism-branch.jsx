@@ -1,6 +1,56 @@
 var PrismBranch = React.createClass( {
 
+	/**
+	 * Handles initial case, when a full url mounts the branch
+	 */
+	componentDidMount: function() {
+
+		log( 1, 'beg PrismBranch.componentWillMount()' );
+
+		this.loadBranch();
+
+		log( 2, 'end PrismBranch.componentWillMount()' );
+
+	},
+
+	/**
+	 * Handles every later case, when user updates the branch
+	 */
+	componentDidUpdate: function() {
+
+		log( 1, 'beg PrismBranch.componentWillUpdate()' );
+
+		this.loadBranch();
+
+		log( 2, 'end PrismBranch.componentWillUpdate()' );
+
+	},
+
+	loadBranch: function() {
+
+		var data   = this.props.data;
+		var func   = this.props.func;
+
+		var branch = data.title;
+		var params = '?filter[posts_per_page]=-1';
+
+		var isNormal = branch != 'search';
+		var isSearch = branch == 'search' && data.search.query != '' && data.search.query != data.search.last;
+
+		var isEmpty  = _.isEmpty( data.leaves );
+
+		if ( branch == 'search' ) {
+			branch   = 'posts';
+			params  += '&filter[s]=' + data.search.query;
+		}
+
+		if ( isSearch || ( isNormal && isEmpty ) )
+			func.loadBranch( branch, params );
+	},
+
 	render: function() {
+
+		log( 1, 'beg PrismBranch.render()' );
 
 		var auth = this.props.auth;
 		var data = this.props.data;
@@ -21,6 +71,8 @@ var PrismBranch = React.createClass( {
 
 		}, this );
 
+		log( 2, 'end PrismBranch.render()' );
+
 		return (
 			<div id="prism-branch" className={data.view} style={style} data-section="branch">
 				<PrismBranchHeader auth={auth} data={data} func={func} />
@@ -38,14 +90,22 @@ var PrismBranch = React.createClass( {
 var PrismBranchHeader = React.createClass( {
 
 	changeView: function(e) {
+
+		log( 1, 'beg PrismBranchHeader.changeView()' );
+
 		e.preventDefault();
 
 		var view = e.target.dataset.view;
 
 		this.props.func.changeView( view );
+
+		log( 2, 'end PrismBranchHeader.changeView()' );
+
 	},
 
 	render: function() {
+
+		log( 1, 'beg PrismBranchHeader.render()' );
 
 		var auth = this.props.auth;
 		var data = this.props.data;
@@ -59,6 +119,8 @@ var PrismBranchHeader = React.createClass( {
 		var classes = 'fa fa-border fa-pull-right fa-2x';
 
 		var renderAddLeaf = auth && data.title !== 'search' ? <i id="prism-add-leaf" className={classes + ' fa-plus'} onClick={func.addLeaf}></i> : null;
+
+		log( 2, 'end PrismBranchHeader.render()' );
 
 		return (
 			<header id="prism-branch-header">
@@ -80,6 +142,9 @@ var PrismBranchHeader = React.createClass( {
 var PrismLeafNode = React.createClass( {
 
 	id : function() {
+
+		log( 1, 'beg PrismLeafNode.id()' );
+
 		var id = this.props.data.type;
 
 		if ( id.slice(-1) != 's' )
@@ -90,10 +155,14 @@ var PrismLeafNode = React.createClass( {
 
 		id += "/" + this.props.data.id;
 
+		log( 2, 'end PrismLeafNode.id()' );
+
 		return id;
 	},
 
 	render: function() {
+
+		log( 1, 'beg PrismLeafNode.render()' );
 
 		var auth = this.props.auth;
 		var data = this.props.data;
@@ -122,6 +191,8 @@ var PrismLeafNode = React.createClass( {
 
 			classes += ' ' + type;
 		}
+
+		log( 2, 'end PrismLeafNode.render()' );
 
 		return (
 			<li id={id} className={classes} key={this.props.key} style={styles}>

@@ -122,7 +122,7 @@ class Prism {
 
 		$data = array(
 			'debug'         => array(
-			    'level'           => 1,
+			    'level'           => 1000,
 			    'ignore'          => array()
 			                   ),
 			'title'         => get_bloginfo( 'title' ),

@@ -22,7 +22,28 @@ var PrismTrunk = React.createClass( {
 var PrismSearch = React.createClass( {
 
 	changeBranch: function() {
-		this.props.func.changeBranch( 'search' );
+
+		var search = this.props.data.search;
+
+		if ( search.query == '' || search.last == search.query )
+			window.location = '/#/search';
+	},
+
+	search: function(e) {
+
+		log( 1, 'beg PrismSearch.search()' );
+
+		var search = this.props.data.search;
+
+		if ( search.query == '' || search.last == search.query )
+			window.location = '/#/search?query=' + e.target.value;
+
+		log( 2, 'end PrismSearch.search()' );
+
+	},
+
+	autoSelect: function(e) {
+		e.nativeEvent.target.select();
 	},
 
 	render: function() {
@@ -30,12 +51,13 @@ var PrismSearch = React.createClass( {
 		var data = this.props.data;
 		var func = this.props.func;
 
+		var value    = data.search.query;
 		var focus    = data.branch == 'search' ? true : false;
 		var classes  = data.branch == 'search' ? 'active' : '';
 
 		return (
 			<div id="prism-search" className={classes}>
-				<input type="text" placeholder="Search" onClick={this.changeBranch} onBlur={func.search} autoFocus={focus} />
+				<input type="text" placeholder="Search" defaultValue={value} onClick={this.changeBranch} onBlur={this.search} onFocus={this.autoSelect} autoFocus={focus} />
 			</div>
 		);
 
