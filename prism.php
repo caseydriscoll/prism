@@ -121,7 +121,10 @@ class Prism {
 		);
 
 		$data = array(
-			'debug'         => 1,
+			'debug'         => array(
+			    'level'           => 1,
+			    'ignore'          => array()
+			                   ),
 			'title'         => get_bloginfo( 'title' ),
 			'description'   => get_bloginfo( 'description' ),
 			'nonce'         => wp_create_nonce( 'wp_rest' ),

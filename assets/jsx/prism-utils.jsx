@@ -55,5 +55,14 @@ var PrismIcon = React.createClass( {
 } );
 
 var log = function( level, message ) {
-	if ( parseInt( PRISM.debug ) <= level ) console.log( _.now(), message );
+	if ( parseInt( PRISM.debug.level ) <= level ) {
+
+		var ignore = false;
+
+		PRISM.debug.ignore.map( function( obj ) {
+			if ( message.indexOf( obj ) >= 0 ) ignore = true;
+		} );
+
+		if ( ! ignore ) console.log( _.now(), message );
+	}
 }
