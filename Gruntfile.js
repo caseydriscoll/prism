@@ -58,6 +58,7 @@ module.exports = function( grunt ) {
 					'assets/js/prism-meta.js'           : 'assets/jsx/prism-meta.jsx',
 
 					'assets/js/prism-utils.js'          : 'assets/jsx/prism-utils.jsx',
+					'assets/js/prism-rainbow-bar.js'    : 'assets/jsx/prism-rainbow-bar.jsx',
 
 					'assets/js/keyboard.js'             : 'assets/jsx/keyboard.jsx'
 				}
@@ -77,6 +78,7 @@ module.exports = function( grunt ) {
 					'assets/js/prism-meta.js',
 
 					'assets/js/prism-utils.js',
+					'assets/js/prism-rainbow-bar.js',
 
 					'assets/js/keyboard.js',
 
@@ -98,6 +100,7 @@ module.exports = function( grunt ) {
 				'assets/js/prism-meta.js',
 
 				'assets/js/prism-utils.js',
+				'assets/js/prism-rainbow-bar.js',
 
 				'assets/js/keyboard.js'
 		],

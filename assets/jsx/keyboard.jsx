@@ -87,6 +87,11 @@ window.onkeyup = function(e) {
 				stateChange = { 'changeMeta' : true };
 			break;
 
+		case 82: // r - for rainbow bar
+			if ( ! input ) 
+				stateChange = { 'rainbow' : true };
+			break;
+
 		case 86: // v - for view
 			if ( ! input && key.mode == false )
 				PRISM.key.mode = 'v';

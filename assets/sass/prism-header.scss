@@ -23,21 +23,6 @@
 
 	}
 
-	#prism-rainbow-bar {
-		display: inline-block; float: left;
-		padding: 5px 10px; margin: 12px 20px 0;
-		font: {
-			size: 32px;
-		}
-		border: 0;
-		color: $light;
-
-		&:focus {
-			color: $dark;
-			background: $white !important;
-		}
-	}
-
 	span.description {
 		display: block; position: relative; float: right;
 		max-width: 420px;

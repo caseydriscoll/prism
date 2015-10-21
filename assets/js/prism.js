@@ -21,7 +21,6 @@ var PrismHeader = React.createClass({
 					PRISM.title
 				)
 			),
-			React.createElement(PrismRainbowBar, { data: data, func: func }),
 			React.createElement(PrismUserAccount, { data: data, auth: auth }),
 			React.createElement(
 				"span",
@@ -29,31 +28,6 @@ var PrismHeader = React.createClass({
 				PRISM.description
 			)
 		);
-	}
-
-});
-
-var PrismRainbowBar = React.createClass({
-	displayName: "PrismRainbowBar",
-
-	executeRainbow: function executeRainbow(e) {
-
-		var key = e.keyCode ? e.keyCode : e.which;
-		var func = this.props.func;
-		var value = e.target.value;
-
-		if (key == 13) {
-			func.executeRainbow(value);
-			e.target.value = '';
-		}
-	},
-
-	render: function render() {
-
-		var data = this.props.data;
-		var func = this.props.func;
-
-		return React.createElement("input", { type: "text", id: "prism-rainbow-bar", onKeyUp: this.executeRainbow, onFocus: func.toggleRainbowBar, onBlur: func.toggleRainbowBar });
 	}
 
 });
@@ -121,6 +95,8 @@ var PrismTree = React.createClass({
 
 		log(1, 'beg PrismTree.componentWillMount()');
 
+		var func = this.props.func;
+
 		PrismKeyHandler = function (changeState) {
 
 			if ('view' in changeState) _this.changeView(changeState.view);
@@ -132,6 +108,8 @@ var PrismTree = React.createClass({
 			if ('changeMeta' in changeState) _this.changeMeta();
 
 			if ('addLeaf' in changeState) _this.addLeaf();
+
+			if ('rainbow' in changeState) func.toggleRainbow();
 		};
 
 		this.initRouter();
@@ -612,7 +590,8 @@ var PrismTree = React.createClass({
 		var trunkData = {
 			branch: '',
 			width: state.width.current.trunk,
-			search: state.search
+			search: state.search,
+			rainbow: this.props.data.rainbowBar
 		};
 
 		if (this.hasActiveBranch()) trunkData.branch = this.state.active.branch;
@@ -722,10 +701,12 @@ var PrismTree = React.createClass({
 		log(1, 'beg PrismTree.render()');
 
 		var auth = this.props.auth;
+		var func = this.props.func;
 
 		var trunkFunctions = {
 			changeWidth: this.changeWidth,
 			resetWidth: this.resetWidth,
+			toggleRainbow: func.toggleRainbow,
 			search: this.search
 		};
 
@@ -849,27 +830,8 @@ var PrismSearch = React.createClass({
 		return React.createElement(
 			'div',
 			{ id: 'prism-search', className: classes },
-			React.createElement(PrismRainbowButton, null),
+			React.createElement(PrismRainbowButton, { data: data, func: func }),
 			React.createElement('input', { type: 'text', placeholder: 'Search', defaultValue: value, onClick: this.changeBranch, onBlur: this.search, onFocus: this.autoSelect, autoFocus: focus })
-		);
-	}
-
-});
-
-var PrismRainbowButton = React.createClass({
-	displayName: 'PrismRainbowButton',
-
-	render: function render() {
-
-		return React.createElement(
-			'div',
-			{ id: 'prism-rainbow-button' },
-			React.createElement('i', { className: 'fa fa-play' }),
-			React.createElement('i', { className: 'fa fa-play' }),
-			React.createElement('i', { className: 'fa fa-play' }),
-			React.createElement('i', { className: 'fa fa-play' }),
-			React.createElement('i', { className: 'fa fa-play' }),
-			React.createElement('i', { className: 'fa fa-play' })
 		);
 	}
 
@@ -1482,6 +1444,57 @@ var log = function log(level, message) {
 
 'use strict';
 
+var PrismRainbowBar = React.createClass({
+	displayName: 'PrismRainbowBar',
+
+	executeRainbow: function executeRainbow(e) {
+
+		var key = e.keyCode ? e.keyCode : e.which;
+		var func = this.props.func;
+		var value = e.target.value;
+
+		if (key == 13) {
+			func.executeRainbow(value);
+			e.target.value = '';
+		}
+	},
+
+	render: function render() {
+
+		var data = this.props.data;
+		var func = this.props.func;
+
+		return React.createElement('div', { id: 'prism-rainbow-bar' });
+	}
+
+});
+
+var PrismRainbowButton = React.createClass({
+	displayName: 'PrismRainbowButton',
+
+	render: function render() {
+
+		var data = this.props.data;
+		var func = this.props.func;
+
+		var classes = data.rainbow ? 'active' : null;
+
+		return React.createElement(
+			'div',
+			{ id: 'prism-rainbow-button', className: classes, onClick: func.toggleRainbow },
+			React.createElement('i', { className: 'fa fa-play' }),
+			React.createElement('i', { className: 'fa fa-play' }),
+			React.createElement('i', { className: 'fa fa-play' }),
+			React.createElement('i', { className: 'fa fa-play' }),
+			React.createElement('i', { className: 'fa fa-play' }),
+			React.createElement('i', { className: 'fa fa-play' })
+		);
+	}
+
+});
+
+'use strict';
+
 window.onkeyup = function (e) {
 
 	var key = {
@@ -1564,6 +1577,11 @@ window.onkeyup = function (e) {
 		case 80:
 			// p - for panel
 			if (!input) stateChange = { 'changeMeta': true };
+			break;
+
+		case 82:
+			// r - for rainbow bar
+			if (!input) stateChange = { 'rainbow': true };
 			break;
 
 		case 86:
@@ -1680,9 +1698,9 @@ var Prism = React.createClass({
 		log(2, 'end Prism.getUser()');
 	},
 
-	toggleRainbowBar: function toggleRainbowBar() {
+	toggleRainbow: function toggleRainbow() {
 
-		log(1, 'beg Prism.toggleRainbowBar()');
+		log(1, 'beg Prism.toggleRainbow()');
 
 		var state = this.state;
 
@@ -1690,16 +1708,7 @@ var Prism = React.createClass({
 
 		this.setState(state);
 
-		log(2, 'end Prism.toggleRainbowBar()');
-	},
-
-	executeRainbow: function executeRainbow(value) {
-
-		log(1, 'beg Prism.executeRainbow()');
-
-		if (value in RainbowBarHandler) RainbowBarHandler[value]();
-
-		log(2, 'end Prism.executeRainbow()');
+		log(2, 'end Prism.toggleRainbow()');
 	},
 
 	render: function render() {
@@ -1710,7 +1719,7 @@ var Prism = React.createClass({
 		var data = this.state;
 		var func = {};
 
-		func.toggleRainbowBar = this.toggleRainbowBar;
+		func.toggleRainbow = this.toggleRainbow;
 		func.executeRainbow = this.executeRainbow;
 
 		var classes = data.rainbowBar ? 'rainbow' : '';
@@ -1720,6 +1729,7 @@ var Prism = React.createClass({
 		return React.createElement(
 			'div',
 			{ id: 'prism', className: classes },
+			React.createElement(PrismRainbowBar, null),
 			React.createElement(PrismHeader, { auth: auth, data: data, func: func }),
 			React.createElement(PrismTree, { auth: auth, data: data, func: func }),
 			React.createElement(PrismFooter, { func: func })

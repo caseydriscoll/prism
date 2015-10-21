@@ -6,11 +6,10 @@ body > *:not(#prism) {
   position: relative;
   width: 100%;
   height: 100vh;
-  overflow: hidden; }
+  left: 0;
+  transition: left 0.2s; }
   #prism * {
     box-sizing: border-box; }
-  #prism.rainbow * {
-    background: #333333 !important; }
 
 .prism-resize-bar {
   display: block;
@@ -27,6 +26,22 @@ body > *:not(#prism) {
     background-color: #1ab7d9;
     opacity: .75; }
 
+#prism.rainbow {
+  left: 20%;
+  transition: left 0.2s; }
+
+#prism-rainbow-bar {
+  display: block;
+  position: absolute;
+  width: 20%;
+  height: 100vh;
+  left: -20%;
+  top: 0;
+  padding: 5px 10px;
+  border: 0;
+  color: #dddddd;
+  background: #ff1d3b; }
+
 #prism-rainbow-button {
   display: inline-block;
   position: relative;
@@ -34,7 +49,7 @@ body > *:not(#prism) {
   height: 30px;
   transform-origin: 50% 70%;
   transform: rotate(-60deg) scale(0.5);
-  transition: transform .5s;
+  transition: transform 0.2s;
   cursor: pointer; }
   #prism-rainbow-button i.fa-play {
     display: block;
@@ -67,27 +82,27 @@ body > *:not(#prism) {
       transform: rotate(-60deg);
       left: 4px;
       bottom: -7px; }
-  #prism-rainbow-button:hover {
+  #prism-rainbow-button:hover, #prism-rainbow-button.active {
     transform: rotate(0deg) scale(1);
     transition: transform .2s; }
-    #prism-rainbow-button:hover i.fa-play {
+    #prism-rainbow-button:hover i.fa-play, #prism-rainbow-button.active i.fa-play {
       transition: transform .2s; }
-      #prism-rainbow-button:hover i.fa-play:nth-of-type(1) {
+      #prism-rainbow-button:hover i.fa-play:nth-of-type(1), #prism-rainbow-button.active i.fa-play:nth-of-type(1) {
         transform: rotate(0deg);
         color: #ff1d3b; }
-      #prism-rainbow-button:hover i.fa-play:nth-of-type(2) {
+      #prism-rainbow-button:hover i.fa-play:nth-of-type(2), #prism-rainbow-button.active i.fa-play:nth-of-type(2) {
         transform: rotate(60deg);
         color: #FF6600; }
-      #prism-rainbow-button:hover i.fa-play:nth-of-type(3) {
+      #prism-rainbow-button:hover i.fa-play:nth-of-type(3), #prism-rainbow-button.active i.fa-play:nth-of-type(3) {
         transform: rotate(120deg);
         color: #fece00; }
-      #prism-rainbow-button:hover i.fa-play:nth-of-type(4) {
+      #prism-rainbow-button:hover i.fa-play:nth-of-type(4), #prism-rainbow-button.active i.fa-play:nth-of-type(4) {
         transform: rotate(180deg);
         color: #66d73a; }
-      #prism-rainbow-button:hover i.fa-play:nth-of-type(5) {
+      #prism-rainbow-button:hover i.fa-play:nth-of-type(5), #prism-rainbow-button.active i.fa-play:nth-of-type(5) {
         transform: rotate(-120deg);
         color: #1ab7d9; }
-      #prism-rainbow-button:hover i.fa-play:nth-of-type(6) {
+      #prism-rainbow-button:hover i.fa-play:nth-of-type(6), #prism-rainbow-button.active i.fa-play:nth-of-type(6) {
         transform: rotate(-60deg);
         color: #6b7ee4; }
 
@@ -108,17 +123,6 @@ body > *:not(#prism) {
       margin: 0;
       font-family: 'Kinescope';
       font-size: 60px; }
-  #prism-header #prism-rainbow-bar {
-    display: inline-block;
-    float: left;
-    padding: 5px 10px;
-    margin: 12px 20px 0;
-    font-size: 32px;
-    border: 0;
-    color: #dddddd; }
-    #prism-header #prism-rainbow-bar:focus {
-      color: #333333;
-      background: #ffffff !important; }
   #prism-header span.description {
     display: block;
     position: relative;

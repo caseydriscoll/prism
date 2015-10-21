@@ -57,31 +57,11 @@ var PrismSearch = React.createClass( {
 
 		return (
 			<div id="prism-search" className={classes}>
-				<PrismRainbowButton />
+				<PrismRainbowButton data={data} func={func} />
 				<input type="text" placeholder="Search" defaultValue={value} onClick={this.changeBranch} onBlur={this.search} onFocus={this.autoSelect} autoFocus={focus} />
 			</div>
 		);
 
-	}
-
-} );
-
-
-var PrismRainbowButton = React.createClass( {
-
-	render: function() {
-
-		return(
-			<div id="prism-rainbow-button">
-				<i className="fa fa-play"></i>
-				<i className="fa fa-play"></i>
-				<i className="fa fa-play"></i>
-				<i className="fa fa-play"></i>
-				<i className="fa fa-play"></i>
-				<i className="fa fa-play"></i>
-
-			</div>
-		)
 	}
 
 } );

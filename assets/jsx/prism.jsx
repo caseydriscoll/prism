@@ -86,9 +86,9 @@ var Prism = React.createClass( {
 
 	},
 
-	toggleRainbowBar: function() {
+	toggleRainbow: function() {
 
-		log( 1, 'beg Prism.toggleRainbowBar()' );
+		log( 1, 'beg Prism.toggleRainbow()' );
 
 		var state = this.state;
 
@@ -96,18 +96,7 @@ var Prism = React.createClass( {
 
 		this.setState( state );
 
-		log( 2, 'end Prism.toggleRainbowBar()' );
-
-	},
-
-	executeRainbow: function(value) {
-
-		log( 1, 'beg Prism.executeRainbow()' );
-
-		if ( value in RainbowBarHandler )
-			RainbowBarHandler[value]();
-
-		log( 2, 'end Prism.executeRainbow()' );
+		log( 2, 'end Prism.toggleRainbow()' );
 
 	},
 
@@ -119,7 +108,7 @@ var Prism = React.createClass( {
 		var data = this.state;
 		var func = {};
 
-		func.toggleRainbowBar = this.toggleRainbowBar;
+		func.toggleRainbow    = this.toggleRainbow;
 		func.executeRainbow   = this.executeRainbow;
 
 		var classes = data.rainbowBar ? 'rainbow' : '';
@@ -128,6 +117,7 @@ var Prism = React.createClass( {
 
 		return (
 			<div id="prism" className={classes}>
+				<PrismRainbowBar />
 				<PrismHeader auth={auth} data={data} func={func} />
 				<PrismTree   auth={auth} data={data} func={func} />
 				<PrismFooter func={func} />

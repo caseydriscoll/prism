@@ -29,6 +29,8 @@ var PrismTree = React.createClass( {
 
 		log( 1, 'beg PrismTree.componentWillMount()' );
 
+		var func = this.props.func;
+
 		PrismKeyHandler = ( changeState ) => {
 
 			if ( 'view'       in changeState )
@@ -45,6 +47,9 @@ var PrismTree = React.createClass( {
 
 			if ( 'addLeaf'    in changeState )
 				this.addLeaf();
+
+			if ( 'rainbow'    in changeState )
+				func.toggleRainbow();
 
 		};
 
@@ -565,9 +570,10 @@ var PrismTree = React.createClass( {
 		var state = this.state;
 
 		var trunkData = { 
-			branch : '',
-			width  : state.width.current.trunk,
-			search : state.search
+			branch  : '',
+			width   : state.width.current.trunk,
+			search  : state.search,
+			rainbow : this.props.data.rainbowBar
 		};
 
 		if ( this.hasActiveBranch() )
@@ -684,11 +690,13 @@ var PrismTree = React.createClass( {
 		log( 1, 'beg PrismTree.render()' );
 
 		var auth = this.props.auth;
+		var func = this.props.func;
 
 		var trunkFunctions  = {
-			changeWidth  : this.changeWidth,
-			resetWidth   : this.resetWidth,
-			search       : this.search
+			changeWidth   : this.changeWidth,
+			resetWidth    : this.resetWidth,
+			toggleRainbow : func.toggleRainbow,
+			search        : this.search
 		};
 
 		var branchFunctions = {

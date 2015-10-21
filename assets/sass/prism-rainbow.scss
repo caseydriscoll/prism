@@ -1,3 +1,20 @@
+#prism.rainbow {
+	left: $rainbow-width;
+	transition: left $rainbow-time;
+}
+
+#prism-rainbow-bar {
+	display: block; position: absolute;
+	width: $rainbow-width; height: 100vh;
+	left: (-$rainbow-width); top: 0;
+	padding: 5px 10px;
+
+	border: 0;
+	color: $light;
+	background: $red;
+}
+
+
 #prism-rainbow-button {
 
 	display: inline-block; position: relative;
@@ -6,7 +23,7 @@
 	transform-origin: 50% 70%;
 
 	transform: rotate( -60deg ) scale( .5 );
-	transition: transform .5s;
+	transition: transform $rainbow-time;
 
 	cursor: pointer;
 
@@ -27,7 +44,8 @@
 		&:nth-of-type(6) { transform: rotate(  -60deg ); left:  4px; bottom: -7px; }
 	}
 
-	&:hover {
+	&:hover,
+	&.active {
 
 		transform: rotate( 0deg ) scale( 1 );
 		transition: transform .2s;
