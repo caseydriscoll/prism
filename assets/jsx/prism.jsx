@@ -24,13 +24,20 @@ var Prism = React.createClass( {
 
 	getInitialState: function() {
 
-		log( 1, 'beg Prism.getInitialState()' );
+		log( 11, 'beg Prism.getInitialState()' );
 
 		var state = {
+			status     : {
+				log     : [],
+				current : {
+					type    : 'normal',
+					message : null
+				}
+			},
 			rainbowBar : false
 		};
 
-		log( 2, 'end Prism.getInitialState()' );
+		log( 12, 'end Prism.getInitialState()' );
 
 		return state;
 
@@ -38,17 +45,17 @@ var Prism = React.createClass( {
 
 	componentWillMount: function() {
 
-		log( 1, 'beg Prism.componentWillMount()' );
+		log( 11, 'beg Prism.componentWillMount()' );
 
 		this.getUser();
 
-		log( 2, 'end Prism.componentWillMount()' );
+		log( 12, 'end Prism.componentWillMount()' );
 
 	},
 
 	getUser: function() {
 
-		log( 1, 'beg Prism.getUser()' );
+		log( 11, 'beg Prism.getUser()' );
 
 		jQuery.ajax( {
 			method  : 'GET',
@@ -82,13 +89,13 @@ var Prism = React.createClass( {
 			}.bind( this )
 		} );
 
-		log( 2, 'end Prism.getUser()' );
+		log( 12, 'end Prism.getUser()' );
 
 	},
 
 	toggleRainbow: function() {
 
-		log( 1, 'beg Prism.toggleRainbow()' );
+		log( 11, 'beg Prism.toggleRainbow()' );
 
 		var state = this.state;
 
@@ -96,31 +103,48 @@ var Prism = React.createClass( {
 
 		this.setState( state );
 
-		log( 2, 'end Prism.toggleRainbow()' );
+		log( 12, 'end Prism.toggleRainbow()' );
+
+	},
+
+	changeStatus: function( status ) {
+
+		log( 11, 'beg Prism.changeStatus()' );
+
+		var state = this.state;
+
+		if ( status.type != 'normal' )
+			state.status.log.push( status );
+
+		state.status.current = status;
+
+		this.setState( state );
+
+		log( 12, 'end Prism.changeStatus()' );
 
 	},
 
 	render: function() {
 
-		log( 1, 'beg Prism.render()' );
+		log( 11, 'beg Prism.render()' );
 
 		var auth = this.state.auth;
 		var data = this.state;
 		var func = {};
 
-		func.toggleRainbow    = this.toggleRainbow;
-		func.executeRainbow   = this.executeRainbow;
+		func.changeStatus  = this.changeStatus;
+		func.toggleRainbow = this.toggleRainbow;
 
 		var classes = data.rainbowBar ? 'rainbow' : '';
 
-		log( 2, 'end Prism.render()' );
+		log( 12, 'end Prism.render()' );
 
 		return (
 			<div id="prism" className={classes}>
-				<PrismRainbowBar />
-				<PrismHeader auth={auth} data={data} func={func} />
-				<PrismTree   auth={auth} data={data} func={func} />
-				<PrismFooter func={func} />
+				<PrismRainbowBar data={data} />
+				<PrismHeader     auth={auth} data={data} func={func} />
+				<PrismTree       auth={auth} data={data} func={func} />
+				<PrismFooter     func={func} />
 			</div>
 		);
 	}

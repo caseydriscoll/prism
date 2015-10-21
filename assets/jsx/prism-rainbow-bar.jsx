@@ -18,8 +18,16 @@ var PrismRainbowBar = React.createClass( {
 		var data = this.props.data;
 		var func = this.props.func;
 
+		var statusLog = _.clone( data.status.log ).reverse().map( function( entry, i ) {
+			return ( <li className={entry.type}><i className="fa fa-li fa-chevron-right"></i>{entry.message}</li> );
+		}, this );
+
 		return (
 			<div id="prism-rainbow-bar">
+				<h3>Status Log</h3>
+				<ul id="prism-status-log" className="fa-ul">
+					{statusLog}
+				</ul>
 			</div>
 		);
 	}
@@ -34,7 +42,9 @@ var PrismRainbowButton = React.createClass( {
 		var data = this.props.data;
 		var func = this.props.func;
 
-		var classes = data.rainbow ? 'active' : null;
+		var classes = data.status.type;
+
+		classes += data.rainbow ? ' active' : '';
 
 		return(
 			<div id="prism-rainbow-button" className={classes} onClick={func.toggleRainbow}>
