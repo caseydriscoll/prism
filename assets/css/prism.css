@@ -269,9 +269,8 @@ body > *:not(#prism) {
       #prism-branch header#prism-branch-header div#prism-branch-visual-controls i#prism-add-leaf {
         margin-right: 25px; }
         #prism-branch header#prism-branch-header div#prism-branch-visual-controls i#prism-add-leaf:hover {
-          color: #808080;
-          border-color: #808080;
-          background: #66d73a; }
+          color: #66d73a;
+          border-color: #66d73a; }
   #prism-branch.grid ul#prism-leaves .prism-leaf {
     width: calc( 25% - 10px );
     padding-bottom: calc( 25% - 10px ); }
