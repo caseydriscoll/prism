@@ -849,7 +849,27 @@ var PrismSearch = React.createClass({
 		return React.createElement(
 			'div',
 			{ id: 'prism-search', className: classes },
+			React.createElement(PrismRainbowButton, null),
 			React.createElement('input', { type: 'text', placeholder: 'Search', defaultValue: value, onClick: this.changeBranch, onBlur: this.search, onFocus: this.autoSelect, autoFocus: focus })
+		);
+	}
+
+});
+
+var PrismRainbowButton = React.createClass({
+	displayName: 'PrismRainbowButton',
+
+	render: function render() {
+
+		return React.createElement(
+			'div',
+			{ id: 'prism-rainbow-button' },
+			React.createElement('i', { className: 'fa fa-play' }),
+			React.createElement('i', { className: 'fa fa-play' }),
+			React.createElement('i', { className: 'fa fa-play' }),
+			React.createElement('i', { className: 'fa fa-play' }),
+			React.createElement('i', { className: 'fa fa-play' }),
+			React.createElement('i', { className: 'fa fa-play' })
 		);
 	}
 

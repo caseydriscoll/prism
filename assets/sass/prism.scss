@@ -4,8 +4,15 @@ $grey:      #808080;
 $dark:      #333333;
 $black:     #000000;
 
-$green:     #87fab3;
-$highlight: #87CEFA;
+
+$red:    #ff1d3b;
+$orange: #FF6600;
+$yellow: #fece00;
+$green:  #66d73a;
+$blue:   #1ab7d9;
+$purple: #6b7ee4;
+
+$highlight: $blue;
 
 $border: 2px solid $black;
 $header-height: 80px;
@@ -28,6 +35,7 @@ body > *:not(#prism) { display: none; }
 }
 
 @import './prism-utils.scss';
+@import './prism-rainbow.scss';
 
 @import './prism-header.scss';
 

@@ -24,8 +24,72 @@ body > *:not(#prism) {
   cursor: col-resize;
   z-index: 100; }
   .prism-resize-bar:hover {
-    background-color: #87CEFA;
+    background-color: #1ab7d9;
     opacity: .75; }
+
+#prism-rainbow-button {
+  display: inline-block;
+  position: relative;
+  width: 30px;
+  height: 30px;
+  transform-origin: 50% 70%;
+  transform: rotate(-60deg) scale(0.5);
+  transition: transform .5s;
+  cursor: pointer; }
+  #prism-rainbow-button i.fa-play {
+    display: block;
+    position: absolute;
+    font-size: 18px;
+    transform-origin: 40% 50%;
+    cursor: pointer;
+    color: #808080; }
+    #prism-rainbow-button i.fa-play:nth-of-type(1) {
+      transform: rotate(0deg);
+      left: 0px;
+      bottom: 0px; }
+    #prism-rainbow-button i.fa-play:nth-of-type(2) {
+      transform: rotate(60deg);
+      left: 4px;
+      bottom: 7px; }
+    #prism-rainbow-button i.fa-play:nth-of-type(3) {
+      transform: rotate(120deg);
+      left: 12px;
+      bottom: 7px; }
+    #prism-rainbow-button i.fa-play:nth-of-type(4) {
+      transform: rotate(180deg);
+      left: 16px;
+      bottom: 0px; }
+    #prism-rainbow-button i.fa-play:nth-of-type(5) {
+      transform: rotate(-120deg);
+      left: 12px;
+      bottom: -7px; }
+    #prism-rainbow-button i.fa-play:nth-of-type(6) {
+      transform: rotate(-60deg);
+      left: 4px;
+      bottom: -7px; }
+  #prism-rainbow-button:hover {
+    transform: rotate(0deg) scale(1);
+    transition: transform .2s; }
+    #prism-rainbow-button:hover i.fa-play {
+      transition: transform .2s; }
+      #prism-rainbow-button:hover i.fa-play:nth-of-type(1) {
+        transform: rotate(0deg);
+        color: #ff1d3b; }
+      #prism-rainbow-button:hover i.fa-play:nth-of-type(2) {
+        transform: rotate(60deg);
+        color: #FF6600; }
+      #prism-rainbow-button:hover i.fa-play:nth-of-type(3) {
+        transform: rotate(120deg);
+        color: #fece00; }
+      #prism-rainbow-button:hover i.fa-play:nth-of-type(4) {
+        transform: rotate(180deg);
+        color: #66d73a; }
+      #prism-rainbow-button:hover i.fa-play:nth-of-type(5) {
+        transform: rotate(-120deg);
+        color: #1ab7d9; }
+      #prism-rainbow-button:hover i.fa-play:nth-of-type(6) {
+        transform: rotate(-60deg);
+        color: #6b7ee4; }
 
 #prism-header {
   display: block;
@@ -38,7 +102,8 @@ body > *:not(#prism) {
     float: left;
     padding: 5px 10px 0;
     cursor: pointer;
-    text-decoration: none; }
+    text-decoration: none;
+    color: #000000; }
     #prism-header a h1 {
       margin: 0;
       font-family: 'Kinescope';
@@ -74,8 +139,8 @@ body > *:not(#prism) {
       border-color: #808080;
       color: #808080; }
       #prism-header #prism-user-account i.fa-user:hover {
-        color: #87CEFA;
-        border-color: #87CEFA; }
+        color: #1ab7d9;
+        border-color: #1ab7d9; }
     #prism-header #prism-user-account img {
       margin-top: -2px;
       border-radius: 50%; }
@@ -101,12 +166,13 @@ body > *:not(#prism) {
     border-bottom: 2px solid #000000;
     font-size: 24px; }
     #prism-trunk #prism-search.active {
-      background: #87CEFA;
+      background: #1ab7d9;
       color: #000000;
       border-color: #000000; }
     #prism-trunk #prism-search input {
-      width: 100%;
+      width: calc( 100% - 40px );
       padding: 2px 10px;
+      margin: 0 0 0 10px;
       border: 2px solid #000000;
       border-color: #808080;
       background: #ffffff; }
@@ -138,7 +204,7 @@ body > *:not(#prism) {
             background: #dddddd; }
           #prism-trunk menu ul li a.active {
             font-weight: bold;
-            background: #87CEFA;
+            background: #1ab7d9;
             color: #000000;
             border-color: #000000; }
 
@@ -167,8 +233,8 @@ body > *:not(#prism) {
         cursor: pointer;
         border-color: #dddddd; }
         #prism-branch header#prism-branch-header div#prism-branch-visual-controls i.fa:hover {
-          color: #87CEFA;
-          border-color: #87CEFA; }
+          color: #1ab7d9;
+          border-color: #1ab7d9; }
         #prism-branch header#prism-branch-header div#prism-branch-visual-controls i.fa.active {
           color: #808080;
           border-color: #808080;
@@ -178,7 +244,7 @@ body > *:not(#prism) {
         #prism-branch header#prism-branch-header div#prism-branch-visual-controls i#prism-add-leaf:hover {
           color: #808080;
           border-color: #808080;
-          background: #87fab3; }
+          background: #66d73a; }
   #prism-branch.grid ul#prism-leaves .prism-leaf {
     width: calc( 25% - 10px );
     padding-bottom: calc( 25% - 10px ); }
@@ -198,7 +264,7 @@ body > *:not(#prism) {
     #prism-branch.list ul#prism-leaves .prism-leaf:hover, #prism-branch.list ul#prism-leaves .prism-leaf.media:hover:hover {
       background-color: #dddddd !important; }
     #prism-branch.list ul#prism-leaves .prism-leaf.active, #prism-branch.list ul#prism-leaves .prism-leaf.media:hover.active {
-      background-color: #87CEFA !important; }
+      background-color: #1ab7d9 !important; }
     #prism-branch.list ul#prism-leaves .prism-leaf.media a, #prism-branch.list ul#prism-leaves .prism-leaf.media:hover.media a {
       padding-left: 110px; }
     #prism-branch.list ul#prism-leaves .prism-leaf a, #prism-branch.list ul#prism-leaves .prism-leaf.media:hover a {
@@ -243,7 +309,7 @@ body > *:not(#prism) {
           transition: background-size .1s; }
         #prism-branch ul#prism-leaves .prism-leaf.media.active {
           opacity: 1;
-          box-shadow: 0 0 10px #87CEFA; }
+          box-shadow: 0 0 10px #1ab7d9; }
           #prism-branch ul#prism-leaves .prism-leaf.media.active a {
             color: #ffffff;
             background: transparent;
@@ -270,10 +336,10 @@ body > *:not(#prism) {
           background-color: #dddddd;
           border-color: #000000; }
       #prism-branch ul#prism-leaves .prism-leaf.active {
-        box-shadow: 0 0 10px #87CEFA; }
+        box-shadow: 0 0 10px #1ab7d9; }
         #prism-branch ul#prism-leaves .prism-leaf.active a {
           color: #000000;
-          background: #87CEFA;
+          background: #1ab7d9;
           border-color: #000000; }
 
 #prism-leaf {
@@ -314,7 +380,7 @@ body > *:not(#prism) {
       cursor: pointer;
       color: #dddddd; }
       #prism-leaf header#prism-leaf-header i.fa:hover {
-        color: #87CEFA; }
+        color: #1ab7d9; }
       #prism-leaf header#prism-leaf-header i.fa.active {
         color: #000000; }
   #prism-leaf #prism-leaf-content {
@@ -353,7 +419,7 @@ body > *:not(#prism) {
       color: #808080;
       border: none; }
       #prism-meta header#prism-meta-header i.fa:hover {
-        color: #87CEFA; }
+        color: #1ab7d9; }
       #prism-meta header#prism-meta-header i.fa.fa-lock {
         color: #000000; }
   #prism-meta ul#prism-meta-info {
