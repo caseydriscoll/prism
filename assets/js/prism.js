@@ -77,7 +77,7 @@ var PrismTree = React.createClass({
 				meta: false
 			},
 			search: {
-				last: '',
+				last: null,
 				query: ''
 			},
 			lockMeta: PRISM.lockMeta,
@@ -556,6 +556,9 @@ var PrismTree = React.createClass({
 
 		log(11, 'beg PrismTree.loadBranch()');
 
+		// TODO: Temp stop gap to prevent infinite loop from firing millions of AJAX calls
+		if (this.props.data.status.current.type != 'normal') return;
+
 		this.changeStatus('loading', 'Loading ' + branch + ' data...');
 
 		var url = PRISM.url.rest + branch + params;
@@ -626,7 +629,7 @@ var PrismTree = React.createClass({
 			leaves: [],
 			width: this.state.width.current.branch,
 			search: this.state.search,
-			status: this.props.data.status
+			view: PRISM.view['default']
 		};
 
 		if (this.hasActiveBranch()) {
@@ -868,13 +871,19 @@ var PrismSearchStatus = React.createClass({
 
 	search: function search(e) {
 
-		log(1, 'beg PrismSearch.search()');
+		log(11, 'beg PrismSearch.search()');
 
 		var search = this.props.data.search;
+		var value = e.target.value;
 
-		if (search.query == '' || search.last == search.query) window.location = '/#/search?query=' + e.target.value;
+		if (value == '') {
+			window.location = '/#/';
+			return;
+		}
 
-		log(2, 'end PrismSearch.search()');
+		window.location = '/#/search?query=' + value;
+
+		log(12, 'end PrismSearch.search()');
 	},
 
 	autoSelect: function autoSelect(e) {
@@ -966,6 +975,11 @@ var PrismBranch = React.createClass({
 		log(12, 'end PrismBranch.componentDidUpdate()');
 	},
 
+	/**
+  * The branch loads with no leaves and runs this function to check on loading the branch with leaves.
+  * 
+  * @return {[type]} [description]
+  */
 	loadBranch: function loadBranch() {
 
 		log(11, 'beg PrismBranch.loadBranch()');
@@ -979,7 +993,7 @@ var PrismBranch = React.createClass({
 		var isNormal = branch != 'search';
 		var isSearch = branch == 'search' && data.search.query != '' && data.search.query != data.search.last;
 
-		var isEmpty = _.isEmpty(data.leaves) && data.status.current.type == 'normal';
+		var isEmpty = _.isEmpty(data.leaves);
 
 		if (branch == 'search') {
 			branch = 'posts';

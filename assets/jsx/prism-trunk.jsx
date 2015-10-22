@@ -77,14 +77,19 @@ var PrismSearchStatus = React.createClass( {
 
 	search: function(e) {
 
-		log( 1, 'beg PrismSearch.search()' );
+		log( 11, 'beg PrismSearch.search()' );
 
 		var search = this.props.data.search;
+		var value  = e.target.value;
 
-		if ( search.query == '' || search.last == search.query )
-			window.location = '/#/search?query=' + e.target.value;
+		if ( value == '' ) {
+			window.location = '/#/';
+			return;
+		}
 
-		log( 2, 'end PrismSearch.search()' );
+		window.location = '/#/search?query=' + value;
+
+		log( 12, 'end PrismSearch.search()' );
 
 	},
 

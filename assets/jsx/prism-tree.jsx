@@ -12,7 +12,7 @@ var PrismTree = React.createClass( {
 				meta    : false
 			},
 			search           : {
-				last    : '',
+				last    : null,
 				query   : ''
 			},
 			lockMeta         : PRISM.lockMeta,
@@ -533,6 +533,9 @@ var PrismTree = React.createClass( {
 
 		log( 11, 'beg PrismTree.loadBranch()' );
 
+		// TODO: Temp stop gap to prevent infinite loop from firing millions of AJAX calls
+		if ( this.props.data.status.current.type != 'normal' ) return;
+
 		this.changeStatus( 'loading', 'Loading ' + branch + ' data...' );
 
 		var url = PRISM.url.rest + branch + params;
@@ -611,7 +614,7 @@ var PrismTree = React.createClass( {
 			leaves : [], 
 			width  : this.state.width.current.branch,
 			search : this.state.search,
-			status : this.props.data.status
+			view   : PRISM.view.default
 		};
 
 		if ( this.hasActiveBranch() ) {

@@ -26,6 +26,11 @@ var PrismBranch = React.createClass( {
 
 	},
 
+	/**
+	 * The branch loads with no leaves and runs this function to check on loading the branch with leaves.
+	 * 
+	 * @return {[type]} [description]
+	 */
 	loadBranch: function() {
 
 		log( 11, 'beg PrismBranch.loadBranch()' );
@@ -39,7 +44,7 @@ var PrismBranch = React.createClass( {
 		var isNormal = branch != 'search';
 		var isSearch = branch == 'search' && data.search.query != '' && data.search.query != data.search.last;
 
-		var isEmpty  = _.isEmpty( data.leaves ) && data.status.current.type == 'normal';
+		var isEmpty  = _.isEmpty( data.leaves );
 
 		if ( branch == 'search' ) {
 			branch   = 'posts';
