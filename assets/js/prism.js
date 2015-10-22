@@ -973,9 +973,26 @@ var PrismBranch = React.createClass({
 
 		log(11, 'beg PrismBranch.componentDidUpdate()');
 
+		this.scrollLeaf();
+
 		this.loadBranch();
 
 		log(12, 'end PrismBranch.componentDidUpdate()');
+	},
+
+	scrollLeaf: function scrollLeaf() {
+		var data = this.props.data;
+
+		var activeLeafID = data.title + '/' + data.leaf;
+
+		var activeLeaf = document.getElementById(activeLeafID);
+		var offset = document.getElementById('prism-branch-header');
+
+		if (offset == null || activeLeaf == null) return;
+
+		offset = offset.offsetHeight + 10;
+
+		document.getElementById('prism-leaves').scrollTop = activeLeaf.offsetTop - offset;
 	},
 
 	/**
