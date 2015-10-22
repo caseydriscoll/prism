@@ -531,7 +531,7 @@ var PrismTree = React.createClass( {
 
 		log( 11, 'beg PrismTree.loadBranch()' );
 
-		this.changeStatus( 'loading', 'Loading ' + branch + ' data.' );
+		this.changeStatus( 'loading', 'Loading ' + branch + ' data...' );
 
 		var url = PRISM.url.rest + branch + params;
 
@@ -566,7 +566,7 @@ var PrismTree = React.createClass( {
 				else
 					state.branches[branch].view = PRISM.view.default;
 
-				this.changeStatus( 'success', 'Successfully loaded ' + branch + ' data.' );
+				this.changeStatus( 'success', 'Successfully loaded ' + branch + ' data!' );
 				this.changeStatus( 'normal', null );
 
 				this.setState( state );
@@ -588,7 +588,7 @@ var PrismTree = React.createClass( {
 			branch  : '',
 			width   : state.width.current.trunk,
 			search  : state.search,
-			status  : this.props.data.status.current,
+			status  : this.props.data.status,
 			rainbow : this.props.data.rainbowBar
 		};
 

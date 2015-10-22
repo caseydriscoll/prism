@@ -32,8 +32,7 @@ var PrismRainbowBar = React.createClass( {
 		);
 	}
 
-} ); 
-
+} );
 
 var PrismRainbowButton = React.createClass( {
 
@@ -42,19 +41,35 @@ var PrismRainbowButton = React.createClass( {
 		var data = this.props.data;
 		var func = this.props.func;
 
-		var classes = data.status.type;
+		var classes = data.showStatus ? data.status.type : null;
 
 		classes += data.rainbow ? ' active' : '';
 
-		return(
+		return (
 			<div id="prism-rainbow-button" className={classes} onClick={func.toggleRainbow}>
-				<i className="fa fa-play"></i>
-				<i className="fa fa-play"></i>
-				<i className="fa fa-play"></i>
-				<i className="fa fa-play"></i>
-				<i className="fa fa-play"></i>
-				<i className="fa fa-play"></i>
+				<i className="fa fa-play"></i><i className="fa fa-play"></i><i className="fa fa-play"></i>
+				<i className="fa fa-play"></i><i className="fa fa-play"></i><i className="fa fa-play"></i>
 			</div>
+		)
+
+	}
+
+} );
+
+
+var PrismRainbowStatus = React.createClass( {
+
+	render: function() {
+
+		var data = this.props.data;
+		var func = this.props.func;
+
+		var classes = data.showStatus ? 'show' : 'hide';
+
+		var status  = data.status;
+
+		return(
+			<div id="prism-rainbow-status" className={classes}>{status.message}</div>
 		)
 	}
 

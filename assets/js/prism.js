@@ -554,7 +554,7 @@ var PrismTree = React.createClass({
 
 		log(11, 'beg PrismTree.loadBranch()');
 
-		this.changeStatus('loading', 'Loading ' + branch + ' data.');
+		this.changeStatus('loading', 'Loading ' + branch + ' data...');
 
 		var url = PRISM.url.rest + branch + params;
 
@@ -585,7 +585,7 @@ var PrismTree = React.createClass({
 
 				if (branch in PRISM.view) state.branches[branch].view = PRISM.view[branch];else state.branches[branch].view = PRISM.view['default'];
 
-				this.changeStatus('success', 'Successfully loaded ' + branch + ' data.');
+				this.changeStatus('success', 'Successfully loaded ' + branch + ' data!');
 				this.changeStatus('normal', null);
 
 				this.setState(state);
@@ -605,7 +605,7 @@ var PrismTree = React.createClass({
 			branch: '',
 			width: state.width.current.trunk,
 			search: state.search,
-			status: this.props.data.status.current,
+			status: this.props.data.status,
 			rainbow: this.props.data.rainbowBar
 		};
 
@@ -801,7 +801,7 @@ var PrismTrunk = React.createClass({
 		return React.createElement(
 			'div',
 			{ id: 'prism-trunk', style: style, 'data-section': 'trunk' },
-			React.createElement(PrismSearch, { data: data, func: func }),
+			React.createElement(PrismSearchStatus, { data: data, func: func }),
 			React.createElement(PrismMenu, { data: data }),
 			React.createElement(PrismResizeBar, { data: data, func: func })
 		);
@@ -809,8 +809,53 @@ var PrismTrunk = React.createClass({
 
 });
 
-var PrismSearch = React.createClass({
-	displayName: 'PrismSearch',
+var PrismSearchStatus = React.createClass({
+	displayName: 'PrismSearchStatus',
+
+	timeout: null,
+
+	getInitialState: function getInitialState() {
+		var state = {
+			showStatus: false,
+			status: {
+				type: null,
+				message: null,
+				time: null
+			}
+		};
+
+		return state;
+	},
+
+	componentWillReceiveProps: function componentWillReceiveProps() {
+		var data = this.props.data;
+		var state = this.state;
+
+		var logs = data.status.log.length;
+
+		if (logs == 0) {
+			state.showStatus = false;
+			state.status = { type: null, message: null, time: null };
+		} else {
+			if (data.status.log[logs - 1].time == state.status.time) return;
+			state.showStatus = true;
+			state.status = data.status.log[logs - 1];
+		}
+
+		if (this.timeout != null) clearTimeout(this.timeout);
+
+		this.timeout = setTimeout(this.hide, PRISM.status.timeout);
+
+		this.setState(state);
+	},
+
+	hide: function hide() {
+		var state = this.state;
+
+		state.showStatus = false;
+
+		this.setState(state);
+	},
 
 	changeBranch: function changeBranch() {
 
@@ -843,10 +888,14 @@ var PrismSearch = React.createClass({
 		var focus = data.branch == 'search' ? true : false;
 		var classes = data.branch == 'search' ? 'active' : '';
 
+		var status = this.state;
+		status.rainbow = data.rainbow;
+
 		return React.createElement(
 			'div',
-			{ id: 'prism-search', className: classes },
-			React.createElement(PrismRainbowButton, { data: data, func: func }),
+			{ id: 'prism-search-status', className: classes },
+			React.createElement(PrismRainbowButton, { data: status, func: func }),
+			React.createElement(PrismRainbowStatus, { data: status, func: func }),
 			React.createElement('input', { type: 'text', placeholder: 'Search', defaultValue: value, onClick: this.changeBranch, onBlur: this.search, onFocus: this.autoSelect, autoFocus: focus })
 		);
 	}
@@ -1519,7 +1568,7 @@ var PrismRainbowButton = React.createClass({
 		var data = this.props.data;
 		var func = this.props.func;
 
-		var classes = data.status.type;
+		var classes = data.showStatus ? data.status.type : null;
 
 		classes += data.rainbow ? ' active' : '';
 
@@ -1532,6 +1581,27 @@ var PrismRainbowButton = React.createClass({
 			React.createElement("i", { className: "fa fa-play" }),
 			React.createElement("i", { className: "fa fa-play" }),
 			React.createElement("i", { className: "fa fa-play" })
+		);
+	}
+
+});
+
+var PrismRainbowStatus = React.createClass({
+	displayName: "PrismRainbowStatus",
+
+	render: function render() {
+
+		var data = this.props.data;
+		var func = this.props.func;
+
+		var classes = data.showStatus ? 'show' : 'hide';
+
+		var status = data.status;
+
+		return React.createElement(
+			"div",
+			{ id: "prism-rainbow-status", className: classes },
+			status.message
 		);
 	}
 
@@ -1692,6 +1762,7 @@ var Prism = React.createClass({
 				log: [],
 				current: {
 					type: 'normal',
+					time: new Date(),
 					message: null
 				}
 			},
@@ -1767,6 +1838,8 @@ var Prism = React.createClass({
 		log(11, 'beg Prism.changeStatus()');
 
 		var state = this.state;
+
+		status.time = new Date();
 
 		if (status.type != 'normal') state.status.log.push(status);
 

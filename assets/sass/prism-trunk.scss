@@ -4,15 +4,15 @@
 
 	border-right: $border;
 
-	#prism-search {
+	#prism-search-status {
 
 		display: block; position: relative;
 		width: 100%; height: $sub-header-height;
-		padding: 10px;
 
 		border-bottom: $border;
 
 		font-size: 24px;
+		overflow: hidden;
 
 		&.active {
 			background: $highlight;
@@ -21,8 +21,9 @@
 		}
 
 		input {
-			width: calc( 100% - 40px );
-			padding: 2px 10px; margin: 0 0 0 10px;
+			display: inline-block;
+			width: calc( 100% - 60px );
+			padding: 2px 10px; margin: 10px 0 0 50px;
 
 			border: $border;
 			border-color: $grey;

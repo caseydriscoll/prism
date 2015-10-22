@@ -32,11 +32,38 @@
 	}
 }
 
+#prism-rainbow-status {
+
+	display: block; position: absolute;
+	left: 0; right: 0;
+	top: 0; bottom: 0;
+
+	padding: 21px 0 0 50px;
+	font-size: 14px;
+
+	color: $white;
+
+	background: $dark;
+
+	&.hide {
+		display: block !important;
+		top: $sub-header-height;
+		transition: top $rainbow-time;
+	}
+
+}
+
+@keyframes rotation {
+	from {transform: rotate(0deg);}
+	to   {transform: rotate(359deg);}
+}
 
 #prism-rainbow-button {
 
-	display: inline-block; position: relative;
+	display: inline-block; position: absolute;
 	width: 30px; height: 30px;
+	left: 10px; top: 10px;
+	z-index: 100;
 
 	transform-origin: 50% 70%;
 
@@ -44,21 +71,6 @@
 	transition: transform $rainbow-time;
 
 	cursor: pointer;
-
-	&.loading { 
-		animation: rotation 2s infinite linear;
-
-		i.fa-play { color: $blue; }
-	}
-
-	&.success { 
-		i.fa-play { color: $green; }
-	}
-
-	@keyframes rotation {
-		from {transform: rotate(0deg);}
-		to   {transform: rotate(359deg);}
-	}
 
 	i.fa-play {
 		display: block; position: absolute;
@@ -68,7 +80,7 @@
 		cursor: pointer;
 
 		color: $grey;
-		border-left: 2px solid $white;
+		border-left: 2px solid transparent;
 
 		&:nth-of-type(1) { transform: rotate(    0deg ); left:  0px; bottom:  0px; }
 		&:nth-of-type(2) { transform: rotate(   60deg ); left:  5px; bottom:  8px; }
@@ -78,6 +90,16 @@
 		&:nth-of-type(6) { transform: rotate(  -60deg ); left:  5px; bottom: -8px; }
 	}
 
+	&.loading{ 
+		animation: rotation 2s infinite linear;
+
+		i.fa-play { color: $blue; }
+	}
+
+	&.success { 
+		i.fa-play { color: $green !important; }
+	}
+
 	&:hover,
 	&.active {
 
@@ -85,7 +107,7 @@
 		transition: transform .2s;
 
 		i.fa-play {
-			border-left: 2px solid $white;
+			border-left: 2px solid transparent;
 			transition: transform .2s;
 
 			&:nth-of-type(1) { transform: rotate(    0deg ); color: $red; }
@@ -96,4 +118,5 @@
 			&:nth-of-type(6) { transform: rotate(  -60deg ); color: $purple; }
 		}
 	}
+
 }

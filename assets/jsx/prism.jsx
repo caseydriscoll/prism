@@ -31,6 +31,7 @@ var Prism = React.createClass( {
 				log     : [],
 				current : {
 					type    : 'normal',
+					time    : new Date(),
 					message : null
 				}
 			},
@@ -112,6 +113,8 @@ var Prism = React.createClass( {
 		log( 11, 'beg Prism.changeStatus()' );
 
 		var state = this.state;
+
+		status.time = new Date();
 
 		if ( status.type != 'normal' )
 			state.status.log.push( status );
