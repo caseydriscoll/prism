@@ -23,6 +23,22 @@ class Prism {
 
 		$args = array(
 			'public' => true,
+			'label'  => 'Movies',
+			'show_in_rest' => true
+		);
+
+		register_post_type( 'movies', $args );
+
+		$args = array(
+			'public' => true,
+			'label'  => 'Actors',
+			'show_in_rest' => true
+		);
+
+		register_post_type( 'actors', $args );
+
+		$args = array(
+			'public' => true,
 			'label'  => 'Swatches',
 			'show_in_rest' => true
 		);
@@ -103,10 +119,12 @@ class Prism {
 	public static function localize() {
 
 		$branches = array(
-			array( 'title' => 'Posts',    'slug' => 'posts',    'icon' => 'fa-thumb-tack' ),
-			array( 'title' => 'Swatches', 'slug' => 'swatches', 'icon' => 'fa-sticky-note-o' ),
-			array( 'title' => 'Crayons',  'slug' => 'crayons',  ),
-			array( 'title' => 'Cities',   'slug' => 'cities',   'icon' => 'fa-map' ),
+			array( 'title' => 'Movies',    'slug' => 'movies',    'icon' => 'fa-film' ),
+			array( 'title' => 'Actors',    'slug' => 'actors',    'icon' => 'fa-group' ),
+			// array( 'title' => 'Posts',    'slug' => 'posts',    'icon' => 'fa-thumb-tack' ),
+			// array( 'title' => 'Swatches', 'slug' => 'swatches', 'icon' => 'fa-sticky-note-o' ),
+			// array( 'title' => 'Crayons',  'slug' => 'crayons',  ),
+			// array( 'title' => 'Cities',   'slug' => 'cities',   'icon' => 'fa-map' ),
 			array( 'title' => 'Media',    'slug' => 'media',    'icon' => 'fa-image' )
 		);
 

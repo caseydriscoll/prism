@@ -5,8 +5,8 @@ wp core install
 
 wp user meta update 1 show_admin_bar_front 'false'
 
-wp plugin activate prism rest-api
+wp plugin activate prism rest-api posts-to-posts
 
-wp option update blogdescription "A developer friendly, React & Backbone based plugin for fast, API centric WordPress application development"
+wp option update blogdescription "A developer friendly, React & Backbone based plugin for fast, REST API centric WordPress application development"
 
 wp rewrite structure '/%postname%'
