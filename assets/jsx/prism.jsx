@@ -35,7 +35,8 @@ var Prism = React.createClass( {
 					message : null
 				}
 			},
-			rainbowBar : false
+			rainbowBar : false,
+			userBar    : false
 		};
 
 		log( 12, 'end Prism.getInitialState()' );
@@ -108,6 +109,20 @@ var Prism = React.createClass( {
 
 	},
 
+	toggleUser: function() {
+
+		log( 11, 'beg Prism.toggleUser()' );
+
+		var state = this.state;
+
+		state.userBar = state.userBar ? false : true;
+
+		this.setState( state );
+
+		log( 12, 'end Prism.toggleUser()' );
+
+	},
+
 	changeStatus: function( status ) {
 
 		log( 11, 'beg Prism.changeStatus()' );
@@ -136,9 +151,12 @@ var Prism = React.createClass( {
 		var func = {};
 
 		func.changeStatus  = this.changeStatus;
+		func.toggleUser    = this.toggleUser;
 		func.toggleRainbow = this.toggleRainbow;
 
 		var classes = data.rainbowBar ? 'rainbow' : '';
+
+		classes += data.userBar ? ' user' : '';
 
 		log( 12, 'end Prism.render()' );
 
@@ -148,6 +166,7 @@ var Prism = React.createClass( {
 				<PrismHeader     auth={auth} data={data} func={func} />
 				<PrismTree       auth={auth} data={data} func={func} />
 				<PrismFooter     func={func} />
+				<PrismUserBar    data={data} />
 			</div>
 		);
 	}

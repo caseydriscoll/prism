@@ -92,6 +92,11 @@ window.onkeyup = function(e) {
 				stateChange = { 'rainbow' : true };
 			break;
 
+		case 85: // u - for user bar
+			if ( ! input ) 
+				stateChange = { 'user' : true };
+			break;
+
 		case 86: // v - for view
 			if ( ! input && key.mode == false )
 				PRISM.key.mode = 'v';

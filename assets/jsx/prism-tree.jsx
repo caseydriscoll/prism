@@ -51,6 +51,9 @@ var PrismTree = React.createClass( {
 			if ( 'rainbow'    in changeState )
 				func.toggleRainbow();
 
+			if ( 'user'    in changeState )
+				func.toggleUser();
+
 		};
 
 		this.initRouter();

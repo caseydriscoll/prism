@@ -21,7 +21,7 @@ var PrismHeader = React.createClass({
 					PRISM.title
 				)
 			),
-			React.createElement(PrismUserAccount, { data: data, auth: auth }),
+			React.createElement(PrismUserAccount, { data: data, auth: auth, func: func }),
 			React.createElement(
 				"span",
 				{ className: "description" },
@@ -39,6 +39,7 @@ var PrismUserAccount = React.createClass({
 
 		var auth = this.props.auth;
 		var data = this.props.data;
+		var func = this.props.func;
 
 		var url,
 		    icon = null;
@@ -53,7 +54,7 @@ var PrismUserAccount = React.createClass({
 
 		return React.createElement(
 			"a",
-			{ id: "prism-user-account", href: url },
+			{ id: "prism-user-account", onClick: func.toggleUser },
 			icon
 		);
 	}
@@ -110,6 +111,8 @@ var PrismTree = React.createClass({
 			if ('addLeaf' in changeState) _this.addLeaf();
 
 			if ('rainbow' in changeState) func.toggleRainbow();
+
+			if ('user' in changeState) func.toggleUser();
 		};
 
 		this.initRouter();
@@ -1623,6 +1626,20 @@ var PrismRainbowStatus = React.createClass({
 
 });
 
+"use strict";
+
+var PrismUserBar = React.createClass({
+	displayName: "PrismUserBar",
+
+	componentDidUpdate: function componentDidUpdate() {
+		window.scrollBy(500, 0);
+	},
+
+	render: function render() {
+		return React.createElement("div", { id: "prism-user-bar" });
+	}
+});
+
 'use strict';
 
 window.onkeyup = function (e) {
@@ -1714,6 +1731,11 @@ window.onkeyup = function (e) {
 			if (!input) stateChange = { 'rainbow': true };
 			break;
 
+		case 85:
+			// u - for user bar
+			if (!input) stateChange = { 'user': true };
+			break;
+
 		case 86:
 			// v - for view
 			if (!input && key.mode == false) PRISM.key.mode = 'v';
@@ -1782,7 +1804,8 @@ var Prism = React.createClass({
 					message: null
 				}
 			},
-			rainbowBar: false
+			rainbowBar: false,
+			userBar: false
 		};
 
 		log(12, 'end Prism.getInitialState()');
@@ -1849,6 +1872,19 @@ var Prism = React.createClass({
 		log(12, 'end Prism.toggleRainbow()');
 	},
 
+	toggleUser: function toggleUser() {
+
+		log(11, 'beg Prism.toggleUser()');
+
+		var state = this.state;
+
+		state.userBar = state.userBar ? false : true;
+
+		this.setState(state);
+
+		log(12, 'end Prism.toggleUser()');
+	},
+
 	changeStatus: function changeStatus(status) {
 
 		log(11, 'beg Prism.changeStatus()');
@@ -1875,9 +1911,12 @@ var Prism = React.createClass({
 		var func = {};
 
 		func.changeStatus = this.changeStatus;
+		func.toggleUser = this.toggleUser;
 		func.toggleRainbow = this.toggleRainbow;
 
 		var classes = data.rainbowBar ? 'rainbow' : '';
+
+		classes += data.userBar ? ' user' : '';
 
 		log(12, 'end Prism.render()');
 
@@ -1887,7 +1926,8 @@ var Prism = React.createClass({
 			React.createElement(PrismRainbowBar, { data: data }),
 			React.createElement(PrismHeader, { auth: auth, data: data, func: func }),
 			React.createElement(PrismTree, { auth: auth, data: data, func: func }),
-			React.createElement(PrismFooter, { func: func })
+			React.createElement(PrismFooter, { func: func }),
+			React.createElement(PrismUserBar, { data: data })
 		);
 	}
 

@@ -1,3 +1,6 @@
+body {
+  overflow-y: hidden; }
+
 body > *:not(#prism) {
   display: none; }
 
@@ -147,6 +150,35 @@ body > *:not(#prism) {
       #prism-rainbow-button:hover i.fa-play:nth-of-type(6), #prism-rainbow-button.active i.fa-play:nth-of-type(6) {
         transform: rotate(-60deg);
         color: #6b7ee4; }
+
+#prism-user-bar {
+  display: none; }
+
+#prism.user {
+  width: 100%;
+  right: 20%;
+  transition: right 0.2s; }
+  #prism.user #prism-user-bar {
+    display: block;
+    position: absolute;
+    width: 20%;
+    height: 100vh;
+    right: -20%;
+    top: 0;
+    padding: 5px 10px;
+    border: 0;
+    color: #dddddd;
+    background: #333333; }
+    #prism.user #prism-user-bar h3 {
+      color: #ffffff; }
+    #prism.user #prism-user-bar ul#prism-status-log {
+      padding: 0; }
+      #prism.user #prism-user-bar ul#prism-status-log li {
+        padding: 5px 0;
+        color: #ffffff;
+        font-size: 18px; }
+        #prism.user #prism-user-bar ul#prism-status-log li i.fa-li {
+          top: 0.5em !important; }
 
 #prism-header {
   display: block;

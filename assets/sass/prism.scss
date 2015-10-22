@@ -18,24 +18,26 @@ $border: 2px solid $black;
 $header-height: 80px;
 $sub-header-height: 65px;
 
-$rainbow-time: .2s;
-$rainbow-width: 20%;
+$bar-time: .2s;
+$bar-width: 20%;
 
 $metapanel-width: 300px;
 
+body { overflow-y: hidden; }
 body > *:not(#prism) { display: none; }
 
 #prism {
 	display: block; position: relative;
 	width: 100%; height: 100vh;
 	left: 0;
-	transition: left $rainbow-time;
+	transition: left $bar-time;
 
 	* { box-sizing: border-box; }
 }
 
 @import './prism-utils.scss';
 @import './prism-rainbow.scss';
+@import './prism-user.scss';
 
 @import './prism-header.scss';
 

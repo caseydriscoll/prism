@@ -1,0 +1,37 @@
+#prism-user-bar { display: none; }
+
+#prism.user {
+	width: 100%;
+
+	right: $bar-width;
+	transition: right $bar-time;
+
+	#prism-user-bar {
+		display: block; position: absolute;
+		width: $bar-width; height: 100vh;
+		right: (-$bar-width); top: 0;
+		padding: 5px 10px;
+
+		border: 0;
+		color: $light;
+		background: $dark;
+
+		h3 {
+			color: $white;
+		}
+
+		ul#prism-status-log {
+			padding: 0;
+
+			li {
+				padding: 5px 0;
+				color: $white;
+				font-size: 18px;
+
+				i.fa-li {
+					top: 0.5em !important;
+				}
+			}
+		}
+	}
+}

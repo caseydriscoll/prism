@@ -11,7 +11,7 @@ var PrismHeader = React.createClass( {
 				<a href={PRISM.url.root}>
 					<h1 id="prism-title" className="title">{PRISM.title}</h1>
 				</a>
-				<PrismUserAccount data={data} auth={auth} />
+				<PrismUserAccount data={data} auth={auth} func={func} />
 				<span className="description">{PRISM.description}</span>
 			</header>
 		);
@@ -26,6 +26,7 @@ var PrismUserAccount = React.createClass( {
 
 		var auth = this.props.auth;
 		var data = this.props.data;
+		var func = this.props.func;
 
 		var url, icon = null;
 
@@ -39,7 +40,7 @@ var PrismUserAccount = React.createClass( {
 
 		return (
 
-			<a id="prism-user-account" href={url}>
+			<a id="prism-user-account" onClick={func.toggleUser}>
 				{icon}
 			</a>
 
