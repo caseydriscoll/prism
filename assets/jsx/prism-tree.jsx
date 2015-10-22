@@ -141,8 +141,17 @@ var PrismTree = React.createClass( {
 			routes[branch.slug]          = branch.slug;
 			routes[branch.slug + "/:id"] = method;
 
-			routerConfig[branch.slug]    = function()   { this.changeBranch(branch.slug)   }.bind( this );
-			routerConfig[method]         = function(id) { this.changeLeaf(branch.slug, id) }.bind( this );
+			branch.connections.map( function( connection, i ) {
+
+				var nested_method = "get_" + connection + "_of_" + branch.slug;
+
+				routes[branch.slug + "/:id/" + connection] = nested_method;
+				routerConfig[nested_method] = function(id) { this.changeNested(branch.slug, id, connection) }.bind( this );
+
+			}, this );
+
+			routerConfig[branch.slug]     = function()   { this.changeBranch(branch.slug)   }.bind( this );
+			routerConfig[method]          = function(id) { this.changeLeaf(branch.slug, id) }.bind( this );
 
 		}, this );
 
@@ -150,6 +159,8 @@ var PrismTree = React.createClass( {
 		routerConfig.search = function() { this.changeSearch() }.bind( this );
 
 		routerConfig.routes = routes;
+
+		log( 1000, routes );
 
 		var Router = Backbone.Router.extend( routerConfig );
 
@@ -290,6 +301,24 @@ var PrismTree = React.createClass( {
 
 		log( 12, 'end PrismTree.changeLeaf()' );
 
+	},
+
+	changeNested: function( branch, leaf, connection ) {
+		log( 11, 'beg PrismTree.changeNested()' );
+
+		var state = this.state;
+
+		console.log( branch, leaf, connection );
+
+		state.active.branch = branch;
+		state.active.leaf   = leaf;
+		state.active.meta   = this.hasActiveMeta();
+
+		if ( ! ( branch in state.branches ) ) state.branches[branch] = { leaves : {} };
+
+		this.setState( state );
+
+		log( 12, 'end PrismTree.changeNested()' );
 	},
 
 	/**

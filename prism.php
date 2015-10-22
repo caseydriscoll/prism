@@ -186,8 +186,18 @@ class Prism {
 	public static function localize() {
 
 		$branches = array(
-			array( 'title' => 'Movies',    'slug' => 'movies',    'icon' => 'fa-film' ),
-			array( 'title' => 'Actors',    'slug' => 'actors',    'icon' => 'fa-group' ),
+			array(
+				'title'       => 'Movies',
+				'slug'        => 'movies',
+				'icon'        => 'fa-film',
+				'connections' => array( 'actors' )
+			),
+			array(
+				'title' => 'Actors',
+				'slug' => 'actors',
+				'icon' => 'fa-group',
+				'connections' => array( 'movies' )
+			),
 			// array( 'title' => 'Posts',    'slug' => 'posts',    'icon' => 'fa-thumb-tack' ),
 			// array( 'title' => 'Swatches', 'slug' => 'swatches', 'icon' => 'fa-sticky-note-o' ),
 			// array( 'title' => 'Crayons',  'slug' => 'crayons',  ),
