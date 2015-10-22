@@ -19,6 +19,8 @@ class Prism {
 
 		add_action( 'p2p_init', 'Prism::connections' );
 
+		add_action( 'rest_api_init', 'Prism::append_p2p_connections' );
+
 	}
 
 	public static function sample_types() {
@@ -83,6 +85,59 @@ class Prism {
 
 	}
 
+	public static function append_p2p_connections() {
+
+		$connections = P2P_Connection_Type_Factory::get_all_instances();
+
+		foreach( $connections as $name => $connection ) {
+			$args = array(
+							'get_callback'    => 'Prism::get_connections',
+							'update_callback' => 'Prism::set_connection',
+							'schema'          => null
+						);
+
+			$side = $connection->side;
+
+			register_api_field( $side['from']->query_vars['post_type'][0], $side['to']->query_vars['post_type'][0], $args );
+		}
+
+	}
+
+	public static function get_connections( $object, $field_name, $request ) {
+
+		$connections = P2P_Connection_Type_Factory::get_all_instances();
+
+		$args = '';
+
+		foreach( $connections as $name => $connection ) {
+
+			$side = $connection->side;
+
+			if ( $side['from']->query_vars['post_type'][0] == $field_name || 
+					 $side[  'to']->query_vars['post_type'][0] == $field_name ) {
+
+				$args = array(
+									'connected_type' => $name,
+									'connected_items' => $object,
+									'nopaging' => true,
+								);
+
+				continue;
+			}
+
+		}
+
+		$posts = new WP_Query( $args );
+
+		$data  = [];
+
+		foreach ( $posts->posts as $post ) {
+			array_push( $data, $post->ID );
+		}
+
+		return $data;
+
+	}
 
 	public static function load_assets() {
 
@@ -152,50 +207,50 @@ class Prism {
 
 		$data = array(
 			'debug'         => array(
-			    'level'           => 10,
-			    'ignore'          => array(
+					'level'           => 10,
+					'ignore'          => array(
 
-			                         )
-			                   ),
+															 )
+												 ),
 			'title'         => get_bloginfo( 'title' ),
 			'description'   => get_bloginfo( 'description' ),
 			'nonce'         => wp_create_nonce( 'wp_rest' ),
 			'url'           => array(
-			    'root'            => get_bloginfo( 'url' ),
-			    'rest'            => get_bloginfo( 'url' ) . '/wp-json/wp/v2/',
-			    'login'           => wp_login_url()
-			                   ),
+					'root'            => get_bloginfo( 'url' ),
+					'rest'            => get_bloginfo( 'url' ) . '/wp-json/wp/v2/',
+					'login'           => wp_login_url()
+												 ),
 			'gravatar'      => array(
-			    'width'           => 48,
-			    'height'          => 48
-			                   ),
+					'width'           => 48,
+					'height'          => 48
+												 ),
 			'view'          => array(
-			    'posts'           => 'list',
-			    'media'           => 'grid',
-			    'search'          => 'list',
-			    'default'         => 'grid'
-			                   ),
+					'posts'           => 'list',
+					'media'           => 'grid',
+					'search'          => 'list',
+					'default'         => 'grid'
+												 ),
 			'branches'      => $branches,
 			'meta'          => $meta,
 			'lockMeta'      => 'unlock',
 			'newleaf'       => false,
 			'key'           => array(
-			    'mode'            => false,
-			    'last'            => array( 'code' =>  0, 'time' => 0   ),
-			    'double'          => array( 'code' => 32, 'time' => 200 )
-			                   ),
+					'mode'            => false,
+					'last'            => array( 'code' =>  0, 'time' => 0   ),
+					'double'          => array( 'code' => 32, 'time' => 200 )
+												 ),
 			'rainbowbar'    => array(
-			    'name'            => 'Rainbow Bar!'
-			                   ),
+					'name'            => 'Rainbow Bar!'
+												 ),
 			'width'         => array( 
-			    'default'         => array( 'trunk' => 17, 'branch' => 33, 'leaf' => 35, 'meta' =>  15 ),
-			    'current'         => array( 'trunk' => 17, 'branch' => 33, 'leaf' => 35, 'meta' =>  15 ),
-			    'minimum'         => array( 'trunk' => 10, 'branch' => 25, 'leaf' => 30, 'meta' =>  10 ),
-			    'maximum'         => array( 'trunk' => 30, 'branch' => 40, 'leaf' => 65, 'meta' =>  30 )
-			                   ),
+					'default'         => array( 'trunk' => 17, 'branch' => 33, 'leaf' => 35, 'meta' =>  15 ),
+					'current'         => array( 'trunk' => 17, 'branch' => 33, 'leaf' => 35, 'meta' =>  15 ),
+					'minimum'         => array( 'trunk' => 10, 'branch' => 25, 'leaf' => 30, 'meta' =>  10 ),
+					'maximum'         => array( 'trunk' => 30, 'branch' => 40, 'leaf' => 65, 'meta' =>  30 )
+												 ),
 			'status'        => array(
-			    'timeout'         => 2000
-			                   )
+					'timeout'         => 2000
+												 )
 		);
 
 		return $data;
