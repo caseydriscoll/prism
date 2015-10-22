@@ -17,6 +17,8 @@ class Prism {
 
 		add_action( 'init', 'Prism::sample_types' );
 
+		add_action( 'p2p_init', 'Prism::connections' );
+
 	}
 
 	public static function sample_types() {
@@ -43,7 +45,7 @@ class Prism {
 			'show_in_rest' => true
 		);
 
-		register_post_type( 'swatches', $args );
+		// register_post_type( 'swatches', $args );
 
 		$args = array(
 			'public' => true,
@@ -51,7 +53,7 @@ class Prism {
 			'show_in_rest' => true
 		);
 
-		register_post_type( 'crayons', $args );
+		// register_post_type( 'crayons', $args );
 
 		$args = array(
 			'public' => true,
@@ -59,7 +61,7 @@ class Prism {
 			'show_in_rest' => true
 		);
 
-		register_post_type( 'cities', $args );
+		// register_post_type( 'cities', $args );
 
 		$args = array(
 			'public' => true,
@@ -67,7 +69,17 @@ class Prism {
 			'show_in_rest' => true
 		);
 
-		register_post_type( 'birds', $args );
+		// register_post_type( 'birds', $args );
+
+	}
+
+	public static function connections() {
+
+		p2p_register_connection_type( array(
+			'name' => 'movies_to_actors',
+			'from' => 'movies',
+			'to'   => 'actors'
+		) );
 
 	}
 
@@ -125,7 +137,7 @@ class Prism {
 			// array( 'title' => 'Swatches', 'slug' => 'swatches', 'icon' => 'fa-sticky-note-o' ),
 			// array( 'title' => 'Crayons',  'slug' => 'crayons',  ),
 			// array( 'title' => 'Cities',   'slug' => 'cities',   'icon' => 'fa-map' ),
-			array( 'title' => 'Media',    'slug' => 'media',    'icon' => 'fa-image' )
+			// array( 'title' => 'Media',    'slug' => 'media',    'icon' => 'fa-image' )
 		);
 
 		$meta = array(
