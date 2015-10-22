@@ -925,13 +925,15 @@ var PrismMenu = React.createClass({
 
 			var classes = branch.slug == this.props.data.branch ? 'active' : '';
 
+			var iconClasses = branch.icon == null ? "fa fw fa-thumb-tack" : "fa fw " + branch.icon;
+
 			return React.createElement(
 				'li',
 				{ key: i },
 				React.createElement(
 					'a',
 					{ href: '/#/' + branch.slug, id: branch.slug, className: classes, 'data-slug': branch.slug },
-					React.createElement('i', { className: 'fa fa-thumb-tack' }),
+					React.createElement('i', { className: iconClasses }),
 					branch.title
 				)
 			);
