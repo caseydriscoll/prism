@@ -270,7 +270,7 @@ body > *:not(#prism) {
           border-top: none; }
         #prism-trunk menu ul li a {
           display: block;
-          padding: 20px;
+          padding: 20px 15px;
           color: #808080;
           font-size: 24px;
           font-family: 'Source Code Pro', sans-serif;
@@ -279,6 +279,8 @@ body > *:not(#prism) {
           border-top: 2px solid #000000;
           border-bottom: 2px solid #000000;
           border-color: transparent; }
+          #prism-trunk menu ul li a i {
+            padding: 0 20px 0 1px; }
           #prism-trunk menu ul li a:hover {
             background: #dddddd; }
           #prism-trunk menu ul li a.active {

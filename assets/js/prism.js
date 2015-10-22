@@ -931,6 +931,7 @@ var PrismMenu = React.createClass({
 				React.createElement(
 					'a',
 					{ href: '/#/' + branch.slug, id: branch.slug, className: classes, 'data-slug': branch.slug },
+					React.createElement('i', { className: 'fa fa-thumb-tack' }),
 					branch.title
 				)
 			);
