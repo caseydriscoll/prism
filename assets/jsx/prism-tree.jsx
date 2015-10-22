@@ -281,6 +281,8 @@ var PrismTree = React.createClass( {
 		state.active.leaf   = leaf;
 		state.active.meta   = this.hasActiveMeta();
 
+		if ( ! ( branch in state.branches ) ) state.branches[branch] = { leaves : {} };
+
 		this.setState( state );
 
 		log( 12, 'end PrismTree.changeLeaf()' );
