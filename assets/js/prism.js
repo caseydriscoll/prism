@@ -212,8 +212,6 @@ var PrismTree = React.createClass({
 
 		routerConfig.routes = routes;
 
-		log(1000, routes);
-
 		var Router = Backbone.Router.extend(routerConfig);
 
 		new Router();
@@ -292,6 +290,8 @@ var PrismTree = React.createClass({
 			if (state.lockMeta == 'lock' || state.branches[branch].leaves[leaf].metapanel == 'open') meta = true;
 		}
 
+		console.log(meta);
+
 		log(2, '------end PrismTree.hasActiveMeta()');
 
 		return meta;
@@ -351,9 +351,7 @@ var PrismTree = React.createClass({
 
 		var state = this.state;
 
-		console.log(branch, leaf, connection);
-
-		state.active.branch = branch;
+		state.active.branch = connection;
 		state.active.leaf = leaf;
 		state.active.meta = this.hasActiveMeta();
 
@@ -596,6 +594,8 @@ var PrismTree = React.createClass({
 
 		var url = PRISM.url.rest + branch + params;
 
+		var requestedBranch = branch;
+
 		jQuery.ajax({
 			method: 'GET',
 			url: url,
@@ -604,7 +604,7 @@ var PrismTree = React.createClass({
 				log(10, 'success PrismTree.loadBranch()');
 
 				var state = this.state;
-				var branch = this.state.active.branch;
+				var branch = state.active.branch == 'search' ? state.active.branch : requestedBranch;
 
 				var leaves = {};
 
@@ -709,23 +709,59 @@ var PrismTree = React.createClass({
 
 		log(1, '---beg PrismTree.metaData()');
 
-		var metaData = {};
+		var metaData = { connections: [] };
 
 		var branch = this.state.active.branch;
 		var leaf = this.state.active.leaf;
 
 		if (this.hasActiveBranch()) {
 
-			branch = this.state.branches[branch];
+			var branches = this.state.branches;
+			var leaves = branches[branch].leaves;
 
 			if (this.hasActiveLeaf()) {
 
 				PRISM.meta['default'].map(function (key, i) {
-					metaData[key] = branch.leaves[leaf][key];
+					metaData[key] = leaves[leaf][key];
+				}, this);
+
+				PRISM.branches.map(function (b, i) {
+
+					if (b.slug == branch) {
+
+						metaData.connections = b.connections;
+
+						b.connections.map(function (connection, i) {
+
+							// An array of post_ids in another branch
+							// (actor ids in the actor branch)
+							var keys = leaves[leaf][connection];
+
+							metaData[connection] = {};
+
+							keys.map(function (key, i) {
+								metaData[connection][key] = {};
+							});
+
+							var connectionBranch = this.state.branches[connection];
+
+							if (connectionBranch == null) {
+
+								this.loadBranch(connection, '?filter[posts_per_page]=-1');
+								metaData[connection] = keys;
+							} else {
+
+								keys.map(function (key, i) {
+									metaData[connection][key]['name'] = branches[connection].leaves[key].title.rendered;
+								});
+							}
+						}, this);
+					}
 				}, this);
 			}
 		}
 
+		metaData.branch = branch;
 		metaData.width = this.state.width.current.meta;
 		metaData.metaActive = this.state.active.meta;
 		metaData.lockMeta = this.state.lockMeta;
@@ -1410,6 +1446,8 @@ var PrismMeta = React.createClass({
 
 	render: function render() {
 
+		log(11, 'beg PrismMeta.render()');
+
 		var auth = this.props.auth;
 		var data = this.props.data;
 		var func = this.props.func;
@@ -1424,7 +1462,13 @@ var PrismMeta = React.createClass({
 			return React.createElement(PrismMetaInfo, { auth: auth, data: data[key], func: func, key: i, label: key });
 		}, this);
 
+		var renderConnections = data.connections.map(function (key, i) {
+			return React.createElement(PrismMetaConnection, { auth: auth, data: data[key], func: func, key: i, label: key });
+		}, this);
+
 		var style = { 'width': data.width + '%' };
+
+		log(12, 'end PrismMeta.render()');
 
 		return React.createElement(
 			'div',
@@ -1442,7 +1486,8 @@ var PrismMeta = React.createClass({
 			React.createElement(
 				'ul',
 				{ id: 'prism-meta-info' },
-				renderMetaInfo
+				renderMetaInfo,
+				renderConnections
 			)
 		);
 	}
@@ -1505,6 +1550,48 @@ var PrismMetaInfo = React.createClass({
 			React.createElement(
 				'span',
 				{ onClick: this.toggleEdit },
+				renderData
+			)
+		);
+	}
+
+});
+
+var PrismMetaConnection = React.createClass({
+	displayName: 'PrismMetaConnection',
+
+	render: function render() {
+
+		log(11, 'beg PrismMetaConnection.render()');
+
+		var data = this.props.data;
+		var func = this.props.func;
+
+		var label = this.props.label;
+
+		var renderData = Object.keys(data).map(function (item, i) {
+			var href = "/#/" + label + "/" + item + "/";
+
+			return React.createElement(
+				'a',
+				{ key: i, href: href },
+				data[item].name
+			);
+		});
+
+		log(12, 'end PrismMetaConnection.render()');
+
+		return React.createElement(
+			'li',
+			{ key: label, className: 'connections' },
+			React.createElement(
+				'h4',
+				null,
+				label + ':'
+			),
+			React.createElement(
+				'span',
+				null,
 				renderData
 			)
 		);

@@ -529,3 +529,18 @@ body > *:not(#prism) {
           cursor: pointer; }
         #prism-meta ul#prism-meta-info li span input {
           width: 100%; }
+        #prism-meta ul#prism-meta-info li span a {
+          display: inline-block;
+          position: relative;
+          padding: 3px 5px;
+          margin: 3px;
+          border: 1px solid #333333;
+          border-radius: 3px;
+          background-color: #dddddd;
+          text-decoration: none;
+          color: #333333;
+          cursor: pointer; }
+          #prism-meta ul#prism-meta-info li span a:hover {
+            color: #000000;
+            border-color: #000000;
+            background-color: #1ab7d9; }

@@ -196,7 +196,7 @@ class Prism {
 				'title' => 'Actors',
 				'slug' => 'actors',
 				'icon' => 'fa-group',
-				'connections' => array( 'movies' )
+				'connections' => array()
 			),
 			// array( 'title' => 'Posts',    'slug' => 'posts',    'icon' => 'fa-thumb-tack' ),
 			// array( 'title' => 'Swatches', 'slug' => 'swatches', 'icon' => 'fa-sticky-note-o' ),
@@ -242,7 +242,7 @@ class Prism {
 												 ),
 			'branches'      => $branches,
 			'meta'          => $meta,
-			'lockMeta'      => 'unlock',
+			'lockMeta'      => 'lock',
 			'newleaf'       => false,
 			'key'           => array(
 					'mode'            => false,

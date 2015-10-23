@@ -24,6 +24,8 @@ var PrismMeta = React.createClass( {
 
 	render: function() {
 
+		log( 11, 'beg PrismMeta.render()' );
+
 		var auth = this.props.auth;
 		var data = this.props.data;
 		var func = this.props.func;
@@ -41,7 +43,15 @@ var PrismMeta = React.createClass( {
 
 		}, this );
 
+		var renderConnections = data.connections.map( function( key, i ) {
+				return (
+					<PrismMetaConnection auth={auth} data={data[key]} func={func} key={i} label={key} />
+				)
+		}, this );
+
 		var style = { 'width' : data.width + '%' };
+
+		log( 12, 'end PrismMeta.render()' );
 
 		return (
 			<div id="prism-meta" style={style}>
@@ -51,6 +61,7 @@ var PrismMeta = React.createClass( {
 				</header>
 				<ul id="prism-meta-info">
 					{renderMetaInfo}
+					{renderConnections}
 				</ul>
 			</div>
 		)
@@ -105,6 +116,37 @@ var PrismMetaInfo = React.createClass( {
 			<li key={label}>
 				<h4>{label + ':'}</h4>
 				<span onClick={this.toggleEdit}>
+					{renderData}
+				</span>
+			</li>
+		)
+	}
+
+} );
+
+var PrismMetaConnection = React.createClass( {
+
+	render: function() {
+
+		log( 11, 'beg PrismMetaConnection.render()' );
+
+		var data = this.props.data;
+		var func = this.props.func;
+
+		var label = this.props.label;
+
+		var renderData = Object.keys( data ).map( function( item, i ) {
+			var href = "/#/" + label + "/" + item + "/";
+
+			return ( <a key={i} href={href}>{data[item].name}</a> );
+		} )
+
+		log( 12, 'end PrismMetaConnection.render()' );
+
+		return (
+			<li key={label} className='connections'>
+				<h4>{label + ':'}</h4>
+				<span>
 					{renderData}
 				</span>
 			</li>

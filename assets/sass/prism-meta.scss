@@ -71,6 +71,23 @@
 					width: 100%;
 				}
 
+				a {
+					display: inline-block; position: relative;
+					padding: 3px 5px; margin: 3px;
+					border: 1px solid $dark;
+					border-radius: 3px;
+					background-color: $light;
+					text-decoration: none;
+					color: $dark;
+					cursor: pointer;
+
+					&:hover {
+						color: $black;
+						border-color: $black;
+						background-color: $highlight;
+					}
+				}
+
 			}
 		}
 
