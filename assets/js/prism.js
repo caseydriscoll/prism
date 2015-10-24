@@ -693,7 +693,8 @@ var PrismTree = React.createClass({
 		// this.changeStatus( 'loading', 'Loading ' + nestedBranch + ' data!' );
 
 		var params = '?filter[posts_per_page]=-1';
-		params += '&filter[connected_type]=' + nestedBranch;
+		params += '&filter[connected_type]=' + branch + '_to_' + nestedBranch;
+		params += '&filter[connected_id]=' + leaf;
 
 		var request = {
 			url: PRISM.url.rest + branch + params,
@@ -764,7 +765,7 @@ var PrismTree = React.createClass({
 
 		PRISM.ajax.status = 'getting';
 
-		// log( request );
+		log(request);
 
 		jQuery.ajax({
 			method: 'GET',

@@ -120,7 +120,7 @@ class Prism {
 
 	public static function override_query_vars( $args ) {
 
-		array_push( $args, 'post_type', 'connected_type' );
+		array_push( $args, 'post_type', 'connected_type', 'connected_items', 'nopaging' );
 
 		return $args;
 	}
@@ -130,10 +130,35 @@ class Prism {
 		if ( array_key_exists( 's', $args ) )
 			$args['post_type'] = 'any';
 
+
+		if ( array_key_exists( 'connected_id', $args ) ) {
+
+			$query = array(
+			           'p'         => $args['connected_id'],
+			           'post_type' => 'any'
+			         );
+
+			$connected_items = new WP_Query( $query );
+
+			$connected_items->the_post();
+
+			// print_r( get_post() ); die();
+
+			$args['nopaging']        = true;
+			$args['connected_items'] = get_post();
+
+			wp_reset_postdata();
+
+			// print_r( $args ); die();
+
+		}
+
 		return $args;
 	}
 
 	public static function get_connections( $object, $field_name, $request ) {
+
+		// return $object;
 
 		$connections = P2P_Connection_Type_Factory::get_all_instances();
 
