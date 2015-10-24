@@ -356,11 +356,11 @@ var PrismTree = React.createClass({
 		return meta;
 	},
 
-	changeStatus: function changeStatus(type, message) {
+	changeStatus: function changeStatus(status) {
 
 		log(11, 'beg PrismTree.changeStatus()');
 
-		this.props.func.changeStatus({ type: type, message: message });
+		this.props.func.changeStatus(status);
 
 		log(12, 'end PrismTree.changeStatus()');
 	},
@@ -698,14 +698,13 @@ var PrismTree = React.createClass({
 
 		log(11, 'beg PrismTree.loadBranch()');
 
-		// this.changeStatus( 'loading', 'Loading ' + branch + ' data!' );
-
 		var params = '?filter[posts_per_page]=-1';
 
 		var request = {
 			url: PRISM.url.rest + branch + params,
 			callback: this.unloadBranch,
-			branch: branch
+			branch: branch,
+			status: { type: 'loading', message: 'Loading ' + branch + ' data...' }
 		};
 
 		this.queueAJAX(request);
@@ -719,15 +718,14 @@ var PrismTree = React.createClass({
 
 		var state = this.state;
 
-		// this.changeStatus( 'loading', 'Searching for "' + state.search.query + '" data!' );
-
 		var params = '?filter[posts_per_page]=-1';
 		params += '&filter[s]=' + state.search.query;
 
 		var request = {
 			url: PRISM.url.rest + 'posts' + params,
 			callback: this.unloadBranch,
-			branch: 'search'
+			branch: 'search',
+			status: { type: 'loading', message: 'Searching for "' + state.search.query + '" data!' }
 		};
 
 		this.queueAJAX(request);
@@ -778,8 +776,8 @@ var PrismTree = React.createClass({
 
 		if (request.branch in PRISM.view) state.branches[request.branch].view = PRISM.view[request.branch];else state.branches[request.branch].view = PRISM.view['default'];
 
-		this.changeStatus('success', 'Successfully loaded ' + request.branch + ' data!');
-		this.changeStatus('normal', null);
+		this.changeStatus({ type: 'success', message: 'Successfully loaded ' + request.branch + ' data!' });
+		this.changeStatus({ type: 'normal', message: null });
 
 		this.setState(state);
 
@@ -815,6 +813,8 @@ var PrismTree = React.createClass({
 		log(11, 'beg PrismTree.getData()');
 
 		PRISM.ajax.status = 'getting';
+
+		this.changeStatus(request.status);
 
 		log(request);
 
@@ -2247,6 +2247,8 @@ var Prism = React.createClass({
 		log(11, 'beg Prism.changeStatus()');
 
 		var state = this.state;
+
+		log(status);
 
 		status.time = new Date();
 

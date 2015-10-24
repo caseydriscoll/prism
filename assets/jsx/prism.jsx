@@ -129,6 +129,8 @@ var Prism = React.createClass( {
 
 		var state = this.state;
 
+		log( status );
+
 		status.time = new Date();
 
 		if ( status.type != 'normal' )
