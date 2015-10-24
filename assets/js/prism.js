@@ -75,7 +75,8 @@ var PrismTree = React.createClass({
 			active: {
 				branch: null,
 				leaf: null,
-				meta: false
+				meta: false,
+				nested: null
 			},
 			search: {
 				last: null,
@@ -118,6 +119,24 @@ var PrismTree = React.createClass({
 		this.initRouter();
 
 		log(12, 'end PrismTree.componentWillMount()');
+	},
+
+	componentDidMount: function componentDidMount() {
+
+		log(11, 'beg PrismTree.componentDidMount()');
+
+		if (PRISM.ajax.queue.length > 0 && PRISM.ajax.status == 'done') this.getData(PRISM.ajax.queue[0]);
+
+		log(12, 'end PrismTree.componentDidMount()');
+	},
+
+	componentDidUpdate: function componentDidUpdate() {
+
+		log(11, 'beg PrismTree.componentDidUpdate()');
+
+		if (PRISM.ajax.queue.length > 0 && PRISM.ajax.status == 'done') this.getData(PRISM.ajax.queue[0]);
+
+		log(12, 'end PrismTree.componentDidUpdate()');
 	},
 
 	move: function move(direction) {
@@ -193,7 +212,7 @@ var PrismTree = React.createClass({
 
 				routes[branch.slug + "/:id/" + connection] = nested_method;
 				routerConfig[nested_method] = (function (id) {
-					this.changeNested(branch.slug, id, connection);
+					this.changeNestedBranch(branch.slug, id, connection);
 				}).bind(this);
 			}, this);
 
@@ -235,6 +254,19 @@ var PrismTree = React.createClass({
 		if (this.state.active.branch !== null && this.state.active.branch in this.state.branches) hasActiveBranch = true;
 
 		log(2, '------end PrismTree.hasActiveBranch()');
+
+		return hasActiveBranch;
+	},
+
+	hasNestedBranch: function hasNestedBranch() {
+
+		log(1, '------beg PrismTree.hasNestedBranch()');
+
+		var hasActiveBranch = false;
+
+		if (this.state.active.nested !== null && this.state.active.nested.route in this.state.branches) hasActiveBranch = true;
+
+		log(2, '------end PrismTree.hasNestedBranch()');
 
 		return hasActiveBranch;
 	},
@@ -290,8 +322,6 @@ var PrismTree = React.createClass({
 			if (state.lockMeta == 'lock' || state.branches[branch].leaves[leaf].metapanel == 'open') meta = true;
 		}
 
-		console.log(meta);
-
 		log(2, '------end PrismTree.hasActiveMeta()');
 
 		return meta;
@@ -321,8 +351,12 @@ var PrismTree = React.createClass({
 		var state = this.state;
 
 		state.active.branch = branch;
+		state.active.nested = null;
 
-		if (!(branch in state.branches)) state.branches[branch] = { leaves: {} };
+		if (!(branch in state.branches)) {
+			state.branches[branch] = { leaves: {} };
+			this.loadBranch(branch);
+		}
 
 		this.setState(state);
 
@@ -338,6 +372,7 @@ var PrismTree = React.createClass({
 		state.active.branch = branch;
 		state.active.leaf = leaf;
 		state.active.meta = this.hasActiveMeta();
+		state.active.nested = null;
 
 		if (!(branch in state.branches)) state.branches[branch] = { leaves: {} };
 
@@ -346,20 +381,48 @@ var PrismTree = React.createClass({
 		log(12, 'end PrismTree.changeLeaf()');
 	},
 
-	changeNested: function changeNested(branch, leaf, connection) {
-		log(11, 'beg PrismTree.changeNested()');
+	/**
+  * A nested resource will have its own specialized branch.
+  *
+  * Previously, I was relying on general branches, and trying to retrieve a subset of those.
+  *
+  * For example, if I wanted the 'actors' in 'movie 4', 
+  *   I would look in branch 'movies' leaf '4',
+  *   but that would need to assume that the 'movies' branch is there.
+  *
+  * The branch should be simple and just reflect the state of that current data.
+  *
+  * If I want the actors of the movie, I should have a special branch stored in state.
+  *
+  * Thus, the url 'movies/4/actors' will have a special branch stored in state called movies_4_actors
+  *
+  * this.loadBranch should then be able to do a API call and get that branch's specific data.
+  *
+  * However, the GUI will reflect this in reverse as "Actors in Movies 4",
+  *   with the main 'Actors' menu link activated (with a UI change to add 'in movies 4' )
+  *
+  * But that rendering should be handled with the 'active.nested' conditional.
+  */
+	changeNestedBranch: function changeNestedBranch(branch, leaf, nestedBranch) {
+		log(11, 'beg PrismTree.changeNestedBranch()');
 
 		var state = this.state;
 
-		state.active.branch = connection;
-		state.active.leaf = leaf;
-		state.active.meta = this.hasActiveMeta();
+		var route = branch + '/' + leaf + '/' + nestedBranch;
 
-		if (!(branch in state.branches)) state.branches[branch] = { leaves: {} };
+		state.active.branch = nestedBranch;
+		state.active.leaf = null;
+		state.active.meta = this.hasActiveMeta();
+		state.active.nested = { branch: branch, leaf: leaf, route: route };
+
+		if (!(route in state.branches)) {
+			state.branches[route] = { leaves: {} };
+			this.loadNestedBranch(branch, leaf, nestedBranch, route);
+		}
 
 		this.setState(state);
 
-		log(12, 'end PrismTree.changeNested()');
+		log(12, 'end PrismTree.changeNestedBranch()');
 	},
 
 	/**
@@ -382,6 +445,8 @@ var PrismTree = React.createClass({
 		if (!(branch in state.branches)) state.branches[branch] = { leaves: {} };
 
 		this.setState(state);
+
+		if (state.search.query != '') this.loadSearch();
 
 		log(12, 'end PrismTree.changeSearch()');
 	},
@@ -578,59 +643,137 @@ var PrismTree = React.createClass({
 		log(12, 'end PrismTree.saveLeaf()');
 	},
 
-	/**
-  * There is a difference between loading the branch with local data a doing an ajax run.
-  *
-  * This function should only be called from the PrismBranch itself after mounting/updating.
-  */
-	loadBranch: function loadBranch(branch, params) {
+	loadBranch: function loadBranch(branch) {
 
 		log(11, 'beg PrismTree.loadBranch()');
 
-		// TODO: Temp stop gap to prevent infinite loop from firing millions of AJAX calls
-		if (this.props.data.status.current.type != 'normal') return;
+		// this.changeStatus( 'loading', 'Loading ' + branch + ' data!' );
 
-		this.changeStatus('loading', 'Loading ' + branch + ' data...');
+		var params = '?filter[posts_per_page]=-1';
 
-		var url = PRISM.url.rest + branch + params;
+		var request = {
+			url: PRISM.url.rest + branch + params,
+			callback: this.unloadBranch,
+			branch: branch
+		};
 
-		var requestedBranch = branch;
+		this.queueAJAX(request);
+
+		log(12, 'end PrismTree.loadBranch()');
+	},
+
+	loadSearch: function loadSearch() {
+
+		log(11, 'beg PrismTree.loadSearch()');
+
+		var state = this.state;
+
+		// this.changeStatus( 'loading', 'Searching for "' + state.search.query + '" data!' );
+
+		var params = '?filter[posts_per_page]=-1';
+		params += '&filter[s]=' + state.search.query;
+
+		var request = {
+			url: PRISM.url.rest + 'posts' + params,
+			callback: this.unloadBranch,
+			branch: 'search'
+		};
+
+		this.queueAJAX(request);
+
+		log(12, 'end PrismTree.loadBranch()');
+	},
+
+	loadNestedBranch: function loadNestedBranch(branch, leaf, nestedBranch, route) {
+
+		log(11, 'beg PrismTree.loadNestedBranch()');
+
+		var state = this.state;
+
+		// this.changeStatus( 'loading', 'Loading ' + nestedBranch + ' data!' );
+
+		var params = '?filter[posts_per_page]=-1';
+		params += '&filter[connected_type]=' + nestedBranch;
+
+		var request = {
+			url: PRISM.url.rest + branch + params,
+			callback: this.unloadBranch,
+			branch: route
+		};
+
+		this.queueAJAX(request);
+
+		log(12, 'end PrismTree.loadNestedBranch()');
+	},
+
+	unloadBranch: function unloadBranch(request, response) {
+
+		log(11, 'beg PrismTree.unloadBranch()');
+
+		var state = this.state;
+
+		var leaves = {};
+
+		for (var i = 0; i < response.length; i++) {
+			var leaf = response[i];
+
+			leaf.metapanel = this.state.active.meta ? 'open' : 'closed';
+
+			leaves[leaf.id] = leaf;
+		}
+
+		state.branches[request.branch] = { leaves: leaves };
+
+		if (request.branch in PRISM.view) state.branches[request.branch].view = PRISM.view[request.branch];else state.branches[request.branch].view = PRISM.view['default'];
+
+		this.changeStatus('success', 'Successfully loaded ' + request.branch + ' data!');
+		this.changeStatus('normal', null);
+
+		this.setState(state);
+
+		log(12, 'beg PrismTree.unloadBranch()');
+	},
+
+	queueAJAX: function queueAJAX(request) {
+		log(11, 'beg PrismTree.queueAJAX()');
+
+		PRISM.ajax.queue.push(request);
+
+		if (PRISM.ajax.queue.length > 0 && PRISM.ajax.status == 'done') this.getData(PRISM.ajax.queue[0]);
+
+		log(12, 'end PrismTree.queueAJAX()');
+	},
+
+	dequeueAJAX: function dequeueAJAX(response) {
+		log(11, 'beg PrismTree.dequeueAJAX()');
+
+		var request = PRISM.ajax.queue.shift();
+
+		PRISM.ajax.status = 'done';
+
+		if (PRISM.ajax.queue.length > 0 && PRISM.ajax.status == 'done') this.getData(PRISM.ajax.queue[0]);
+
+		request.callback(request, response);
+
+		log(12, 'end PrismTree.dequeueAJAX()');
+	},
+
+	getData: function getData(request) {
+
+		log(11, 'beg PrismTree.getData()');
+
+		PRISM.ajax.status = 'getting';
+
+		// log( request );
 
 		jQuery.ajax({
 			method: 'GET',
-			url: url,
-			success: (function (response) {
-
-				log(10, 'success PrismTree.loadBranch()');
-
-				var state = this.state;
-				var branch = state.active.branch == 'search' ? state.active.branch : requestedBranch;
-
-				var leaves = {};
-
-				for (var i = 0; i < response.length; i++) {
-					var leaf = response[i];
-
-					leaf.metapanel = this.state.active.meta ? 'open' : 'closed';
-
-					leaves[leaf.id] = leaf;
-				}
-
-				state.branches[branch] = { leaves: leaves };
-
-				// TODO: Temp stop gap to prevent constant updating loop in PrismBranch.componentWillUpdate/loadBranch
-				if (branch == 'search') state.search.last = state.search.query;
-
-				if (branch in PRISM.view) state.branches[branch].view = PRISM.view[branch];else state.branches[branch].view = PRISM.view['default'];
-
-				this.changeStatus('success', 'Successfully loaded ' + branch + ' data!');
-				this.changeStatus('normal', null);
-
-				this.setState(state);
-			}).bind(this)
+			url: request.url,
+			success: this.dequeueAJAX,
+			error: this.dequeueAJAX
 		});
 
-		log(12, 'end PrismTree.loadBranch()');
+		log(12, 'end PrismTree.getData()');
 	},
 
 	trunkData: function trunkData() {
@@ -640,14 +783,12 @@ var PrismTree = React.createClass({
 		var state = this.state;
 
 		var trunkData = {
-			branch: '',
+			active: state.active,
 			width: state.width.current.trunk,
 			search: state.search,
 			status: this.props.data.status,
 			rainbow: this.props.data.rainbowBar
 		};
-
-		if (this.hasActiveBranch()) trunkData.branch = this.state.active.branch;
 
 		log(2, '---end PrismTree.trunkData()');
 
@@ -673,6 +814,19 @@ var PrismTree = React.createClass({
 			branchData.leaf = this.state.active.leaf;
 			branchData.view = this.state.branches[branch].view;
 			branchData.leaves = this.state.branches[branch].leaves;
+		}
+
+		if (this.hasNestedBranch()) {
+
+			var route = this.state.active.nested.route;
+			var nestedBranch = this.state.active.nested.branch;
+
+			branchData.nested = this.state.active.nested;
+
+			branchData.title = this.state.active.branch;
+			branchData.leaf = this.state.active.nested.leaf;
+			branchData.view = this.state.branches[route].view;
+			branchData.leaves = this.state.branches[route].leaves;
 		}
 
 		log(2, '---end PrismTree.branchData()');
@@ -747,7 +901,7 @@ var PrismTree = React.createClass({
 
 							if (connectionBranch == null) {
 
-								this.loadBranch(connection, '?filter[posts_per_page]=-1');
+								this.loadBranch(connection);
 								metaData[connection] = keys;
 							} else {
 
@@ -829,7 +983,7 @@ var PrismTree = React.createClass({
 		var prismMeta = React.createElement(PrismMeta, { func: metaFunctions, auth: auth, data: this.metaData() });
 
 		var renderTrunk = prismTrunk; // For code consistency
-		var renderBranch = this.hasActiveBranch() ? prismBranch : null;
+		var renderBranch = this.hasActiveBranch() || this.hasNestedBranch() ? prismBranch : null;
 		var renderLeaf = this.hasActiveLeaf() ? prismLeaf : null;
 		var renderMeta = this.hasActiveMeta() ? prismMeta : null;
 
@@ -987,9 +1141,36 @@ var PrismMenu = React.createClass({
 
 	render: function render() {
 
+		var data = this.props.data;
+
 		var menuItems = PRISM.branches.map(function (branch, i) {
 
-			var classes = branch.slug == this.props.data.branch ? 'active' : '';
+			var active = branch.slug == data.active.branch;
+			var nested = data.active.nested;
+
+			var classes = active ? 'active' : '';
+			classes += active && nested != null ? ' nested' : '';
+
+			var title = branch.title;
+
+			var nestedLink = (function () {
+
+				if (active && nested != null) {
+					var link = null;
+					var href = '/#/' + nested.branch + '/' + nested.leaf;
+
+					link = React.createElement(
+						'a',
+						{ href: href, className: 'active nested' },
+						'in ',
+						nested.branch,
+						' ',
+						nested.leaf
+					);
+				}
+
+				return link;
+			}).bind(this);
 
 			var iconClasses = branch.icon == null ? "fa fa-fw fa-thumb-tack" : "fa fa-fw " + branch.icon;
 
@@ -1000,8 +1181,9 @@ var PrismMenu = React.createClass({
 					'a',
 					{ href: '/#/' + branch.slug, id: branch.slug, className: classes, 'data-slug': branch.slug },
 					React.createElement('i', { className: iconClasses }),
-					branch.title
-				)
+					title
+				),
+				nestedLink()
 			);
 		}, this);
 
@@ -1024,18 +1206,6 @@ var PrismBranch = React.createClass({
 	displayName: 'PrismBranch',
 
 	/**
-  * Handles initial case, when a full url mounts the branch
-  */
-	componentDidMount: function componentDidMount() {
-
-		log(11, 'beg PrismBranch.componentDidMount()');
-
-		this.loadBranch();
-
-		log(12, 'end PrismBranch.componentDidMount()');
-	},
-
-	/**
   * Handles every later case, when user updates the branch
   */
 	componentDidUpdate: function componentDidUpdate() {
@@ -1043,8 +1213,6 @@ var PrismBranch = React.createClass({
 		log(11, 'beg PrismBranch.componentDidUpdate()');
 
 		this.scrollLeaf();
-
-		this.loadBranch();
 
 		log(12, 'end PrismBranch.componentDidUpdate()');
 	},
@@ -1062,36 +1230,6 @@ var PrismBranch = React.createClass({
 		offset = offset.offsetHeight + 10;
 
 		document.getElementById('prism-leaves').scrollTop = activeLeaf.offsetTop - offset;
-	},
-
-	/**
-  * The branch loads with no leaves and runs this function to check on loading the branch with leaves.
-  * 
-  * @return {[type]} [description]
-  */
-	loadBranch: function loadBranch() {
-
-		log(11, 'beg PrismBranch.loadBranch()');
-
-		var data = this.props.data;
-		var func = this.props.func;
-
-		var branch = data.title;
-		var params = '?filter[posts_per_page]=-1';
-
-		var isNormal = branch != 'search';
-		var isSearch = branch == 'search' && data.search.query != '' && data.search.query != data.search.last;
-
-		var isEmpty = _.isEmpty(data.leaves);
-
-		if (branch == 'search') {
-			branch = 'posts';
-			params += '&filter[s]=' + data.search.query;
-		}
-
-		if (isSearch || isNormal && isEmpty) func.loadBranch(branch, params);
-
-		log(12, 'end PrismBranch.loadBranch()');
 	},
 
 	render: function render() {
@@ -1463,7 +1601,7 @@ var PrismMeta = React.createClass({
 		}, this);
 
 		var renderConnections = data.connections.map(function (key, i) {
-			return React.createElement(PrismMetaConnection, { auth: auth, data: data[key], func: func, key: i, label: key });
+			return React.createElement(PrismMetaConnection, { auth: auth, data: data, func: func, key: i, label: key });
 		}, this);
 
 		var style = { 'width': data.width + '%' };
@@ -1569,15 +1707,17 @@ var PrismMetaConnection = React.createClass({
 
 		var label = this.props.label;
 
-		var renderData = Object.keys(data).map(function (item, i) {
-			var href = "/#/" + label + "/" + item + "/";
+		var renderData = Object.keys(data[label]).map(function (item, i) {
+			var href = "/#/" + label + "/" + item;
 
 			return React.createElement(
 				'a',
 				{ key: i, href: href },
-				data[item].name
+				data[label][item].name
 			);
 		});
+
+		var href = "/#/" + data.branch + "/" + data.id + "/" + label;
 
 		log(12, 'end PrismMetaConnection.render()');
 
@@ -1587,7 +1727,11 @@ var PrismMetaConnection = React.createClass({
 			React.createElement(
 				'h4',
 				null,
-				label + ':'
+				React.createElement(
+					'a',
+					{ href: href },
+					'Connected ' + label + ':'
+				)
 			),
 			React.createElement(
 				'span',
@@ -1655,12 +1799,19 @@ var PrismIcon = React.createClass({
 });
 
 var log = function log(level, message) {
+
+	// For log( message ) calls to set default
+	if (!_.isNumber(level)) {
+		message = level;
+		level = 10000;
+	}
+
 	if (parseInt(PRISM.debug.level) <= level) {
 
 		var ignore = false;
 
 		PRISM.debug.ignore.map(function (obj) {
-			if (message.indexOf(obj) >= 0) ignore = true;
+			if (_.isString(message) && message.indexOf(obj) >= 0) ignore = true;
 		});
 
 		if (!ignore) console.log(_.now(), message);

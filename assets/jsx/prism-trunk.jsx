@@ -73,6 +73,7 @@ var PrismSearchStatus = React.createClass( {
 
 		if ( search.query == '' || search.last == search.query )
 			window.location = '/#/search';
+
 	},
 
 	search: function(e) {
@@ -126,19 +127,43 @@ var PrismMenu = React.createClass( {
 
 	render: function() {
 
+		var data = this.props.data;
+
 		var menuItems = PRISM.branches.map( function( branch, i ) {
 
-			var classes = branch.slug == this.props.data.branch ? 'active' : '';
+			var active  = branch.slug == data.active.branch;
+			var nested  = data.active.nested;
+
+			var classes = active ? 'active'  : '';
+			classes    += active && nested != null ? ' nested' : '';
+
+			var title   = branch.title;
+
+			var nestedLink = function() {
+
+				if ( active && nested != null ) {
+					var link  = null;
+					var href  = '/#/' + nested.branch + '/' + nested.leaf;
+
+					link = <a href={href} className='active nested'>in {nested.branch} {nested.leaf}</a>
+				}
+
+				return link;
+
+			}.bind( this );
+
 
 			var iconClasses = branch.icon == null ? "fa fa-fw fa-thumb-tack" : "fa fa-fw " + branch.icon;
 
 			return (
 				<li key={i}>
 					<a href={'/#/' + branch.slug} id={branch.slug} className={classes} data-slug={branch.slug}>
-						<i className={iconClasses}></i>{branch.title}
+						<i className={iconClasses}></i>{title}
 					</a>
+					{nestedLink()}
 				</li>
 			);
+
 		}, this );
 
 		return (

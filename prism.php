@@ -21,6 +21,11 @@ class Prism {
 
 		add_action( 'rest_api_init', 'Prism::append_p2p_connections' );
 
+		add_filter( 'rest_private_query_vars', 'Prism::override_query_vars', 10, 1 );
+
+		add_filter( 'rest_post_query', 'Prism::override_query', 10, 2 );
+
+
 	}
 
 	public static function sample_types() {
@@ -78,9 +83,10 @@ class Prism {
 	public static function connections() {
 
 		p2p_register_connection_type( array(
-			'name' => 'movies_to_actors',
-			'from' => 'movies',
-			'to'   => 'actors'
+			'name'       => 'movies_to_actors',
+			'from'       => 'movies',
+			'to'         => 'actors',
+			// 'reciprocal' => true
 		) );
 
 	}
@@ -89,6 +95,9 @@ class Prism {
 
 		$connections = P2P_Connection_Type_Factory::get_all_instances();
 
+		// TODO: Remove this line
+		// print_r( $connections ); die();
+
 		foreach( $connections as $name => $connection ) {
 			$args = array(
 							'get_callback'    => 'Prism::get_connections',
@@ -96,11 +105,32 @@ class Prism {
 							'schema'          => null
 						);
 
-			$side = $connection->side;
 
-			register_api_field( $side['from']->query_vars['post_type'][0], $side['to']->query_vars['post_type'][0], $args );
+			$from = $connection->side['from']->query_vars['post_type'][0];
+			$to   = $connection->side[  'to']->query_vars['post_type'][0];
+
+			register_api_field( $from, $to, $args );
+
+			add_filter( 'rest_prepare_' . $from, 'Prism::prepare_request', 10, 3 );
+			add_filter( 'rest_prepare_' . $to,   'Prism::prepare_request', 10, 3 );
+			// TODO: If reciprocal, do a second reversed register_api_field here?
 		}
 
+	}
+
+	public static function override_query_vars( $args ) {
+
+		array_push( $args, 'post_type', 'connected_type' );
+
+		return $args;
+	}
+
+	public static function override_query( $args, $request ) {
+
+		if ( array_key_exists( 's', $args ) )
+			$args['post_type'] = 'any';
+
+		return $args;
 	}
 
 	public static function get_connections( $object, $field_name, $request ) {
@@ -134,6 +164,12 @@ class Prism {
 		foreach ( $posts->posts as $post ) {
 			array_push( $data, $post->ID );
 		}
+
+		return $data;
+
+	}
+
+	public static function prepare_request( $data, $post, $request ) {
 
 		return $data;
 
@@ -219,8 +255,11 @@ class Prism {
 			'debug'         => array(
 					'level'           => 10,
 					'ignore'          => array(
+															   'PrismLeafNode'
+															 ),
+					'only'            => array(
 
-															 )
+					                     )
 												 ),
 			'title'         => get_bloginfo( 'title' ),
 			'description'   => get_bloginfo( 'description' ),
@@ -233,6 +272,10 @@ class Prism {
 			'gravatar'      => array(
 					'width'           => 48,
 					'height'          => 48
+												 ),
+			'ajax'          => array(
+					'status'          => 'done',
+					'queue'           => array()
 												 ),
 			'view'          => array(
 					'posts'           => 'list',
@@ -259,7 +302,7 @@ class Prism {
 					'maximum'         => array( 'trunk' => 30, 'branch' => 40, 'leaf' => 65, 'meta' =>  30 )
 												 ),
 			'status'        => array(
-					'timeout'         => 2000
+					'timeout'         => 1000
 												 )
 		);
 

@@ -1,19 +1,6 @@
 var PrismBranch = React.createClass( {
 
 	/**
-	 * Handles initial case, when a full url mounts the branch
-	 */
-	componentDidMount: function() {
-
-		log( 11, 'beg PrismBranch.componentDidMount()' );
-
-		this.loadBranch();
-
-		log( 12, 'end PrismBranch.componentDidMount()' );
-
-	},
-
-	/**
 	 * Handles every later case, when user updates the branch
 	 */
 	componentDidUpdate: function() {
@@ -21,8 +8,6 @@ var PrismBranch = React.createClass( {
 		log( 11, 'beg PrismBranch.componentDidUpdate()' );
 
 		this.scrollLeaf();
-
-		this.loadBranch();
 
 		log( 12, 'end PrismBranch.componentDidUpdate()' );
 
@@ -41,38 +26,6 @@ var PrismBranch = React.createClass( {
 		offset = offset.offsetHeight + 10;
 
 		document.getElementById( 'prism-leaves' ).scrollTop = activeLeaf.offsetTop - offset;
-	},
-
-	/**
-	 * The branch loads with no leaves and runs this function to check on loading the branch with leaves.
-	 * 
-	 * @return {[type]} [description]
-	 */
-	loadBranch: function() {
-
-		log( 11, 'beg PrismBranch.loadBranch()' );
-
-		var data   = this.props.data;
-		var func   = this.props.func;
-
-		var branch = data.title;
-		var params = '?filter[posts_per_page]=-1';
-
-		var isNormal = branch != 'search';
-		var isSearch = branch == 'search' && data.search.query != '' && data.search.query != data.search.last;
-
-		var isEmpty  = _.isEmpty( data.leaves );
-
-		if ( branch == 'search' ) {
-			branch   = 'posts';
-			params  += '&filter[s]=' + data.search.query;
-		}
-
-		if ( isSearch || ( isNormal && isEmpty ) )
-			func.loadBranch( branch, params );
-
-		log( 12, 'end PrismBranch.loadBranch()' );
-
 	},
 
 	render: function() {
