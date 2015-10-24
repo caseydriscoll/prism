@@ -6,6 +6,10 @@ var PrismTree = React.createClass( {
 
 		var state = { 
 			branches         : {},
+			ajax             : {
+				status  : 'done',
+				queue   : []
+			},
 			active           : { 
 				branch  : null,
 				leaf    : null,
@@ -67,8 +71,12 @@ var PrismTree = React.createClass( {
 
 		log( 11, 'beg PrismTree.componentDidMount()' );
 
-		if ( PRISM.ajax.queue.length > 0 && PRISM.ajax.status == 'done' )
-			this.getData( PRISM.ajax.queue[0] );
+		var state = this.state;
+
+		if ( state.ajax.queue.length > 0 && state.ajax.status == 'done' )
+			this.getData( state.ajax.queue[0] );
+
+		this.setState;
 
 		log( 12, 'end PrismTree.componentDidMount()' );
 
@@ -78,8 +86,12 @@ var PrismTree = React.createClass( {
 
 		log( 11, 'beg PrismTree.componentDidUpdate()' );
 
-		if ( PRISM.ajax.queue.length > 0 && PRISM.ajax.status == 'done' )
-			this.getData( PRISM.ajax.queue[0] );
+		var state = this.state;
+
+		if ( state.ajax.queue.length > 0 && state.ajax.status == 'done' )
+			this.getData( state.ajax.queue[0] );
+
+		this.setState;
 
 		log( 12, 'end PrismTree.componentDidUpdate()' );
 
@@ -277,7 +289,7 @@ var PrismTree = React.createClass( {
 
 			var nested = this.state.active.nested;
 
-			log( nested );
+			// log( nested );
 
 			if ( nested != null && this.state.active.leaf in this.state.branches[nested.route].leaves )
 				hasNestedLeaf = true;
@@ -371,7 +383,10 @@ var PrismTree = React.createClass( {
 		state.active.meta   = this.hasActiveMeta();
 		state.active.nested = null;
 
-		if ( ! ( branch in state.branches ) ) state.branches[branch] = { leaves : {} };
+		if ( ! ( branch in state.branches ) ) {
+			state.branches[branch] = { leaves : {} };
+			this.loadBranch( branch );
+		}
 
 		this.setState( state );
 
@@ -731,8 +746,6 @@ var PrismTree = React.createClass( {
 
 		var state = this.state;
 
-		// this.changeStatus( 'loading', 'Loading ' + nestedBranch + ' data!' );
-
 		var params  = '?filter[posts_per_page]=-1';
 		    params += '&filter[connected_type]=' + branch + '_to_' + nestedBranch;
 		    params += '&filter[connected_id]='   + leaf;
@@ -740,7 +753,8 @@ var PrismTree = React.createClass( {
 		var request = {
 			url      : PRISM.url.rest + branch + params,
 			callback : this.unloadBranch,
-			branch   : route
+			branch   : route,
+			status   : { type : 'loading', message : 'Searching for ' + nestedBranch + ' data!' }
 		}
 
 		this.queueAJAX( request );
@@ -783,10 +797,15 @@ var PrismTree = React.createClass( {
 	queueAJAX: function( request ) {
 		log( 11, 'beg PrismTree.queueAJAX()' );
 
-		PRISM.ajax.queue.push( request );
+		var state = this.state;
 
-		if ( PRISM.ajax.queue.length > 0 && PRISM.ajax.status == 'done' )
-			this.getData( PRISM.ajax.queue[0] );
+		if ( state.ajax.status == 'done' ) {
+			state.ajax.queue.push( request );
+			this.setState( state );
+		} else {
+			PRISM.ajax.queue.push( request );
+		}
+
 
 		log( 12, 'end PrismTree.queueAJAX()' );
 	},
@@ -794,14 +813,22 @@ var PrismTree = React.createClass( {
 	dequeueAJAX: function( response ) {
 		log( 11, 'beg PrismTree.dequeueAJAX()' );
 
-		var request = PRISM.ajax.queue.shift();
+		var state   = this.state;
 
-		PRISM.ajax.status = 'done';
+		var request = state.ajax.queue.shift();
 
-		if ( PRISM.ajax.queue.length > 0 && PRISM.ajax.status == 'done' )
-			this.getData( PRISM.ajax.queue[0] );
+		state.ajax.status = 'done';
 
 		request.callback( request, response );
+
+		// TODO: GREAT WORKAROUND OR UGLIEST WORKAROUND
+		//       TIE AJAX QUEUE TO STATE, BUT DON'T DISRUPT STATE IF NOT DONE
+		//       PUT IN TEMP QUEUE, THEN COMBINE AT END OF EVERY AJAX CALL
+		//       SHOULD BE A CLEANER WAY, BUT THIS SEEMS TO BE WORKING
+		state.ajax.queue = state.ajax.queue.concat( PRISM.ajax.queue );
+		PRISM.ajax.queue = [];
+
+		this.setState( state );
 
 		log( 12, 'end PrismTree.dequeueAJAX()' );
 	},
@@ -810,7 +837,11 @@ var PrismTree = React.createClass( {
 
 		log( 11, 'beg PrismTree.getData()' );
 
-		PRISM.ajax.status = 'getting';
+		var state = this.state;
+
+		state.ajax.status = 'getting';
+
+		this.setState( state );
 
 		this.changeStatus( request.status );
 

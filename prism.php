@@ -299,7 +299,6 @@ class Prism {
 					'height'          => 48
 												 ),
 			'ajax'          => array(
-					'status'          => 'done',
 					'queue'           => array()
 												 ),
 			'view'          => array(
