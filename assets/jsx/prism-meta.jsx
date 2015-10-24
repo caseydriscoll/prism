@@ -136,7 +136,7 @@ var PrismMetaConnection = React.createClass( {
 		var label = this.props.label;
 
 		var renderData = Object.keys( data[label] ).map( function( item, i ) {
-			var href = "/#/" + label + "/" + item;
+			var href = "/#/" + data.branch + "/" + data.id + "/" + label + "/" + item;
 
 			return ( <a key={i} href={href}>{data[label][item].name}</a> );
 		} )

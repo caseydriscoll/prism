@@ -47,6 +47,14 @@ var PrismBranch = React.createClass( {
 			else
 				leaf.active = '';
 
+			if ( data.nested == null )
+				leaf.nested = false;
+			else {
+				leaf.nested = data.nested;
+			}
+
+			log( data );
+
 			return <PrismLeafNode data={leaf} key={key} func={func} type={data.title} />
 
 		}, this );
@@ -160,6 +168,9 @@ var PrismLeafNode = React.createClass( {
 		var id    = this.id();
 		var href  = '/#/' + type + '/' + data.id;
 		var title = data.title.rendered;
+
+		if ( data.nested != false )
+			href = '/#/' + data.nested.branch + '/' + data.nested.leaf + '/' + type + '/' + data.id;
 
 		var styles  = {};
 		var classes = 'prism-leaf ' + data.active;
