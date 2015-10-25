@@ -11,6 +11,63 @@ class Prism_Movies_Data {
 
 	static function init() {
 		register_activation_hook( __FILE__, array( __CLASS__, 'install' ) );
+
+		add_action( 'init', array( __CLASS__, 'business_logic' ) );
+
+		add_action( 'p2p_init', array( __CLASS__, 'connections' ) );
+
+		add_filter( 'prism_branches', array( __CLASS__, 'add_branches' ) );
+
+	}
+
+	static function business_logic() {
+		$args = array(
+			'public' => true,
+			'label'  => 'Movies',
+			'show_in_rest' => true
+		);
+
+		register_post_type( 'movies', $args );
+
+		$args = array(
+			'public' => true,
+			'label'  => 'Actors',
+			'show_in_rest' => true
+		);
+
+		register_post_type( 'actors', $args );
+
+	}
+
+
+	public static function connections() {
+
+		p2p_register_connection_type( array(
+			'name'       => 'movies_to_actors',
+			'from'       => 'movies',
+			'to'         => 'actors',
+			// 'reciprocal' => true
+		) );
+
+	}
+
+	public static function add_branches( $branches ) {
+		$movie_branches =  array(
+			array(
+				'title'       => 'Movies',
+				'slug'        => 'movies',
+				'icon'        => 'fa-film',
+				'connections' => array( 'actors' )
+			),
+			array(
+				'title' => 'Actors',
+				'slug' => 'actors',
+				'icon' => 'fa-group',
+				'connections' => array()
+			),
+		);
+
+		return array_merge( $branches, $movie_branches );
 	}
 
 

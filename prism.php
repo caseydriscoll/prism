@@ -15,10 +15,6 @@ class Prism {
 
 		add_action( 'wp_enqueue_scripts', 'Prism::load_assets' );
 
-		add_action( 'init', 'Prism::sample_types' );
-
-		add_action( 'p2p_init', 'Prism::connections' );
-
 		add_action( 'rest_api_init', 'Prism::append_p2p_connections' );
 
 		add_filter( 'rest_private_query_vars', 'Prism::override_query_vars', 10, 1 );
@@ -29,22 +25,6 @@ class Prism {
 	}
 
 	public static function sample_types() {
-
-		$args = array(
-			'public' => true,
-			'label'  => 'Movies',
-			'show_in_rest' => true
-		);
-
-		register_post_type( 'movies', $args );
-
-		$args = array(
-			'public' => true,
-			'label'  => 'Actors',
-			'show_in_rest' => true
-		);
-
-		register_post_type( 'actors', $args );
 
 		$args = array(
 			'public' => true,
@@ -80,16 +60,6 @@ class Prism {
 
 	}
 
-	public static function connections() {
-
-		p2p_register_connection_type( array(
-			'name'       => 'movies_to_actors',
-			'from'       => 'movies',
-			'to'         => 'actors',
-			// 'reciprocal' => true
-		) );
-
-	}
 
 	public static function append_p2p_connections() {
 
@@ -247,18 +217,6 @@ class Prism {
 	public static function localize() {
 
 		$branches = array(
-			array(
-				'title'       => 'Movies',
-				'slug'        => 'movies',
-				'icon'        => 'fa-film',
-				'connections' => array( 'actors' )
-			),
-			array(
-				'title' => 'Actors',
-				'slug' => 'actors',
-				'icon' => 'fa-group',
-				'connections' => array()
-			),
 			// array( 'title' => 'Posts',    'slug' => 'posts',    'icon' => 'fa-thumb-tack' ),
 			// array( 'title' => 'Swatches', 'slug' => 'swatches', 'icon' => 'fa-sticky-note-o' ),
 			// array( 'title' => 'Crayons',  'slug' => 'crayons',  ),
@@ -307,7 +265,7 @@ class Prism {
 					'search'          => 'list',
 					'default'         => 'grid'
 												 ),
-			'branches'      => $branches,
+			'branches'      => apply_filters( 'prism_branches', $branches ),
 			'meta'          => $meta,
 			'lockMeta'      => 'lock',
 			'newleaf'       => false,
