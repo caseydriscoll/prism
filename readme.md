@@ -21,3 +21,8 @@ Clicking on an item moves you up and down the tree.
 Here is what it could look like with more stuffs.
 
 ![prism](docs/prism.png)
+
+
+## Loading
+
+Run ./tools/reset to init the database and init with sample data with `wp plugin activate prism/prism-data-movies`
