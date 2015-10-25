@@ -22,16 +22,22 @@ class Prism_Movies_Data {
 
 	static function business_logic() {
 		$args = array(
-			'public' => true,
-			'label'  => 'Movies',
+			'public'       => true,
+			'label'        => 'Movies',
+			'labels'       => array(
+			                    'singular' => 'movie'
+			                  ),
 			'show_in_rest' => true
 		);
 
 		register_post_type( 'movies', $args );
 
 		$args = array(
-			'public' => true,
-			'label'  => 'Actors',
+			'public'       => true,
+			'label'        => 'Actors',
+			'labels'       => array(
+			                    'singular' => 'actor'
+			                  ),
 			'show_in_rest' => true
 		);
 
@@ -55,14 +61,20 @@ class Prism_Movies_Data {
 		$movie_branches =  array(
 			array(
 				'title'       => 'Movies',
-				'slug'        => 'movies',
+				'slug'        => array(
+				                   'plural' => 'movies',
+				                   'single' => 'movie'
+				                 ),
 				'icon'        => 'fa-film',
 				'connections' => array( 'actors' )
 			),
 			array(
-				'title' => 'Actors',
-				'slug' => 'actors',
-				'icon' => 'fa-group',
+				'title'       => 'Actors',
+				'slug'        => array(
+				                   'plural' => 'actors',
+				                   'single' => 'actor'
+				                 ),
+				'icon'        => 'fa-group',
 				'connections' => array()
 			),
 		);

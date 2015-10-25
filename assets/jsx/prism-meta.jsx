@@ -135,13 +135,23 @@ var PrismMetaConnection = React.createClass( {
 
 		var label = this.props.label;
 
-		var renderData = Object.keys( data[label] ).map( function( item, i ) {
-			var href = "/#/" + data.branch + "/" + data.id + "/" + label + "/" + item;
 
-			return ( <a key={i} href={href}>{data[label][item].name}</a> );
+		var nameSingle = data.branch.slug.single;
+		var nestedSingle;
+
+		// TODO: Currently cycles through whole map, convert to 'some' or use for/break?
+		PRISM.branches.map( function( branch, i ) {
+			if ( branch.slug.plural == label ) nestedSingle = branch.slug.single;
+		} );
+
+
+		var renderData = Object.keys( data[label] ).map( function( key, i ) {
+			var href = "/#/" + nameSingle + "/" + data.id + "/" + nestedSingle + "/" + key;
+
+			return ( <a key={i} href={href}>{data[label][key].name}</a> );
 		} )
 
-		var href = "/#/" + data.branch + "/" + data.id + "/" + label;
+		var href = "/#/" + nameSingle + "/" + data.id + "/" + label;
 
 		log( 12, 'end PrismMetaConnection.render()' );
 

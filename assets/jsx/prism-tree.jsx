@@ -171,32 +171,49 @@ var PrismTree = React.createClass( {
 
 		PRISM.branches.map( function( branch, i ) {
 
-			var method = "get_" + branch.slug + "_by_id";
+			var nameSingle = branch.slug.single;
+			var namePlural = branch.slug.plural;
 
-			routes[branch.slug]          = branch.slug;
-			routes[branch.slug + "/:id"] = method;
+			log( namePlural );
+
+			routes[namePlural] = namePlural;
+
+			var method = "get_" + nameSingle + "_by_id";
+
+			routes[nameSingle + "/:id"] = method;
 
 			branch.connections.map( function( nestedBranch, i ) {
 
-				var nestedBranchMethod = "get_" + nestedBranch + "_of_" + branch.slug;
+				var nestedSingle;
+				var nestedPlural;
 
-				routes[branch.slug + "/:id/" + nestedBranch] = nestedBranchMethod;
+				// TODO: Currently cycles through whole map, convert to 'some' or use for/break?
+				PRISM.branches.map( function( b, i ) {
+					if ( b.slug.plural == nestedBranch ) {
+						nestedSingle = b.slug.single;
+						nestedPlural = b.slug.plural;
+					}
+				} );
+
+				var nestedBranchMethod = "get_" + nestedBranch + "_of_" + nameSingle;
+
+				routes[nameSingle + "/:id/" + nestedBranch] = nestedBranchMethod;
 				routerConfig[nestedBranchMethod] = function( id ) { 
-				                                     this.changeNestedBranch( branch.slug, id, nestedBranch );
+				                                     this.changeNestedBranch( namePlural, id, nestedBranch );
 				                                   }.bind( this );
 
 
-				var nestedLeafMethod = "get_" + nestedBranch + "_of_" + branch.slug + "_by_id";
+				var nestedLeafMethod = "get_" + nestedSingle + "_of_" + namePlural + "_by_id";
 
-				routes[branch.slug + "/:id/" + nestedBranch + "/:nestedLeaf"] = nestedLeafMethod;
-				routerConfig[nestedLeafMethod]   = function( id, nestedLeaf ) { 
-				                                     this.changeNestedLeaf( branch.slug, id, nestedBranch, nestedLeaf );
+				routes[nameSingle + "/:id/" + nestedSingle + "/:nested_id"] = nestedLeafMethod;
+				routerConfig[nestedLeafMethod]   = function( id, nested_id ) { 
+				                                     this.changeNestedLeaf( namePlural, id, nestedBranch, nested_id );
 				                                   }.bind( this );
 
 			}, this );
 
-			routerConfig[branch.slug]     = function()   { this.changeBranch(branch.slug)   }.bind( this );
-			routerConfig[method]          = function(id) { this.changeLeaf(branch.slug, id) }.bind( this );
+			routerConfig[namePlural] = function()   { this.changeBranch( namePlural )   }.bind( this );
+			routerConfig[method]     = function(id) { this.changeLeaf( namePlural, id) }.bind( this );
 
 		}, this );
 
@@ -205,7 +222,7 @@ var PrismTree = React.createClass( {
 
 		routerConfig.routes = routes;
 
-		// log( routes );
+		log( routes );
 
 		var Router = Backbone.Router.extend( routerConfig );
 
@@ -963,13 +980,18 @@ var PrismTree = React.createClass( {
 
 		var metaData = { connections : [] };
 
-		var branch = this.state.active.branch;
-		var leaf   = this.state.active.leaf;
-
 		if ( this.hasActiveBranch() ) {
+
+			var branch = this.state.active.branch;
+			var leaf   = this.state.active.leaf;
 
 			var branches = this.state.branches;
 			var leaves   = branches[branch].leaves;
+
+			// TODO: Currently cycles through whole map, convert to 'some' or use for/break?
+			PRISM.branches.map( function( b, i ) {
+				if ( b.slug.plural == branch ) metaData.branch = b;
+			} );
 
 			if ( this.hasActiveLeaf() ) {
 
@@ -979,7 +1001,7 @@ var PrismTree = React.createClass( {
 
 				PRISM.branches.map( function( b, i ) {
 
-					if ( b.slug == branch ) {
+					if ( b.slug.plural == branch ) {
 
 						metaData.connections = b.connections;
 
@@ -997,10 +1019,15 @@ var PrismTree = React.createClass( {
 
 							var connectionBranch = this.state.branches[connection];
 
-							if ( connectionBranch == null ) {
+							console.log( 'cb: ', connectionBranch );
+
+							if ( connectionBranch == undefined ) {
 
 								this.loadBranch( connection );
-								metaData[connection] = keys;
+
+								keys.map( function( key, i ) {
+									metaData[connection][key]['name'] = key;
+								} );
 
 							} else {
 
@@ -1020,11 +1047,12 @@ var PrismTree = React.createClass( {
 
 		}
 
-		metaData.branch           = branch;
 		metaData.width            = this.state.width.current.meta;
 		metaData.metaActive       = this.state.active.meta;
 		metaData.lockMeta         = this.state.lockMeta;
 		metaData.currentlyChanged = this.state.currentlyChanged;
+
+		log( metaData );
 
 		log( 2, '---end PrismTree.metaData()' );
 

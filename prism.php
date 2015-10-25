@@ -260,8 +260,8 @@ class Prism {
 					'queue'           => array()
 												 ),
 			'view'          => array(
-					'posts'           => 'list',
-					'media'           => 'grid',
+					// 'posts'           => 'list',
+					// 'media'           => 'grid',
 					'search'          => 'list',
 					'default'         => 'grid'
 												 ),

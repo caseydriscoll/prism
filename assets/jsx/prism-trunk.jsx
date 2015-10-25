@@ -131,7 +131,9 @@ var PrismMenu = React.createClass( {
 
 		var menuItems = PRISM.branches.map( function( branch, i ) {
 
-			var active  = branch.slug == data.active.branch;
+			var namePlural = branch.slug.plural;
+
+			var active  = namePlural == data.active.branch;
 			var nested  = data.active.nested;
 
 			var classes = active ? 'active'  : '';
@@ -142,10 +144,16 @@ var PrismMenu = React.createClass( {
 			var nestedLink = function() {
 
 				if ( active && nested != null ) {
-					var link  = null;
-					var href  = '/#/' + nested.branch + '/' + nested.leaf;
 
-					link = <a href={href} className='active nested'>in {nested.branch} {nested.leaf}</a>
+					var nameNested;
+
+					PRISM.branches.map( function( branch, i ) {
+						if ( branch.slug.plural == nested.branch ) nameNested = branch.slug.single;
+					} );
+
+					var href = '/#/' + nameNested + '/' + nested.leaf;
+
+					var link = <a href={href} className='active nested'>in {nameNested} {nested.leaf}</a>
 				}
 
 				return link;
@@ -157,7 +165,7 @@ var PrismMenu = React.createClass( {
 
 			return (
 				<li key={i}>
-					<a href={'/#/' + branch.slug} id={branch.slug} className={classes} data-slug={branch.slug}>
+					<a href={'/#/' + namePlural} id={namePlural} className={classes} data-slug={namePlural}>
 						<i className={iconClasses}></i>{title}
 					</a>
 					{nestedLink()}

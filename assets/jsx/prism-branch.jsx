@@ -53,9 +53,16 @@ var PrismBranch = React.createClass( {
 				leaf.nested = data.nested;
 			}
 
-			log( data );
+			// log( data );
 
-			return <PrismLeafNode data={leaf} key={key} func={func} type={data.title} />
+			var branch;
+
+			// TODO: Currently cycles through whole map, convert to 'some' or use for/break?
+			PRISM.branches.map( function( b, i ) {
+				if ( b.slug.plural == leaf.type ) branch = b;
+			} );
+
+			return <PrismLeafNode data={leaf} key={key} func={func} branch={branch} />
 
 		}, this );
 
@@ -155,39 +162,59 @@ var PrismLeafNode = React.createClass( {
 		var auth = this.props.auth;
 		var data = this.props.data;
 		var func = this.props.func;
-		var type = this.props.data.type;
+
+		var nameSingle;
+		var namePlural;
+
+		if ( data.type != 'search' ) {
+			nameSingle = this.props.branch.slug.single;
+			namePlural = this.props.branch.slug.plural;
+		} else {
+			nameSingle = '';
+			namePlural = '';
+		}
+
+		var nestedSingle;
+		var nestedPlural;
+
+		// TODO: Currently cycles through whole map, convert to 'some' or use for/break?
+		PRISM.branches.map( function( b, i ) {
+			if ( b.slug.plural == data.nested.branch ) {
+				nestedSingle = b.slug.single;
+				nestedPlural = b.slug.plural;
+			}
+		} );
 
 		// TODO: Don't do this.
 		// This is an UGLY stop gap to get around the post/posts problem
-		if ( type.slice(-1) != 's' )
-			type += 's';
+		// if ( type.slice(-1) != 's' )
+		// 	type += 's';
 
-		if ( this.props.type == 'media' )
-			type = this.props.type;
+		// if ( this.props.type == 'media' )
+		// 	type = this.props.type;
 
 		var id    = this.id();
-		var href  = '/#/' + type + '/' + data.id;
-		var title = data.title.rendered;
+		var href  = '/#/' + nameSingle + '/' + data.id;
 
 		if ( data.nested != false )
-			href = '/#/' + data.nested.branch + '/' + data.nested.leaf + '/' + type + '/' + data.id;
+			href = '/#/' + nestedSingle + '/' + data.nested.leaf + '/' + nameSingle + '/' + data.id;
 
 		var styles  = {};
 		var classes = 'prism-leaf ' + data.active;
 
-		if ( type == 'media' && data.media_type == 'image' ) {
-			var thumbnail  = data.media_details.sizes.thumbnail.source_url;
+		// if ( type == 'media' && data.media_type == 'image' ) {
+		// 	var thumbnail  = data.media_details.sizes.thumbnail.source_url;
 
-			styles.backgroundImage = 'url(' + thumbnail + ')';
+		// 	styles.backgroundImage = 'url(' + thumbnail + ')';
 
-			classes += ' ' + type;
-		}
+		// 	classes += ' ' + type;
+		// }
 
 		log( 2, 'end PrismLeafNode.render()' );
 
 		return (
 			<li id={id} className={classes} key={this.props.key} style={styles}>
-				<a href={href} data-title={title} data-id={data.id}>{title}</a>
+				<a href={href} data-title={namePlural} data-id={data.id}>{data.title.rendered}</a>
 			</li>
 		)
 	}
