@@ -21,6 +21,47 @@ class Prism {
 
 		add_filter( 'rest_post_query', 'Prism::override_query', 10, 2 );
 
+		add_action( 'init', array( __CLASS__, 'business_logic' ) );
+		add_action( 'p2p_init', array( __CLASS__, 'connections' ) );
+
+
+	}
+	
+	static function business_logic() {
+		$args = array(
+			'public'       => true,
+			'label'        => 'Movies',
+			'labels'       => array(
+			                    'singular' => 'movie'
+			                  ),
+			'show_in_rest' => true
+		);
+
+		register_post_type( 'movies', $args );
+
+		$args = array(
+			'public'       => true,
+			'label'        => 'Actors',
+			'labels'       => array(
+			                    'singular' => 'actor'
+			                  ),
+			'show_in_rest' => true
+		);
+
+		register_post_type( 'actors', $args );
+
+	}
+
+
+
+	public static function connections() {
+
+		p2p_register_connection_type( array(
+			'name'       => 'movies_to_actors',
+			'from'       => 'movies',
+			'to'         => 'actors',
+			// 'reciprocal' => true
+		) );
 
 	}
 
