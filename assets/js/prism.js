@@ -116,6 +116,11 @@ var PrismTree = React.createClass({
 
 			if ('rainbow' in changeState) func.toggleRainbow();
 
+			if ('search' in changeState) {
+				window.location = '/#/search';
+				document.getElementById('prism-search').focus();
+			}
+
 			if ('user' in changeState) func.toggleUser();
 		};
 
@@ -566,9 +571,9 @@ var PrismTree = React.createClass({
 
 		if (!(branch in state.branches)) state.branches[branch] = { leaves: {}, slugs: {} };
 
-		this.setState(state);
+		if (state.search.query != '') this.loadSearch(state.search.query);
 
-		if (state.search.query != '') this.loadSearch();
+		this.setState(state);
 
 		log(12, 'end PrismTree.changeSearch()');
 	},
@@ -779,20 +784,18 @@ var PrismTree = React.createClass({
 		log(12, 'end PrismTree.loadBranch()');
 	},
 
-	loadSearch: function loadSearch() {
+	loadSearch: function loadSearch(query) {
 
 		log(11, 'beg PrismTree.loadSearch()');
 
-		var state = this.state;
-
 		var params = '?filter[posts_per_page]=-1';
-		params += '&filter[s]=' + state.search.query;
+		params += '&filter[s]=' + query;
 
 		var request = {
 			url: PRISM.url.rest + 'posts' + params,
 			callback: this.unloadBranch,
 			branch: 'search',
-			status: { type: 'loading', message: 'Searching for "' + state.search.query + '" data!' }
+			status: { type: 'loading', message: 'Searching for "' + query + '" data!' }
 		};
 
 		this.queueAJAX(request);
@@ -1199,10 +1202,14 @@ var PrismTrunk = React.createClass({
 
 	render: function render() {
 
+		log(11, 'beg PrismTrunk.render()');
+
 		var data = this.props.data;
 		var func = this.props.func;
 
 		var style = { 'width': data.width + '%' };
+
+		log(11, 'end PrismTrunk.render()');
 
 		return React.createElement(
 			'div',
@@ -1272,7 +1279,7 @@ var PrismSearchStatus = React.createClass({
 
 	search: function search(e) {
 
-		log(11, 'beg PrismSearch.search()');
+		log(11, 'beg PrismSearchStatus.search()');
 
 		var search = this.props.data.search;
 		var value = e.target.value;
@@ -1284,7 +1291,7 @@ var PrismSearchStatus = React.createClass({
 
 		window.location = '/#/search?query=' + value;
 
-		log(12, 'end PrismSearch.search()');
+		log(12, 'end PrismSearchStatus.search()');
 	},
 
 	autoSelect: function autoSelect(e) {
@@ -1293,22 +1300,29 @@ var PrismSearchStatus = React.createClass({
 
 	render: function render() {
 
+		log(11, 'beg PrismSearchStatus.render()');
+
 		var data = this.props.data;
 		var func = this.props.func;
 
 		var value = data.search.query;
-		var focus = data.branch == 'search' ? true : false;
-		var classes = data.branch == 'search' ? 'active' : '';
+		var focus = data.active.branch == 'search' ? true : false;
+		var classes = data.active.branch == 'search' ? 'active' : '';
+
+		log(data.active);
+		log('focus ' + focus);
 
 		var status = this.state;
 		status.rainbow = data.rainbow;
+
+		log(12, 'end PrismSearchStatus.render()');
 
 		return React.createElement(
 			'div',
 			{ id: 'prism-search-status', className: classes },
 			React.createElement(PrismRainbowButton, { data: status, func: func }),
 			React.createElement(PrismRainbowStatus, { data: status, func: func }),
-			React.createElement('input', { type: 'text', placeholder: 'Search', defaultValue: value, onClick: this.changeBranch, onBlur: this.search, onFocus: this.autoSelect, autoFocus: focus })
+			React.createElement('input', { type: 'text', placeholder: 'Search', id: 'prism-search', defaultValue: value, onClick: this.changeBranch, onBlur: this.search, onFocus: this.autoSelect, autoFocus: focus })
 		);
 	}
 
@@ -2232,6 +2246,11 @@ window.onkeyup = function (e) {
 		case 82:
 			// r - for rainbow bar
 			if (!input) stateChange = { 'rainbow': true };
+			break;
+
+		case 83:
+			// s - for search
+			if (!input) stateChange = { 'search': true };
 			break;
 
 		case 85:

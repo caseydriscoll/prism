@@ -92,6 +92,11 @@ window.onkeyup = function(e) {
 				stateChange = { 'rainbow' : true };
 			break;
 
+		case 83: // s - for search
+			if ( ! input ) 
+				stateChange = { 'search' : true };
+			break;
+
 		case 85: // u - for user bar
 			if ( ! input ) 
 				stateChange = { 'user' : true };

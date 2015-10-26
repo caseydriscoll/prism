@@ -2,10 +2,14 @@ var PrismTrunk = React.createClass( {
 
 	render: function() {
 
+		log( 11, 'beg PrismTrunk.render()' );
+
 		var data = this.props.data;
 		var func = this.props.func;
 
 		var style = { 'width' : data.width + '%' };
+
+		log( 11, 'end PrismTrunk.render()' );
 
 		return (
 			<div id="prism-trunk" style={style} data-section='trunk'>
@@ -78,7 +82,7 @@ var PrismSearchStatus = React.createClass( {
 
 	search: function(e) {
 
-		log( 11, 'beg PrismSearch.search()' );
+		log( 11, 'beg PrismSearchStatus.search()' );
 
 		var search = this.props.data.search;
 		var value  = e.target.value;
@@ -90,7 +94,7 @@ var PrismSearchStatus = React.createClass( {
 
 		window.location = '/#/search?query=' + value;
 
-		log( 12, 'end PrismSearch.search()' );
+		log( 12, 'end PrismSearchStatus.search()' );
 
 	},
 
@@ -100,21 +104,28 @@ var PrismSearchStatus = React.createClass( {
 
 	render: function() {
 
+		log( 11, 'beg PrismSearchStatus.render()' );
+
 		var data = this.props.data;
 		var func = this.props.func;
 
 		var value   = data.search.query;
-		var focus   = data.branch == 'search' ? true : false;
-		var classes = data.branch == 'search' ? 'active' : '';
+		var focus   = data.active.branch == 'search' ? true : false;
+		var classes = data.active.branch == 'search' ? 'active' : '';
+
+		log( data.active );
+		log( 'focus ' + focus );
 
 		var status     = this.state;
 		status.rainbow = data.rainbow;
+
+		log( 12, 'end PrismSearchStatus.render()' );
 
 		return (
 			<div id="prism-search-status" className={classes}>
 				<PrismRainbowButton data={status} func={func} />
 				<PrismRainbowStatus data={status} func={func} />
-				<input type="text" placeholder="Search" defaultValue={value} onClick={this.changeBranch} onBlur={this.search} onFocus={this.autoSelect} autoFocus={focus} />
+				<input type="text" placeholder="Search" id='prism-search' defaultValue={value} onClick={this.changeBranch} onBlur={this.search} onFocus={this.autoSelect} autoFocus={focus} />
 			</div>
 		);
 

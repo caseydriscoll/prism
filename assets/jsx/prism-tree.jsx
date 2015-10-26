@@ -55,7 +55,12 @@ var PrismTree = React.createClass( {
 			if ( 'rainbow'    in changeState )
 				func.toggleRainbow();
 
-			if ( 'user'    in changeState )
+			if ( 'search'     in changeState ) {
+				window.location = '/#/search';
+				document.getElementById( 'prism-search' ).focus();
+			}
+
+			if ( 'user'       in changeState )
 				func.toggleUser();
 
 		};
@@ -558,10 +563,10 @@ var PrismTree = React.createClass( {
 		if ( ! ( branch in state.branches ) )
 			state.branches[branch] = { leaves : {}, slugs : {} };
 
-		this.setState( state );
-
 		if ( state.search.query != '' )
-			this.loadSearch();
+			this.loadSearch( state.search.query );
+
+		this.setState( state );
 
 		log( 12, 'end PrismTree.changeSearch()' );
 
@@ -792,20 +797,18 @@ var PrismTree = React.createClass( {
 
 	},
 
-	loadSearch: function() {
+	loadSearch: function( query ) {
 
 		log( 11, 'beg PrismTree.loadSearch()' );
 
-		var state = this.state;
-
 		var params  = '?filter[posts_per_page]=-1';
-		    params += '&filter[s]=' + state.search.query;
+		    params += '&filter[s]=' + query;
 
 		var request = {
 			url      : PRISM.url.rest + 'posts' + params,
 			callback : this.unloadBranch,
 			branch   : 'search',
-			status   : { type : 'loading', message : 'Searching for "' + state.search.query + '" data!' }
+			status   : { type : 'loading', message : 'Searching for "' + query + '" data!' }
 		}
 
 		this.queueAJAX( request );
