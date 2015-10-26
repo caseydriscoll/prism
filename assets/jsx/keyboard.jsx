@@ -40,6 +40,26 @@ window.onkeyup = function(e) {
 		case 32: // Spacebar
 			break;
 
+		case 37: // 'left'
+			if ( ! input )
+				stateChange = { 'move' : 'left' };
+			break;
+
+		case 38: // 'up'
+			if ( ! input )
+				stateChange = { 'move' : 'up' };
+			break;
+
+		case 39: // 'right'
+			if ( ! input )
+				stateChange = { 'move' : 'right' };
+			break;
+
+		case 40: // 'down'
+			if ( ! input )
+				stateChange = { 'move' : 'down' };
+			break;
+
 		case 70: // f - for 'full' (with 'v' keyMode)
 			if ( ! input && key.mode == 'v' )
 				stateChange = { 'view' : 'full' };
