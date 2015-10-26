@@ -146,12 +146,12 @@ var PrismMetaConnection = React.createClass( {
 
 
 		var renderData = Object.keys( data[label] ).map( function( key, i ) {
-			var href = "/#/" + nameSingle + "/" + data.id + "/" + nestedSingle + "/" + key;
+			var href = "/#/" + nameSingle + "/" + data.slug + "/" + nestedSingle + "/" + data[label][key].slug;
 
 			return ( <a key={i} href={href}>{data[label][key].name}</a> );
 		} )
 
-		var href = "/#/" + nameSingle + "/" + data.id + "/" + label;
+		var href = "/#/" + nameSingle + "/" + data.slug + "/" + label;
 
 		log( 12, 'end PrismMetaConnection.render()' );
 

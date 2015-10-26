@@ -14,7 +14,7 @@ var PrismTree = React.createClass( {
 				branch  : null,
 				leaf    : null,
 				meta    : false,
-				nested  : null
+				parent  : { branch: null, leaf: { id: null, slug: null } }
 			},
 			search           : {
 				last    : null,
@@ -162,6 +162,15 @@ var PrismTree = React.createClass( {
 		log( 12, 'end PrismTree.move()' );
 	},
 
+	/**
+	 * Build all url routes with the following pattern:
+	 *
+	 * 1. https://url.com/#/activeBranchPlural
+	 * 2. https://url.com/#/activeBranchSingle/:activeLeaf
+	 * 3. https://url.com/#/parentBranchSingle/:parentLeaf/activeBranchPlural
+	 * 4. https://url.com/#/parentBranchSingle/:parentLeaf/activeBranchPlural/:activeLeaf
+	 * 
+	 */
 	initRouter: function() {
 
 		log( 11, 'beg PrismTree.initRouter()' );
@@ -171,49 +180,71 @@ var PrismTree = React.createClass( {
 
 		PRISM.branches.map( function( branch, i ) {
 
-			var nameSingle = branch.slug.single;
-			var namePlural = branch.slug.plural;
+			var activeBranchSingle = branch.slug.single;
+			var activeBranchPlural = branch.slug.plural;
 
-			log( namePlural );
 
-			routes[namePlural] = namePlural;
+			// Route Pattern 1.
+			// https://url.com/#/activeBranchPlural
+			// https://patch.works/#/movies
+			var activeBranchMethod = "get_" + activeBranchPlural;
+			routes[activeBranchPlural] = activeBranchMethod;
 
-			var method = "get_" + nameSingle + "_by_id";
+			routerConfig[activeBranchMethod] = function() { 
+			                                     this.changeBranch( activeBranchPlural );
+			                                   }.bind( this );
 
-			routes[nameSingle + "/:id"] = method;
+			// Route Pattern 2.
+			// https://url.com/#/activeBranchSingle/:activeleaf
+			// https://patch.works/#/movie/soylent-green
+			var activeLeafMethod = "get_active_" + activeBranchSingle;
+			routes[activeBranchSingle + "/:activeLeaf"] = activeLeafMethod;
 
-			branch.connections.map( function( nestedBranch, i ) {
+			routerConfig[activeLeafMethod]   = function( activeLeaf )  { 
+			                                     this.changeLeaf( activeBranchPlural, activeLeaf ) 
+			                                   }.bind( this );
 
-				var nestedSingle;
-				var nestedPlural;
+
+			// Create all dynamic Route Patterns 3 and 4 for every connection
+			branch.connections.map( function( activeBranch, i ) {
+
+				var parentBranchSingle = activeBranchSingle;
+				var parentBranchPlural = activeBranchPlural;
+
+				var childBranchSingle;
+				var childBranchPlural;
 
 				// TODO: Currently cycles through whole map, convert to 'some' or use for/break?
-				PRISM.branches.map( function( b, i ) {
-					if ( b.slug.plural == nestedBranch ) {
-						nestedSingle = b.slug.single;
-						nestedPlural = b.slug.plural;
+				PRISM.branches.map( function( branch, i ) {
+					if ( branch.slug.plural == activeBranch ) {
+						childBranchSingle = branch.slug.single;
+						childBranchPlural = branch.slug.plural;
 					}
-				} );
+				}, this );
 
-				var nestedBranchMethod = "get_" + nestedBranch + "_of_" + nameSingle;
 
-				routes[nameSingle + "/:id/" + nestedBranch] = nestedBranchMethod;
-				routerConfig[nestedBranchMethod] = function( id ) { 
-				                                     this.changeNestedBranch( namePlural, id, nestedBranch );
+				// Route Pattern 3.
+				// https://url.com/#/parentBranchSingle/:parentLeaf/childBranchPlural
+				// https://patch.works/#/movie/soylent-green/actors
+				var nestedBranchMethod = "get_" + childBranchPlural + "_of_" + parentBranchSingle;
+
+				routes[parentBranchSingle + "/:parentLeaf/" + childBranchPlural] = nestedBranchMethod;
+				routerConfig[nestedBranchMethod] = function( parentLeaf ) { 
+				                                     this.changeNestedBranch( parentBranchPlural, parentLeaf, childBranchPlural );
 				                                   }.bind( this );
 
 
-				var nestedLeafMethod = "get_" + nestedSingle + "_of_" + namePlural + "_by_id";
+				// Route Pattern 4.
+				// https://url.com/#/parentBranchSingle/:parentLeaf/childBranchSingle/:activeLeaf
+				// https://patch.works/#/movie/soylent-green/actor/charlton-heston
+				var nestedLeafMethod = "get_active_" + childBranchSingle + "_of_" + parentBranchSingle;
 
-				routes[nameSingle + "/:id/" + nestedSingle + "/:nested_id"] = nestedLeafMethod;
-				routerConfig[nestedLeafMethod]   = function( id, nested_id ) { 
-				                                     this.changeNestedLeaf( namePlural, id, nestedBranch, nested_id );
+				routes[parentBranchSingle + "/:parentLeaf/" + childBranchSingle + "/:activeLeaf"] = nestedLeafMethod;
+				routerConfig[nestedLeafMethod]   = function( parentLeaf, activeLeaf ) { 
+				                                     this.changeNestedLeaf( parentBranchPlural, parentLeaf, childBranchPlural, activeLeaf );
 				                                   }.bind( this );
 
 			}, this );
-
-			routerConfig[namePlural] = function()   { this.changeBranch( namePlural )   }.bind( this );
-			routerConfig[method]     = function(id) { this.changeLeaf( namePlural, id) }.bind( this );
 
 		}, this );
 
@@ -222,7 +253,7 @@ var PrismTree = React.createClass( {
 
 		routerConfig.routes = routes;
 
-		log( routes );
+		console.log( 'Routes: ', routes );
 
 		var Router = Backbone.Router.extend( routerConfig );
 
@@ -253,18 +284,18 @@ var PrismTree = React.createClass( {
 
 	},
 
-	hasNestedBranch: function() {
+	hasParentBranch: function() {
 
-		log( 1, '------beg PrismTree.hasNestedBranch()' );
+		log( 1, '------beg PrismTree.hasParentBranch()' );
 
-		var hasNestedBranch = false;
+		var hasParentBranch = false;
 
-		if ( this.state.active.nested !== null && this.state.active.nested.route in this.state.branches )
-			hasNestedBranch = true;
+		if ( this.state.active.parent.branch !== null && this.state.active.parent.route in this.state.branches )
+			hasParentBranch = true;
 
-		log( 2, '------end PrismTree.hasNestedBranch() ' + hasNestedBranch );
+		log( 2, '------end PrismTree.hasParentBranch() ' + hasParentBranch );
 
-		return hasNestedBranch;
+		return hasParentBranch;
 
 	},
 
@@ -285,7 +316,7 @@ var PrismTree = React.createClass( {
 
 			var activeBranch = this.state.branches[this.state.active.branch];
 
-			if ( this.state.active.leaf !== null && this.state.active.leaf in activeBranch.leaves )
+			if ( this.state.active.leaf !== null && this.state.active.leaf.id != null && this.state.active.leaf.id in activeBranch.leaves )
 				hasActiveLeaf = true;
 
 		}
@@ -296,26 +327,24 @@ var PrismTree = React.createClass( {
 
 	},
 
-	hasNestedLeaf: function() {
+	hasParentLeaf: function() {
 
-		log( 1, '------beg PrismTree.hasNestedLeaf()' );
+		log( 1, '------beg PrismTree.hasParentLeaf()' );
 
-		var hasNestedLeaf = false;
+		var hasParentLeaf = false;
 
-		if ( this.hasNestedBranch() ) {
+		if ( this.hasParentBranch() ) {
 
-			var nested = this.state.active.nested;
+			var parent = this.state.active.parent;
 
-			// log( nested );
-
-			if ( nested != null && this.state.active.leaf in this.state.branches[nested.route].leaves )
-				hasNestedLeaf = true;
+			if ( parent.branch != null && this.state.active.leaf.id in this.state.branches[parent.route].leaves )
+				hasParentLeaf = true;
 
 		}
 
-		log( 2, '------end PrismTree.hasNestedLeaf(): ' + hasNestedLeaf );
+		log( 2, '------end PrismTree.hasParentLeaf(): ' + hasParentLeaf );
 
-		return hasNestedLeaf;
+		return hasParentLeaf;
 
 	},
 
@@ -342,7 +371,7 @@ var PrismTree = React.createClass( {
 		var meta   = false;
 
 		if ( this.hasActiveLeaf() ) {
-			if ( state.lockMeta == 'lock' || state.branches[branch].leaves[leaf].metapanel == 'open' )
+			if ( state.lockMeta == 'lock' || state.branches[branch].leaves[leaf.id].metapanel == 'open' )
 				meta = true;
 		}
 
@@ -369,40 +398,50 @@ var PrismTree = React.createClass( {
 	 * @param  {[type]} branch [description]
 	 * @return {[type]}        [description]
 	 */
-	changeBranch: function( branch ) {
+	changeBranch: function( activeBranch ) {
 
-		log( 11, 'beg PrismTree.changeBranch()' );
+		log( 11, 'beg PrismTree.changeBranch() ' + activeBranch );
 
 		var state = this.state;
 
-		state.active.branch = branch;
-		state.active.nested = null;
+		state.active.branch = activeBranch;
+		state.active.leaf   = { id: null, slug: null };
+		state.active.meta   = this.hasActiveMeta();
+		state.active.parent = { branch: null, leaf: { id: null, slug: null } };
 
-		if ( ! ( branch in state.branches ) ) {
-			state.branches[branch] = { leaves : {} };
-			this.loadBranch( branch );
+		if ( ! ( activeBranch in state.branches ) ) {
+			state.branches[activeBranch] = { leaves : {}, slugs : {} };
+			this.loadBranch( activeBranch );
 		}
 
 		this.setState( state );
 
-		log( 12, 'end PrismTree.changeBranch()' );
+		log( 12, 'end PrismTree.changeBranch() ' + activeBranch );
 
 	},
 
-	changeLeaf: function( branch, leaf ) {
+	changeLeaf: function( activeBranch, activeLeaf ) {
 
 		log( 11, 'beg PrismTree.changeLeaf()' );
 
 		var state = this.state;
 
-		state.active.branch = branch;
-		state.active.leaf   = leaf;
+		state.active.branch = activeBranch;
+		state.active.leaf   = { id: null, slug: null };
 		state.active.meta   = this.hasActiveMeta();
-		state.active.nested = null;
+		state.active.parent = { branch: null, leaf: { id: null, slug: null } };
 
-		if ( ! ( branch in state.branches ) ) {
-			state.branches[branch] = { leaves : {} };
-			this.loadBranch( branch );
+		if ( _.isNumber( activeLeaf ) )
+			state.active.leaf.id   = activeLeaf;
+		else
+			state.active.leaf.slug = activeLeaf;
+
+		if ( ! ( activeBranch in state.branches ) ) {
+			state.branches[activeBranch] = { leaves : {}, slugs : {} };
+			this.loadBranch( activeBranch );
+		} else {
+			if ( state.active.leaf.id == null )
+				state.active.leaf.id = state.branches[activeBranch].slugs[activeLeaf];
 		}
 
 		this.setState( state );
@@ -433,21 +472,29 @@ var PrismTree = React.createClass( {
 	 *
 	 * But that rendering should be handled with the 'active.nested' conditional.
 	 */
-	changeNestedBranch: function( branch, leaf, nestedBranch ) {
+	changeNestedBranch: function( parentBranch, parentLeaf, activeBranch ) {
 		log( 11, 'beg PrismTree.changeNestedBranch()' );
 
 		var state = this.state;
 
-		var route = branch + '/' + leaf + '/' + nestedBranch;
+		var route = parentBranch + '/' + parentLeaf + '/' + activeBranch;
 
-		state.active.branch = nestedBranch;
-		state.active.leaf   = null;
+		state.active.branch = activeBranch;
+		state.active.leaf   = { id: null, slug: null };
 		state.active.meta   = this.hasActiveMeta();
-		state.active.nested = { branch : branch, leaf : leaf, route : route };
+		state.active.parent = { branch : parentBranch, leaf : { id: null, slug: null }, route : route };
+
+		if ( _.isNumber( parentLeaf ) )
+			state.active.parent.leaf.id   = parentLeaf;
+		else
+			state.active.parent.leaf.slug = parentLeaf;
 
 		if ( ! ( route in state.branches ) ) {
-			state.branches[route] = { leaves : {} };
-			this.loadNestedBranch( branch, leaf, nestedBranch, route );
+			state.branches[route] = { leaves : {}, slugs: {} };
+			this.loadNestedBranch( parentBranch, parentLeaf, activeBranch, route );
+		} else {
+			if ( state.active.parent.leaf.id == null )
+				state.active.parent.leaf.id = state.branches[route].slugs[parentLeaf];
 		}
 
 		this.setState( state );
@@ -455,21 +502,34 @@ var PrismTree = React.createClass( {
 		log( 12, 'end PrismTree.changeNestedBranch()' );
 	},
 
-	changeNestedLeaf: function( branch, leaf, nestedBranch, nestedLeaf ) {
+	changeNestedLeaf: function( parentBranch, parentLeaf, activeBranch, activeLeaf ) {
 		log( 11, 'beg PrismTree.changeNestedLeaf()' );
 
 		var state = this.state;
 
-		var route = branch + '/' + leaf + '/' + nestedBranch;
+		var route = parentBranch + '/' + parentLeaf + '/' + activeBranch;
 
-		state.active.branch = nestedBranch;
-		state.active.leaf   = nestedLeaf;
+		state.active.branch = activeBranch;
+		state.active.leaf   = { id: null, slug: null };
 		state.active.meta   = this.hasActiveMeta();
-		state.active.nested = { branch : branch, leaf : leaf, route : route };
+		state.active.parent = { branch : parentBranch, leaf : { id: null, slug: null }, route : route };
+
+		if ( _.isNumber( parentLeaf ) )
+			state.active.parent.leaf.id   = parentLeaf;
+		else
+			state.active.parent.leaf.slug = parentLeaf;
+
+		if ( _.isNumber( activeLeaf ) )
+			state.active.leaf.id   = activeLeaf;
+		else
+			state.active.leaf.slug = activeLeaf;
 
 		if ( ! ( route in state.branches ) ) {
-			state.branches[route] = { leaves : {} };
-			this.loadNestedBranch( branch, leaf, nestedBranch, route );
+			state.branches[route] = { leaves : {}, slugs : {} };
+			this.loadNestedBranch( parentBranch, parentLeaf, activeBranch, route );
+		} else {
+			if ( state.active.leaf.id == null )
+				state.active.leaf.id = state.branches[route].slugs[activeLeaf];
 		}
 
 		this.setState( state );
@@ -491,11 +551,12 @@ var PrismTree = React.createClass( {
 		var branch = 'search';
 
 		state.active.branch = branch;
+		state.active.leaf   = { id: null, slug: null };
 		state.search.last   = state.search.query;
 		state.search.query  = window.location.hash.slice( '#/search?query'.length + 1 );
 
 		if ( ! ( branch in state.branches ) )
-			state.branches[branch] = { leaves : {} };
+			state.branches[branch] = { leaves : {}, slugs : {} };
 
 		this.setState( state );
 
@@ -517,10 +578,10 @@ var PrismTree = React.createClass( {
 		var branch    = state.active.branch;
 		var leaf      = state.active.leaf;
 
-		if ( state.branches[branch].leaves[leaf].metapanel == 'open' )
-			state.branches[branch].leaves[leaf].metapanel = 'closed';
+		if ( state.branches[branch].leaves[leaf.id].metapanel == 'open' )
+			state.branches[branch].leaves[leaf.id].metapanel = 'closed';
 		else
-			state.branches[branch].leaves[leaf].metapanel = 'open';
+			state.branches[branch].leaves[leaf.id].metapanel = 'open';
 
 		state.active.meta = this.hasActiveMeta();
 
@@ -757,21 +818,21 @@ var PrismTree = React.createClass( {
 
 	},
 
-	loadNestedBranch: function( branch, leaf, nestedBranch, route ) {
+	loadNestedBranch: function( parentBranch, parentLeaf, activeBranch, route ) {
 
 		log( 11, 'beg PrismTree.loadNestedBranch()' );
 
 		var state = this.state;
 
 		var params  = '?filter[posts_per_page]=-1';
-		    params += '&filter[connected_type]=' + branch + '_to_' + nestedBranch;
-		    params += '&filter[connected_id]='   + leaf;
+		    params += '&filter[connected_type]=' + parentBranch + '_to_' + activeBranch;
+		    params += '&filter[connected_id]='   + parentLeaf;
 
 		var request = {
-			url      : PRISM.url.rest + branch + params,
+			url      : PRISM.url.rest + parentBranch + params,
 			callback : this.unloadBranch,
 			branch   : route,
-			status   : { type : 'loading', message : 'Searching for ' + nestedBranch + ' data!' }
+			status   : { type : 'loading', message : 'Loading ' + activeBranch + ' data...' }
 		}
 
 		this.queueAJAX( request );
@@ -786,17 +847,25 @@ var PrismTree = React.createClass( {
 
 		var state  = this.state;
 
+		var slugs  = {};
 		var leaves = {};
 
 		for ( var i = 0; i < response.length; i++ ) {
 			var leaf = response[i];
+			var slug = leaf.slug;
 
 			leaf.metapanel = this.state.active.meta ? 'open' : 'closed';
 
 			leaves[leaf.id] = leaf;
+
+			// Create slug alias of id
+			slugs[slug] = leaf.id;
+
+			if ( state.active.leaf.id == null && state.active.leaf.slug == slug)
+				state.active.leaf.id = leaf.id;
 		}
 
-		state.branches[request.branch] = { leaves: leaves };
+		state.branches[request.branch] = { leaves: leaves, slugs: slugs };
 
 		if ( request.branch in PRISM.view )
 			state.branches[request.branch].view = PRISM.view[request.branch];
@@ -899,37 +968,25 @@ var PrismTree = React.createClass( {
 
 		log( 1, '---beg PrismTree.branchData()' );
 
-		var branchData = { 
-			leaves : [], 
-			width  : this.state.width.current.branch,
-			search : this.state.search,
-			view   : PRISM.view.default
-		};
+		var branch = null;
+		var branchData = null;
 
-		if ( this.hasActiveBranch() ) {
+		if ( this.hasActiveBranch() ) branch = this.state.active.branch;
+		if ( this.hasParentBranch() ) branch = this.state.active.parent.route;
 
-			var branch = this.state.active.branch;
-
-			branchData.title  = branch;
-			branchData.leaf   = this.state.active.leaf;
-			branchData.view   = this.state.branches[branch].view;
-			branchData.leaves = this.state.branches[branch].leaves;
-
+		if ( branch == null ) {
+			branchData = { 
+				leaves : {},
+				slugs  : {},
+				view   : PRISM.view.default
+			};
+		} else {
+			branchData = this.state.branches[branch];
 		}
 
-		if ( this.hasNestedBranch() ) {
-
-			var route         = this.state.active.nested.route;
-			var nestedBranch  = this.state.active.nested.branch;
-
-			branchData.nested = this.state.active.nested;
-
-			branchData.title  = this.state.active.branch;
-			branchData.leaf   = this.state.active.leaf;
-			branchData.view   = this.state.branches[route].view;
-			branchData.leaves = this.state.branches[route].leaves;
-
-		}
+		branchData.active = this.state.active;
+		branchData.search = this.state.search;
+		branchData.width  = this.state.width.current.branch;
 
 		log( 2, '---end PrismTree.branchData()' );
 
@@ -950,18 +1007,18 @@ var PrismTree = React.createClass( {
 			branch = this.state.branches[branch];
 
 			if ( this.hasActiveLeaf() )
-				leafData = branch.leaves[leaf];
+				leafData = branch.leaves[leaf.id];
 
 		}
 
-		if ( this.hasNestedBranch() ) {
+		if ( this.hasParentBranch() ) {
 
-			branch = this.state.active.nested.route;
+			branch = this.state.active.parent.route;
 
 			branch = this.state.branches[branch];
 
-			if ( this.hasNestedLeaf() )
-				leafData = branch.leaves[leaf];
+			if ( this.hasParentLeaf() )
+				leafData = branch.leaves[leaf.id];
 
 		}
 
@@ -996,7 +1053,7 @@ var PrismTree = React.createClass( {
 			if ( this.hasActiveLeaf() ) {
 
 				PRISM.meta.default.map( function( key, i ) {
-					metaData[key] = leaves[leaf][key];
+					metaData[key] = leaves[leaf.id][key];
 				}, this );
 
 				PRISM.branches.map( function( b, i ) {
@@ -1009,7 +1066,7 @@ var PrismTree = React.createClass( {
 
 							// An array of post_ids in another branch
 							// (actor ids in the actor branch)
-							var keys = leaves[leaf][connection];
+							var keys = leaves[leaf.id][connection];
 
 							metaData[connection] = {};
 
@@ -1027,12 +1084,14 @@ var PrismTree = React.createClass( {
 
 								keys.map( function( key, i ) {
 									metaData[connection][key]['name'] = key;
+									metaData[connection][key]['slug'] = key;
 								} );
 
 							} else {
 
 								keys.map( function( key, i ) {
 									metaData[connection][key]['name'] = branches[connection].leaves[key].title.rendered;
+									metaData[connection][key]['slug'] = branches[connection].leaves[key].slug;
 								} );
 
 							}
@@ -1051,8 +1110,6 @@ var PrismTree = React.createClass( {
 		metaData.metaActive       = this.state.active.meta;
 		metaData.lockMeta         = this.state.lockMeta;
 		metaData.currentlyChanged = this.state.currentlyChanged;
-
-		log( metaData );
 
 		log( 2, '---end PrismTree.metaData()' );
 
@@ -1116,8 +1173,8 @@ var PrismTree = React.createClass( {
 		var prismMeta    = <PrismMeta   func={metaFunctions}   auth={auth} data={this.metaData()}   />;
 
 		var renderTrunk  = prismTrunk; // For code consistency
-		var renderBranch = this.hasActiveBranch() || this.hasNestedBranch() ? prismBranch : null;
-		var renderLeaf   = this.hasActiveLeaf()   || this.hasNestedLeaf()   ? prismLeaf   : null;
+		var renderBranch = this.hasActiveBranch() || this.hasParentBranch() ? prismBranch : null;
+		var renderLeaf   = this.hasActiveLeaf()   || this.hasParentLeaf()   ? prismLeaf   : null;
 		var renderMeta   = this.hasActiveMeta()   ? prismMeta   : null;
 
 		log( 12, 'end PrismTree.render()' );

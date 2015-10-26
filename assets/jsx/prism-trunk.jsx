@@ -131,44 +131,44 @@ var PrismMenu = React.createClass( {
 
 		var menuItems = PRISM.branches.map( function( branch, i ) {
 
-			var namePlural = branch.slug.plural;
+			var branchPlural = branch.slug.plural;
 
-			var active  = namePlural == data.active.branch;
-			var nested  = data.active.nested;
+			var active  = branchPlural == data.active.branch;
+			var parent  = data.active.parent;
 
 			var classes = active ? 'active'  : '';
-			classes    += active && nested != null ? ' nested' : '';
+			classes    += active && parent.branch != null ? ' parent' : '';
 
 			var title   = branch.title;
 
-			var nestedLink = function() {
+			var parentLink = function() {
 
-				if ( active && nested != null ) {
+				if ( active && parent.branch != null ) {
 
-					var nameNested;
+					var leaf = data.active.parent.leaf;
+					var parentSingle;
 
-					PRISM.branches.map( function( branch, i ) {
-						if ( branch.slug.plural == nested.branch ) nameNested = branch.slug.single;
+					PRISM.branches.map( function( b, i ) {
+						if ( b.slug.plural == parent.branch ) parentSingle = b.slug.single;
 					} );
 
-					var href = '/#/' + nameNested + '/' + nested.leaf;
+					var href = '/#/' + parentSingle + '/' + leaf.slug;
 
-					var link = <a href={href} className='active nested'>in {nameNested} {nested.leaf}</a>
+					var link = <a href={href} className='active parent'>in {parent.leaf.slug}</a>
 				}
 
 				return link;
 
 			}.bind( this );
 
-
 			var iconClasses = branch.icon == null ? "fa fa-fw fa-thumb-tack" : "fa fa-fw " + branch.icon;
 
 			return (
 				<li key={i}>
-					<a href={'/#/' + namePlural} id={namePlural} className={classes} data-slug={namePlural}>
+					<a href={'/#/' + branchPlural} id={branchPlural} className={classes}>
 						<i className={iconClasses}></i>{title}
 					</a>
-					{nestedLink()}
+					{parentLink()}
 				</li>
 			);
 

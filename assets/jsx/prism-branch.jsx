@@ -42,27 +42,34 @@ var PrismBranch = React.createClass( {
 
 			var leaf = data.leaves[key];
 
-			if ( leaf.id == data.leaf )
+			if ( leaf.id == data.active.leaf.id )
 				leaf.active = 'active';
 			else
 				leaf.active = '';
 
-			if ( data.nested == null )
-				leaf.nested = false;
-			else {
-				leaf.nested = data.nested;
+			var branch;
+			var parentBranch;
+
+			leaf.href = '/#/';
+
+			if ( data.active.parent.branch != null ) {
+				// TODO: Currently cycles through whole map, convert to 'some' or use for/break?
+				PRISM.branches.map( function( b, i ) {
+					if ( b.slug.plural == data.active.parent.branch ) parentBranch = b.slug.single;
+				} );
+
+				leaf.href += parentBranch + '/' + data.active.parent.leaf.slug + '/';
 			}
 
-			// log( data );
-
-			var branch;
 
 			// TODO: Currently cycles through whole map, convert to 'some' or use for/break?
 			PRISM.branches.map( function( b, i ) {
-				if ( b.slug.plural == leaf.type ) branch = b;
+				if ( b.slug.plural == leaf.type ) branch = b.slug.single;
 			} );
 
-			return <PrismLeafNode data={leaf} key={key} func={func} branch={branch} />
+			leaf.href += branch + '/' + leaf.slug;
+
+			return <PrismLeafNode data={leaf} key={key} func={func} />
 
 		}, this );
 
@@ -113,13 +120,13 @@ var PrismBranchHeader = React.createClass( {
 
 		var classes = 'fa fa-border fa-pull-right fa-2x';
 
-		var renderAddLeaf = auth && data.title !== 'search' ? <i id="prism-add-leaf" className={classes + ' fa-plus'} onClick={func.addLeaf}></i> : null;
+		var renderAddLeaf = auth && data.active.branch !== 'search' ? <i id="prism-add-leaf" className={classes + ' fa-plus'} onClick={func.addLeaf}></i> : null;
 
 		log( 12, 'end PrismBranchHeader.render()' );
 
 		return (
 			<header id="prism-branch-header">
-				<h2>{data.title}</h2>
+				<h2>{data.active.branch}</h2>
 				<div id="prism-branch-visual-controls">
 					<i id="prism-branch-view-rows" data-view="list" className={classes + list} onClick={this.changeView}></i>
 					<i id="prism-branch-view-full" data-view="full" className={classes + full} onClick={this.changeView}></i>
@@ -148,7 +155,7 @@ var PrismLeafNode = React.createClass( {
 		if ( this.props.data.type == 'attachment' )
 			id = 'media';
 
-		id += "/" + this.props.data.id;
+		id += "/" + this.props.data.slug;
 
 		log( 2, 'end PrismLeafNode.id()' );
 
@@ -163,28 +170,6 @@ var PrismLeafNode = React.createClass( {
 		var data = this.props.data;
 		var func = this.props.func;
 
-		var nameSingle;
-		var namePlural;
-
-		if ( data.type != 'search' ) {
-			nameSingle = this.props.branch.slug.single;
-			namePlural = this.props.branch.slug.plural;
-		} else {
-			nameSingle = '';
-			namePlural = '';
-		}
-
-		var nestedSingle;
-		var nestedPlural;
-
-		// TODO: Currently cycles through whole map, convert to 'some' or use for/break?
-		PRISM.branches.map( function( b, i ) {
-			if ( b.slug.plural == data.nested.branch ) {
-				nestedSingle = b.slug.single;
-				nestedPlural = b.slug.plural;
-			}
-		} );
-
 		// TODO: Don't do this.
 		// This is an UGLY stop gap to get around the post/posts problem
 		// if ( type.slice(-1) != 's' )
@@ -194,10 +179,6 @@ var PrismLeafNode = React.createClass( {
 		// 	type = this.props.type;
 
 		var id    = this.id();
-		var href  = '/#/' + nameSingle + '/' + data.id;
-
-		if ( data.nested != false )
-			href = '/#/' + nestedSingle + '/' + data.nested.leaf + '/' + nameSingle + '/' + data.id;
 
 		var styles  = {};
 		var classes = 'prism-leaf ' + data.active;
@@ -214,7 +195,7 @@ var PrismLeafNode = React.createClass( {
 
 		return (
 			<li id={id} className={classes} key={this.props.key} style={styles}>
-				<a href={href} data-title={namePlural} data-id={data.id}>{data.title.rendered}</a>
+				<a href={data.href}>{data.title.rendered}</a>
 			</li>
 		)
 	}

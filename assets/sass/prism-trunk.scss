@@ -80,7 +80,7 @@
 						border-color: $black;
 					}
 
-					&.nested {
+					&.parent {
 						padding: 5px 15px;
 
 						&:nth-of-type(1) { padding-bottom: 0; border-bottom: none; }

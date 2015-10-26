@@ -104,9 +104,14 @@ class Prism {
 		if ( array_key_exists( 'connected_id', $args ) ) {
 
 			$query = array(
-			           'p'         => $args['connected_id'],
 			           'post_type' => 'any'
 			         );
+
+			if ( is_numeric( $args['connected_id'] ) )
+				$query['p']    = $args['connected_id'];
+			else
+				$query['name'] = $args['connected_id'];
+
 
 			$connected_items = new WP_Query( $query );
 
