@@ -1601,6 +1601,8 @@ var PrismLeafNode = React.createClass({
 		// 	classes += ' ' + type;
 		// }
 
+		var content = data.content.raw.length > 0 ? data.content.raw.substring(0, 75) + '...' : '';
+
 		log(2, 'end PrismLeafNode.render()');
 
 		return React.createElement(
@@ -1609,7 +1611,16 @@ var PrismLeafNode = React.createClass({
 			React.createElement(
 				'a',
 				{ href: '#/' + data.href },
-				data.title.rendered
+				React.createElement(
+					'h4',
+					null,
+					data.title.raw
+				),
+				React.createElement(
+					'p',
+					null,
+					content
+				)
 			)
 		);
 	}
@@ -1664,7 +1675,7 @@ var PrismLeaf = React.createClass({
 
 		var content;
 
-		if (data.type == 'attachment') content = React.createElement('img', { src: data.source_url });else content = data.content.rendered;
+		if (data.type == 'attachment') content = React.createElement('img', { src: data.source_url });else content = data.content.raw;
 
 		var editContent = React.createElement('textarea', { autoFocus: true, id: 'prism-leaf-content', 'data-key': 'content', value: content, onBlur: this.toggleEdit, onFocus: this.autoSelect, onChange: func.changeValue });
 		var staticContent = React.createElement(
@@ -1716,7 +1727,7 @@ var PrismLeafHeader = React.createClass({
 		return React.createElement(
 			'header',
 			{ id: 'prism-leaf-header' },
-			React.createElement(PrismLeafTitle, { auth: auth, data: data.title.rendered, func: func }),
+			React.createElement(PrismLeafTitle, { auth: auth, data: data.title.raw, func: func }),
 			React.createElement(PrismIcon, { type: 'toggle', data: data, func: func })
 		);
 	}

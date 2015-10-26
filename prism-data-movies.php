@@ -51,7 +51,10 @@ class Prism_Movies_Data {
 									'post_title'   => 'Yellow Submarine',
 									'post_content' => 'The Beatles agree to accompany Captain Fred in his Yellow Submarine and go to Pepperland to free it from the music hating Blue Meanies.'
 								),
-								array( 'post_title' => 'The Color Purple'               ),
+								array( 
+									'post_title'   => 'The Color Purple',
+									'post_content' => 'A black Southern woman struggles to find her identity after suffering years of abuse from her father and others over 40 years.'
+								),
 								array( 'post_title' => 'The Pink Panther'               ),
 								array( 'post_title' => 'Red Dragon'                     ),
 								array( 'post_title' => 'Soylent Green'                  ),

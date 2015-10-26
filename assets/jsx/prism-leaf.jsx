@@ -49,7 +49,7 @@ var PrismLeaf = React.createClass( {
 		if ( data.type == 'attachment' ) 
 			content = <img src={data.source_url} />;
 		else
-			content = data.content.rendered;
+			content = data.content.raw;
 
 		var editContent    = <textarea autoFocus id="prism-leaf-content" data-key="content" value={content} onBlur={this.toggleEdit} onFocus={this.autoSelect} onChange={func.changeValue} />;
 		var staticContent  = <pre id="prism-leaf-content" onDoubleClick={this.toggleEdit}>{content}</pre>;
@@ -101,7 +101,7 @@ var PrismLeafHeader = React.createClass( {
 
 		return (
 			<header id="prism-leaf-header">
-				<PrismLeafTitle auth={auth} data={data.title.rendered} func={func} />
+				<PrismLeafTitle auth={auth} data={data.title.raw} func={func} />
 				<PrismIcon type='toggle' data={data} func={func} />
 			</header>
 		)

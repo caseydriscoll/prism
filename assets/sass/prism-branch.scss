@@ -127,7 +127,6 @@
 				background-size: 100%;
 
 				a {
-
 					color: $black;
 					text-shadow: 0 0 2px $white;
 
@@ -165,7 +164,7 @@
 				display: block; position: absolute;
 				left: 0; right: 0;
 				top: 0; bottom: 0;
-				padding: 10px;
+				padding: 7px;
 
 				font-size: 16px;
 				font-weight: bold;
@@ -181,6 +180,21 @@
 
 				border: $border;
 				border-color: $grey;
+
+				overflow: hidden;
+
+				h4 {
+					margin: 0 0 5px;
+					font-size: 16px;
+					line-height: 20px;
+				}
+
+				p {
+					font-size: 12px;
+					line-height: 15px;
+					color: $grey;
+				}
+
 
 				&:hover {
 					color: $black;
@@ -198,6 +212,8 @@
 					color: $black;
 					background: $highlight;
 					border-color: $black;
+
+					p { color: $dark; }
 				}
 			}
 

@@ -414,7 +414,7 @@ body > *:not(#prism) {
         right: 0;
         top: 0;
         bottom: 0;
-        padding: 10px;
+        padding: 7px;
         font-size: 16px;
         font-weight: bold;
         line-height: 20px;
@@ -423,7 +423,16 @@ body > *:not(#prism) {
         color: #808080;
         text-decoration: none;
         border: 2px solid #000000;
-        border-color: #808080; }
+        border-color: #808080;
+        overflow: hidden; }
+        #prism-branch ul#prism-leaves .prism-leaf a h4 {
+          margin: 0 0 5px;
+          font-size: 16px;
+          line-height: 20px; }
+        #prism-branch ul#prism-leaves .prism-leaf a p {
+          font-size: 12px;
+          line-height: 15px;
+          color: #808080; }
         #prism-branch ul#prism-leaves .prism-leaf a:hover {
           color: #000000;
           background-color: #dddddd;
@@ -434,6 +443,8 @@ body > *:not(#prism) {
           color: #000000;
           background: #1ab7d9;
           border-color: #000000; }
+          #prism-branch ul#prism-leaves .prism-leaf.active a p {
+            color: #333333; }
 
 #prism-leaf {
   display: block;
