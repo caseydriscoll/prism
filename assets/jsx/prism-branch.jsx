@@ -150,6 +150,8 @@ var PrismLeafNode = React.createClass( {
 
 		var id = this.props.data.type;
 
+		if ( id == null ) return 'no-search-results';
+
 		if ( id.slice(-1) != 's' )
 			id += 's';
 
@@ -180,6 +182,8 @@ var PrismLeafNode = React.createClass( {
 		// 	type = this.props.type;
 
 		var id    = this.id();
+
+		if ( id == 'no-search-results' ) data.href = 'search';
 
 		var styles  = {};
 		var classes = 'prism-leaf ' + data.active;

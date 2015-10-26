@@ -987,6 +987,10 @@ var PrismTree = React.createClass({
 			branchData = this.state.branches[branch];
 		}
 
+		var query = this.state.search.query;
+
+		if (branch == 'search' && _.isEmpty(branchData.leaves) && query != '') branchData.leaves[0] = { id: 0, type: null, title: { rendered: 'No search results for "' + query + '"' } };
+
 		branchData.active = this.state.active;
 		branchData.search = this.state.search;
 		branchData.width = this.state.width.current.branch;
@@ -1549,6 +1553,8 @@ var PrismLeafNode = React.createClass({
 
 		var id = this.props.data.type;
 
+		if (id == null) return 'no-search-results';
+
 		if (id.slice(-1) != 's') id += 's';
 
 		if (this.props.data.type == 'attachment') id = 'media';
@@ -1577,6 +1583,8 @@ var PrismLeafNode = React.createClass({
 		// 	type = this.props.type;
 
 		var id = this.id();
+
+		if (id == 'no-search-results') data.href = 'search';
 
 		var styles = {};
 		var classes = 'prism-leaf ' + data.active;
