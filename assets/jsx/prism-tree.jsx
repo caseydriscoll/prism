@@ -13,7 +13,6 @@ var PrismTree = React.createClass( {
 			active           : { 
 				branch  : null,
 				leaf    : null,
-				meta    : false,
 				parent  : { branch: null, leaf: { id: null, slug: null } }
 			},
 			search           : {
@@ -353,11 +352,10 @@ var PrismTree = React.createClass( {
 	 *     The global state is 'locked' open for all leaves
 	 *     The local state is 'open' for that particular leaf
 	 *
-	 * This condition is checked on toggleMeta and lockMeta
-	 *
-	 * This needed to be attached to state because it wasn't updating otherwise.
+	 * Therefor the application does not have a saved meta 'state' 
+	 *     as it depends on these two state conditions
 	 * 
-	 * @return {Boolean} [description]
+	 * @return {Boolean} The state of the metapanel. True for open, False for closed
 	 */
 	hasActiveMeta: function() {
 
@@ -368,16 +366,16 @@ var PrismTree = React.createClass( {
 		var branch = state.active.branch;
 		var leaf   = state.active.leaf;
 
-		var meta   = false;
+		var hasActiveMeta = false;
 
 		if ( this.hasActiveLeaf() ) {
 			if ( state.lockMeta == 'lock' || state.branches[branch].leaves[leaf.id].metapanel == 'open' )
-				meta = true;
+				hasActiveMeta = true;
 		}
 
-		log( 2, '------end PrismTree.hasActiveMeta()' );
+		log( 2, '------end PrismTree.hasActiveMeta() ' + hasActiveMeta );
 
-		return meta;
+		return hasActiveMeta;
 	},
 
 	changeStatus: function( status ) {
@@ -406,7 +404,6 @@ var PrismTree = React.createClass( {
 
 		state.active.branch = activeBranch;
 		state.active.leaf   = { id: null, slug: null };
-		state.active.meta   = this.hasActiveMeta();
 		state.active.parent = { branch: null, leaf: { id: null, slug: null } };
 
 		if ( ! ( activeBranch in state.branches ) ) {
@@ -428,7 +425,6 @@ var PrismTree = React.createClass( {
 
 		state.active.branch = activeBranch;
 		state.active.leaf   = { id: null, slug: null };
-		state.active.meta   = this.hasActiveMeta();
 		state.active.parent = { branch: null, leaf: { id: null, slug: null } };
 
 		if ( _.isNumber( activeLeaf ) )
@@ -481,7 +477,6 @@ var PrismTree = React.createClass( {
 
 		state.active.branch = activeBranch;
 		state.active.leaf   = { id: null, slug: null };
-		state.active.meta   = this.hasActiveMeta();
 		state.active.parent = { branch : parentBranch, leaf : { id: null, slug: null }, route : route };
 
 		if ( _.isNumber( parentLeaf ) )
@@ -511,7 +506,6 @@ var PrismTree = React.createClass( {
 
 		state.active.branch = activeBranch;
 		state.active.leaf   = { id: null, slug: null };
-		state.active.meta   = this.hasActiveMeta();
 		state.active.parent = { branch : parentBranch, leaf : { id: null, slug: null }, route : route };
 
 		if ( _.isNumber( parentLeaf ) )
@@ -583,8 +577,6 @@ var PrismTree = React.createClass( {
 		else
 			state.branches[branch].leaves[leaf.id].metapanel = 'open';
 
-		state.active.meta = this.hasActiveMeta();
-
 		this.setState( state );
 
 		log( 12, 'end PrismTree.changeMeta()' );
@@ -600,8 +592,6 @@ var PrismTree = React.createClass( {
 			state.lockMeta = 'lock';
 		else
 			state.lockMeta = 'unlock';
-
-		state.active.meta = this.hasActiveMeta();
 
 		this.setState( state );
 
@@ -854,7 +844,7 @@ var PrismTree = React.createClass( {
 			var leaf = response[i];
 			var slug = leaf.slug;
 
-			leaf.metapanel = this.state.active.meta ? 'open' : 'closed';
+			leaf.metapanel = 'closed';
 
 			leaves[leaf.id] = leaf;
 
@@ -1023,7 +1013,7 @@ var PrismTree = React.createClass( {
 		}
 
 		leafData.width            = this.state.width.current;
-		leafData.metaActive       = this.state.active.meta;
+		leafData.metaActive       = this.hasActiveMeta();
 		leafData.currentlyChanged = this.state.currentlyChanged;
 
 		log( 2, '---end PrismTree.leafData()' );
@@ -1107,7 +1097,7 @@ var PrismTree = React.createClass( {
 		}
 
 		metaData.width            = this.state.width.current.meta;
-		metaData.metaActive       = this.state.active.meta;
+		metaData.metaActive       = this.hasActiveMeta();
 		metaData.lockMeta         = this.state.lockMeta;
 		metaData.currentlyChanged = this.state.currentlyChanged;
 

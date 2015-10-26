@@ -284,7 +284,7 @@ class Prism {
 			'debug'         => array(
 					'level'           => 1,
 					'ignore'          => array(
-															   // 'PrismLeafNode'
+															   'PrismLeafNode'
 															 ),
 					'only'            => array(
 
