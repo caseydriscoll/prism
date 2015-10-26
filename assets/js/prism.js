@@ -1306,9 +1306,6 @@ var PrismSearchStatus = React.createClass({
 		var focus = data.active.branch == 'search' ? true : false;
 		var classes = data.active.branch == 'search' ? 'active' : '';
 
-		log(data.active);
-		log('focus ' + focus);
-
 		var status = this.state;
 		status.rainbow = data.rainbow;
 
