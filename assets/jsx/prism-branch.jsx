@@ -196,14 +196,16 @@ var PrismLeafNode = React.createClass( {
 		// 	classes += ' ' + type;
 		// }
 
-		var content = data.content.raw.length > 0 ? data.content.raw.substring( 0, 75 ) + '...' : '';
+		var contentType = data.content.raw == null ? 'rendered' : 'raw';
+
+		var content = data.content[contentType].length > 0 ? data.content[contentType].substring( 0, 75 ) + '...' : '';
 
 		log( 2, 'end PrismLeafNode.render()' );
 
 		return (
 			<li id={data.href} className={classes} key={this.props.key} style={styles}>
 				<a href={ '#/' + data.href}>
-					<h4>{data.title.raw}</h4>
+					<h4>{data.title[contentType]}</h4>
 					<p>{content}</p>
 				</a>
 			</li>
