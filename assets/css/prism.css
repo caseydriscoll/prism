@@ -437,6 +437,8 @@ body > *:not(#prism) {
           color: #000000;
           background-color: #dddddd;
           border-color: #000000; }
+          #prism-branch ul#prism-leaves .prism-leaf a:hover p {
+            color: #333333; }
       #prism-branch ul#prism-leaves .prism-leaf.active {
         box-shadow: 0 0 10px #1ab7d9; }
         #prism-branch ul#prism-leaves .prism-leaf.active a {
