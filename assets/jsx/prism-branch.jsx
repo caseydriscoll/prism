@@ -50,7 +50,7 @@ var PrismBranch = React.createClass( {
 			var branch;
 			var parentBranch;
 
-			leaf.href = '/#/';
+			leaf.href = '';
 
 			if ( data.active.parent.branch != null ) {
 				// TODO: Currently cycles through whole map, convert to 'some' or use for/break?
@@ -194,8 +194,8 @@ var PrismLeafNode = React.createClass( {
 		log( 2, 'end PrismLeafNode.render()' );
 
 		return (
-			<li id={id} className={classes} key={this.props.key} style={styles}>
-				<a href={data.href}>{data.title.rendered}</a>
+			<li id={data.href} className={classes} key={this.props.key} style={styles}>
+				<a href={ '#/' + data.href}>{data.title.rendered}</a>
 			</li>
 		)
 	}

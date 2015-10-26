@@ -166,12 +166,9 @@ var PrismTree = React.createClass({
 		log(11, 'beg PrismTree.move()');
 
 		if (this.hasActiveLeaf()) {
-			var leaf = this.state.active.leaf;
-			var branch = this.state.active.branch;
 
-			var view = this.state.branches[branch].view;
-
-			var id = branch + '/' + leaf;
+			var id = window.location.hash.substring(2);
+			var view = this.state.branches[this.state.active.branch].view;
 
 			var next;
 
@@ -208,7 +205,7 @@ var PrismTree = React.createClass({
 				if (direction == 'up') next = document.getElementById(id).previousSibling;else if (direction == 'down') next = document.getElementById(id).nextSibling;
 			}
 
-			if (next != null) window.location = '/#/' + next.id;
+			if (next != null) window.location = '#/' + next.id;
 		}
 
 		log(12, 'end PrismTree.move()');
@@ -1450,7 +1447,7 @@ var PrismBranch = React.createClass({
 			var branch;
 			var parentBranch;
 
-			leaf.href = '/#/';
+			leaf.href = '';
 
 			if (data.active.parent.branch != null) {
 				// TODO: Currently cycles through whole map, convert to 'some' or use for/break?
@@ -1598,10 +1595,10 @@ var PrismLeafNode = React.createClass({
 
 		return React.createElement(
 			'li',
-			{ id: id, className: classes, key: this.props.key, style: styles },
+			{ id: data.href, className: classes, key: this.props.key, style: styles },
 			React.createElement(
 				'a',
-				{ href: data.href },
+				{ href: '#/' + data.href },
 				data.title.rendered
 			)
 		);

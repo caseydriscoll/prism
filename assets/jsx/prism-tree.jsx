@@ -112,12 +112,9 @@ var PrismTree = React.createClass( {
 		log( 11, 'beg PrismTree.move()' );
 
 		if ( this.hasActiveLeaf() ) {
-			var leaf   = this.state.active.leaf;
-			var branch = this.state.active.branch;
 
-			var view   = this.state.branches[branch].view;
-
-			var id     = branch + '/' + leaf;
+			var id     = window.location.hash.substring( 2 );
+			var view   = this.state.branches[this.state.active.branch].view;
 
 			var next;
 
@@ -165,7 +162,7 @@ var PrismTree = React.createClass( {
 			}
 
 
-			if ( next != null ) window.location = '/#/' + next.id;
+			if ( next != null ) window.location = '#/' + next.id;
 
 		}
 
