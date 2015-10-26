@@ -72,6 +72,9 @@ var PrismTree = React.createClass( {
 
 		var state = this.state;
 
+		state.ajax.queue = state.ajax.queue.concat( PRISM.ajax.queue );
+		PRISM.ajax.queue = [];
+
 		if ( state.ajax.queue.length > 0 && state.ajax.status == 'done' )
 			this.getData( state.ajax.queue[0] );
 
@@ -86,6 +89,9 @@ var PrismTree = React.createClass( {
 		log( 11, 'beg PrismTree.componentDidUpdate()' );
 
 		var state = this.state;
+
+		state.ajax.queue = state.ajax.queue.concat( PRISM.ajax.queue );
+		PRISM.ajax.queue = [];
 
 		if ( state.ajax.queue.length > 0 && state.ajax.status == 'done' )
 			this.getData( state.ajax.queue[0] );
@@ -769,7 +775,7 @@ var PrismTree = React.createClass( {
 
 	loadBranch: function( branch ) {
 
-		log( 11, 'beg PrismTree.loadBranch()' );
+		log( 11, 'beg PrismTree.loadBranch() ' + branch );
 
 		var params = '?filter[posts_per_page]=-1';
 
@@ -873,15 +879,7 @@ var PrismTree = React.createClass( {
 	queueAJAX: function( request ) {
 		log( 11, 'beg PrismTree.queueAJAX()' );
 
-		var state = this.state;
-
-		if ( state.ajax.status == 'done' ) {
-			state.ajax.queue.push( request );
-			this.setState( state );
-		} else {
-			PRISM.ajax.queue.push( request );
-		}
-
+		PRISM.ajax.queue.push( request );
 
 		log( 12, 'end PrismTree.queueAJAX()' );
 	},
@@ -907,6 +905,47 @@ var PrismTree = React.createClass( {
 		this.setState( state );
 
 		log( 12, 'end PrismTree.dequeueAJAX()' );
+	},
+
+	needsData: function( branch ) {
+		log( 11, 'beg PrismTree.needsData() ' + branch );
+
+		var needsData = false;
+
+		var connectionBranch = this.state.branches[branch];
+
+		var inQueue = false;
+
+		PRISM.ajax.queue.map( function( request, i ) {
+			if ( branch == request.branch )
+				inQueue = true;
+		}, this );
+
+		this.state.ajax.queue.map( function( request, i ) {
+			if ( branch == request.branch )
+				inQueue = true;
+		}, this );
+
+		if ( connectionBranch == undefined && ! inQueue )
+			needsData = true;
+
+		log( 12, 'end PrismTree.needsData() ' + needsData );
+		return needsData;
+
+	},
+
+	hasData: function( branch ) {
+		log( 11, 'beg PrismTree.hasData() ' + branch );
+
+		var hasData = false;
+
+		var branchData = this.state.branches[branch];
+
+		if ( branchData != undefined )
+			hasData = true;
+
+		log( 12, 'end PrismTree.hasData() ' + hasData );
+		return hasData;
 	},
 
 	getData: function( request ) {
@@ -1064,24 +1103,20 @@ var PrismTree = React.createClass( {
 								metaData[connection][key] = {};
 							} );
 
-							var connectionBranch = this.state.branches[connection];
+							if ( this.needsData( connection ) ) this.loadBranch( connection );
 
-							console.log( 'cb: ', connectionBranch );
-
-							if ( connectionBranch == undefined ) {
-
-								this.loadBranch( connection );
+							if ( this.hasData ( connection ) ) {
 
 								keys.map( function( key, i ) {
-									metaData[connection][key]['name'] = key;
-									metaData[connection][key]['slug'] = key;
+									metaData[connection][key]['name'] = branches[connection].leaves[key].title.rendered;
+									metaData[connection][key]['slug'] = branches[connection].leaves[key].slug;
 								} );
 
 							} else {
 
 								keys.map( function( key, i ) {
-									metaData[connection][key]['name'] = branches[connection].leaves[key].title.rendered;
-									metaData[connection][key]['slug'] = branches[connection].leaves[key].slug;
+									metaData[connection][key]['name'] = key;
+									metaData[connection][key]['slug'] = key;
 								} );
 
 							}

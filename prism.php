@@ -26,7 +26,7 @@ class Prism {
 
 
 	}
-	
+
 	static function business_logic() {
 		$args = array(
 			'public'       => true,
@@ -282,7 +282,7 @@ class Prism {
 
 		$data = array(
 			'debug'         => array(
-					'level'           => 1,
+					'level'           => 10,
 					'ignore'          => array(
 															   'PrismLeafNode'
 															 ),
