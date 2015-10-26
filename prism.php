@@ -34,6 +34,7 @@ class Prism {
 			'labels'       => array(
 			                    'singular' => 'movie'
 			                  ),
+			'supports'     => array( 'title', 'editor', 'author', 'thumbnail', 'excerpt' ),
 			'show_in_rest' => true
 		);
 
@@ -45,6 +46,7 @@ class Prism {
 			'labels'       => array(
 			                    'singular' => 'actor'
 			                  ),
+			'supports'     => array( 'title', 'editor', 'author', 'thumbnail', 'excerpt' ),
 			'show_in_rest' => true
 		);
 

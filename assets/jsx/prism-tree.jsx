@@ -779,7 +779,8 @@ var PrismTree = React.createClass( {
 
 		log( 11, 'beg PrismTree.loadBranch() ' + branch );
 
-		var params = '?filter[posts_per_page]=-1';
+		var params  = '?filter[posts_per_page]=-1';
+		    params += '&context=edit';
 
 		var request = {
 			url      : PRISM.url.rest + branch + params,
@@ -965,6 +966,9 @@ var PrismTree = React.createClass( {
 		jQuery.ajax( {
 			method  : 'GET',
 			url     : request.url,
+			beforeSend: function ( xhr ) {
+				xhr.setRequestHeader( 'X-WP-Nonce', PRISM.nonce );
+			},
 			success : this.dequeueAJAX,
 			error   : this.dequeueAJAX
 		} );

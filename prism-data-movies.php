@@ -47,7 +47,10 @@ class Prism_Movies_Data {
 		P2P_Storage::install();
 
 		$movies = array(
-								array( 'post_title' => 'Yellow Submarine'               ),
+								array( 
+									'post_title'   => 'Yellow Submarine',
+									'post_content' => 'The Beatles agree to accompany Captain Fred in his Yellow Submarine and go to Pepperland to free it from the music hating Blue Meanies.'
+								),
 								array( 'post_title' => 'The Color Purple'               ),
 								array( 'post_title' => 'The Pink Panther'               ),
 								array( 'post_title' => 'Red Dragon'                     ),
