@@ -1871,6 +1871,9 @@ var PrismMetaInfo = React.createClass({
 		// If not authenticated, don't all to edit
 		if (!auth) return;
 
+		// If currently editing, ignore extra clicks
+		if (this.state.edit && e.type == 'click') return;
+
 		// Don't allow editing of the primary ID
 		if (key == 'id') return;
 
