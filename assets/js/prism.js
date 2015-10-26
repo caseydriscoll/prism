@@ -993,7 +993,12 @@ var PrismTree = React.createClass({
 
 		var query = this.state.search.query;
 
-		if (branch == 'search' && _.isEmpty(branchData.leaves) && query != '') branchData.leaves[0] = { id: 0, type: null, title: { rendered: 'No search results for "' + query + '"' } };
+		if (branch == 'search' && _.isEmpty(branchData.leaves) && query != '') branchData.leaves[0] = {
+			id: 0,
+			type: null,
+			content: { raw: '' },
+			title: { raw: 'No search results for "' + query + '"' }
+		};
 
 		branchData.active = this.state.active;
 		branchData.search = this.state.search;
