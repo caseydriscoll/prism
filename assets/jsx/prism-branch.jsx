@@ -16,9 +16,10 @@ var PrismBranch = React.createClass( {
 	scrollLeaf: function() {
 		var data = this.props.data;
 
-		var activeLeafID = data.title + '/' + data.leaf;
+		var activeLeafID = window.location.hash.substring( 2 );
 
 		var activeLeaf = document.getElementById( activeLeafID );
+		var container  = document.getElementById( 'prism-branch' );
 		var offset     = document.getElementById( 'prism-branch-header' );
 
 		if ( offset == null || activeLeaf == null ) return;
