@@ -767,8 +767,10 @@ var PrismTree = React.createClass({
 
 		log(11, 'beg PrismTree.loadBranch() ' + branch);
 
+		var context = this.props.auth ? 'edit' : 'view';
+
 		var params = '?filter[posts_per_page]=-1';
-		params += '&context=edit';
+		params += '&context=' + context;
 
 		var request = {
 			url: PRISM.url.rest + branch + params,
