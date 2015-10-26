@@ -77,11 +77,13 @@ var PrismLeaf = React.createClass( {
 		else
 			style.width = 100 - ( data.width.trunk + data.width.branch ) + '%';
 
+		var resizeBar = data.metaActive ? <PrismResizeBar data={data} func={func} /> : null;
+
 		return (
 			<div id="prism-leaf" data-section='leaf' style={style}>
 				<PrismLeafHeader auth={auth} data={data} func={func} />
 				{this.renderContentPanel()}
-				<PrismResizeBar data={data} func={func} />
+				{resizeBar}
 			</div>
 		);
 	}
