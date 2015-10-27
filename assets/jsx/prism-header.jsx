@@ -38,7 +38,7 @@ var PrismUserAccount = React.createClass( {
 
 		return (
 
-			<a id="prism-user-account" onClick={func.toggleUser}>
+			<a id="prism-user-account" onClick={func.toggleUserBar}>
 				{icon}
 			</a>
 

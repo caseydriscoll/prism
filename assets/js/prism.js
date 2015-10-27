@@ -46,7 +46,7 @@ var PrismUserAccount = React.createClass({
 
 		return React.createElement(
 			"a",
-			{ id: "prism-user-account", onClick: func.toggleUser },
+			{ id: "prism-user-account", onClick: func.toggleUserBar },
 			icon
 		);
 	}
@@ -2281,7 +2281,7 @@ var Prism = React.createClass({
 
 		log(11, 'beg Prism.componentWillMount()');
 
-		this.getUser();
+		this.loadUser();
 
 		log(12, 'end Prism.componentWillMount()');
 	},
@@ -2360,41 +2360,40 @@ var Prism = React.createClass({
 		log(12, 'end Prism.dequeueAJAX()');
 	},
 
-	getUser: function getUser() {
+	loadUser: function loadUser() {
 
-		log(11, 'beg Prism.getUser()');
+		log(11, 'beg Prism.loadUser()');
 
-		jQuery.ajax({
-			method: 'GET',
+		// TODO: Brought over from loadBranch, consider using
+		// var context = this.props.auth ? 'edit' : 'view';
+		// var params += '&context=' + context;
+
+		var request = {
 			url: PRISM.url.rest + 'users/me',
-			beforeSend: function beforeSend(xhr) {
-				xhr.setRequestHeader('X-WP-Nonce', PRISM.nonce);
-			},
-			success: (function (response) {
+			callback: this.unloadUser,
+			status: { type: 'loading', message: 'Loading user data...' }
+		};
 
-				log(10, 'success Prism.getUser()');
+		this.queueAJAX(request);
 
-				var state = this.state;
+		log(12, 'end Prism.loadUser()');
+	},
 
-				state.auth = true;
-				state.user = response;
+	unloadUser: function unloadUser(request, response) {
+		log(11, 'beg Prism.unloadUser()');
 
-				this.setState(state);
-			}).bind(this),
-			error: (function (response) {
+		var state = this.state;
 
-				log(10, 'error Prism.getUser()');
+		state.auth = response.status == 401 ? false : true;
 
-				var state = this.state;
+		state.user = response;
 
-				state.auth = false;
-				state.user = response;
+		this.setState(state);
 
-				this.setState(state);
-			}).bind(this)
-		});
+		this.changeStatus({ type: 'success', message: 'Successfully loaded user!' });
+		this.changeStatus({ type: 'normal', message: null });
 
-		log(12, 'end Prism.getUser()');
+		log(12, 'end Prism.unloadUser()');
 	},
 
 	toggleStatusBar: function toggleStatusBar() {

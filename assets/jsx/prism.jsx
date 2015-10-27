@@ -53,7 +53,7 @@ var Prism = React.createClass( {
 
 		log( 11, 'beg Prism.componentWillMount()' );
 
-		this.getUser();
+		this.loadUser();
 
 		log( 12, 'end Prism.componentWillMount()' );
 
@@ -136,44 +136,41 @@ var Prism = React.createClass( {
 		log( 12, 'end Prism.dequeueAJAX()' );
 	},
 
-	getUser: function() {
+	loadUser: function() {
 
-		log( 11, 'beg Prism.getUser()' );
+		log( 11, 'beg Prism.loadUser()' );
 
-		jQuery.ajax( {
-			method  : 'GET',
-			url     : PRISM.url.rest + 'users/me',
-			beforeSend: function ( xhr ) {
-				xhr.setRequestHeader( 'X-WP-Nonce', PRISM.nonce );
-			},
-			success : function( response ) {
+		// TODO: Brought over from loadBranch, consider using
+		// var context = this.props.auth ? 'edit' : 'view';
+		// var params += '&context=' + context;
 
-				log( 10, 'success Prism.getUser()' );
+		var request = {
+			url      : PRISM.url.rest + 'users/me',
+			callback : this.unloadUser,
+			status   : { type : 'loading', message : 'Loading user data...' }
+		}
 
-				var state = this.state;
+		this.queueAJAX( request );
 
-				state.auth = true;
-				state.user = response;
+		log( 12, 'end Prism.loadUser()' );
 
-				this.setState( state );
+	},
 
-			}.bind( this ),
-			error   : function( response ) {
+	unloadUser: function( request, response ) {
+		log( 11, 'beg Prism.unloadUser()' );
 
-				log( 10, 'error Prism.getUser()' );
+		var state = this.state;
 
-				var state = this.state;
+		state.auth = response.status == 401 ? false : true;
 
-				state.auth = false;
-				state.user = response;
+		state.user = response;
 
-				this.setState( state );
+		this.setState( state );
 
-			}.bind( this )
-		} );
+		this.changeStatus( { type: 'success', message: 'Successfully loaded user!' } );
+		this.changeStatus( { type: 'normal',  message: null } );
 
-		log( 12, 'end Prism.getUser()' );
-
+		log( 12, 'end Prism.unloadUser()' );
 	},
 
 	toggleStatusBar: function() {
