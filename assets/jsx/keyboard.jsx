@@ -17,11 +17,12 @@ window.onkeyup = function(e) {
 
 	var input = document.activeElement.tagName == 'INPUT';
 
-	var doubleKeyTime = key.time - PRISM.key.last.time < PRISM.key.double.time;
-	var doubleKeyCode = key.code == PRISM.key.double.code && PRISM.key.last.code == PRISM.key.double.code;
+	// TODO: The 'RainbowBar' idea is deprecated for the time being 2015-10-27 15:58:07
+	// var doubleKeyTime = key.time - PRISM.key.last.time < PRISM.key.double.time;
+	// var doubleKeyCode = key.code == PRISM.key.double.code && PRISM.key.last.code == PRISM.key.double.code;
 
-	if ( doubleKeyTime && doubleKeyCode ) 
-		document.getElementById( 'prism-rainbow-bar' ).focus();
+	// if ( doubleKeyTime && doubleKeyCode ) 
+	// 	document.getElementById( 'prism-rainbow-bar' ).focus();
 
 	// console.log( key.code );
 
@@ -32,10 +33,10 @@ window.onkeyup = function(e) {
 			
 			break;
 
-		case 27: // Escape
-			if ( document.activeElement.id == 'prism-rainbow-bar' )
-				document.getElementById( 'prism-rainbow-bar' ).blur();
-			break;
+		// case 27: // Escape
+		// 	if ( document.activeElement.id == 'prism-status-bar' )
+		// 		document.getElementById( 'prism-status-bar' ).blur();
+		// 	break;
 
 		case 32: // Spacebar
 			break;
@@ -107,19 +108,17 @@ window.onkeyup = function(e) {
 				stateChange = { 'changeMeta' : true };
 			break;
 
-		case 82: // r - for rainbow bar
-			if ( ! input ) 
-				stateChange = { 'rainbow' : true };
-			break;
-
-		case 83: // s - for search
-			if ( ! input ) 
+		case 83: // s - for status and search
+			if ( ! input && e.shiftKey ) 
+				stateChange = { 'statusBar' : true };
+			else if ( ! input ) 
 				stateChange = { 'search' : true };
+
 			break;
 
 		case 85: // u - for user bar
 			if ( ! input ) 
-				stateChange = { 'user' : true };
+				stateChange = { 'userBar' : true };
 			break;
 
 		case 86: // v - for view

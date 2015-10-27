@@ -35,7 +35,7 @@ var Prism = React.createClass( {
 					message : null
 				}
 			},
-			rainbowBar : false,
+			statusBar  : false,
 			userBar    : false
 		};
 
@@ -95,23 +95,23 @@ var Prism = React.createClass( {
 
 	},
 
-	toggleRainbow: function() {
+	toggleStatusBar: function() {
 
-		log( 11, 'beg Prism.toggleRainbow()' );
+		log( 11, 'beg Prism.toggleStatusBar()' );
 
 		var state = this.state;
 
-		state.rainbowBar = state.rainbowBar ? false : true;
+		state.statusBar = state.statusBar ? false : true;
 
 		this.setState( state );
 
-		log( 12, 'end Prism.toggleRainbow()' );
+		log( 12, 'end Prism.toggleStatusBar()' );
 
 	},
 
-	toggleUser: function() {
+	toggleUserBar: function() {
 
-		log( 11, 'beg Prism.toggleUser()' );
+		log( 11, 'beg Prism.toggleUserBar()' );
 
 		var state = this.state;
 
@@ -119,7 +119,7 @@ var Prism = React.createClass( {
 
 		this.setState( state );
 
-		log( 12, 'end Prism.toggleUser()' );
+		log( 12, 'end Prism.toggleUserBar()' );
 
 	},
 
@@ -152,23 +152,23 @@ var Prism = React.createClass( {
 		var data = this.state;
 		var func = {};
 
-		func.changeStatus  = this.changeStatus;
-		func.toggleUser    = this.toggleUser;
-		func.toggleRainbow = this.toggleRainbow;
+		func.changeStatus    = this.changeStatus;
+		func.toggleUserBar   = this.toggleUserBar;
+		func.toggleStatusBar = this.toggleStatusBar;
 
-		var classes = data.rainbowBar ? 'rainbow' : '';
+		var classes = data.statusBar ? 'status-bar' : '';
 
-		classes += data.userBar ? ' user' : '';
+		classes += data.userBar ? ' user-bar' : '';
 
 		log( 12, 'end Prism.render()' );
 
 		return (
 			<div id="prism" className={classes}>
-				<PrismRainbowBar data={data} />
+				<PrismStatusBar              data={data} />
 				<PrismHeader     auth={auth} data={data} func={func} />
 				<PrismTree       auth={auth} data={data} func={func} />
-				<PrismFooter     func={func} />
-				<PrismUserBar    data={data} />
+				<PrismFooter                             func={func} />
+				<PrismUserBar                data={data} />
 			</div>
 		);
 	}

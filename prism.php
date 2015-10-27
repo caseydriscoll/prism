@@ -284,7 +284,7 @@ class Prism {
 
 		$data = array(
 			'debug'         => array(
-					'level'           => 10,
+					'level'           => 1000,
 					'ignore'          => array(
 															   'PrismLeafNode'
 															 ),
@@ -301,8 +301,8 @@ class Prism {
 					'login'           => wp_login_url()
 												 ),
 			'gravatar'      => array(
-					'width'           => 48,
-					'height'          => 48
+					'width'           => 32,
+					'height'          => 32
 												 ),
 			'ajax'          => array(
 					'queue'           => array()
@@ -322,9 +322,6 @@ class Prism {
 					'last'            => array( 'code' =>  0, 'time' => 0   ),
 					'double'          => array( 'code' => 32, 'time' => 200 )
 												 ),
-			'rainbowbar'    => array(
-					'name'            => 'Rainbow Bar!'
-												 ),
 			'width'         => array( 
 					'default'         => array( 'trunk' => 17, 'branch' => 33, 'leaf' => 35, 'meta' =>  15 ),
 					'current'         => array( 'trunk' => 17, 'branch' => 33, 'leaf' => 35, 'meta' =>  15 ),
@@ -332,7 +329,7 @@ class Prism {
 					'maximum'         => array( 'trunk' => 30, 'branch' => 40, 'leaf' => 65, 'meta' =>  30 )
 												 ),
 			'status'        => array(
-					'timeout'         => 1000
+					'timeout'         => 2000
 												 )
 		);
 

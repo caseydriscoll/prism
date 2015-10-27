@@ -29,11 +29,11 @@ body > *:not(#prism) {
     background-color: #1ab7d9;
     opacity: .75; }
 
-#prism.rainbow {
+#prism.status-bar {
   left: 20%;
   transition: left 0.2s; }
 
-#prism-rainbow-bar {
+#prism-status-bar {
   display: block;
   position: absolute;
   width: 20%;
@@ -44,121 +44,125 @@ body > *:not(#prism) {
   border: 0;
   color: #dddddd;
   background: #ff1d3b; }
-  #prism-rainbow-bar h3 {
+  #prism-status-bar h3 {
     color: #ffffff; }
-  #prism-rainbow-bar ul#prism-status-log {
+  #prism-status-bar ul#prism-status-log {
     padding: 0; }
-    #prism-rainbow-bar ul#prism-status-log li {
+    #prism-status-bar ul#prism-status-log li {
       padding: 5px 0;
       color: #ffffff;
       font-size: 18px; }
-      #prism-rainbow-bar ul#prism-status-log li i.fa-li {
+      #prism-status-bar ul#prism-status-log li i.fa-li {
         top: 0.5em !important; }
 
-#prism-rainbow-status {
-  display: block;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  padding: 21px 0 0 50px;
-  font-size: 14px;
-  color: #ffffff;
-  background: #333333; }
-  #prism-rainbow-status.hide {
-    display: block !important;
-    top: 65px;
-    transition: top 0.2s; }
+#prism-status {
+  display: inline-block;
+  position: relative;
+  height: 50px;
+  padding: 0; }
+  #prism-status.hide-status #prism-status-button i {
+    transition: color 0.2s; }
+  #prism-status.hide-status #prism-status-message {
+    opacity: 0;
+    transition: opacity 0.2s; }
+  #prism-status #prism-status-button {
+    display: block;
+    position: relative;
+    float: left;
+    width: 30px;
+    height: 30px;
+    margin-top: 3px;
+    transform-origin: 50% 70%;
+    transform: rotate(-60deg) scale(0.6);
+    transition: transform 0.2s;
+    cursor: pointer; }
+    #prism-status #prism-status-button i.fa-play {
+      display: block;
+      position: absolute;
+      font-size: 18px;
+      transform-origin: 40% 50%;
+      cursor: pointer;
+      color: #808080;
+      border-left: 2px solid transparent; }
+      #prism-status #prism-status-button i.fa-play:nth-of-type(1) {
+        transform: rotate(0deg);
+        left: 0px;
+        bottom: 0px; }
+      #prism-status #prism-status-button i.fa-play:nth-of-type(2) {
+        transform: rotate(60deg);
+        left: 5px;
+        bottom: 8px; }
+      #prism-status #prism-status-button i.fa-play:nth-of-type(3) {
+        transform: rotate(120deg);
+        left: 14px;
+        bottom: 8px; }
+      #prism-status #prism-status-button i.fa-play:nth-of-type(4) {
+        transform: rotate(180deg);
+        left: 18px;
+        bottom: 0px; }
+      #prism-status #prism-status-button i.fa-play:nth-of-type(5) {
+        transform: rotate(-120deg);
+        left: 14px;
+        bottom: -8px; }
+      #prism-status #prism-status-button i.fa-play:nth-of-type(6) {
+        transform: rotate(-60deg);
+        left: 5px;
+        bottom: -8px; }
+    #prism-status #prism-status-button.loading {
+      animation: rotation 2s infinite linear; }
+      #prism-status #prism-status-button.loading i.fa-play {
+        color: #1ab7d9; }
+    #prism-status #prism-status-button.success i.fa-play {
+      color: #66d73a !important; }
+    #prism-status #prism-status-button:hover, #prism-status #prism-status-button.active {
+      transform: rotate(0deg) scale(1);
+      transition: transform .2s; }
+      #prism-status #prism-status-button:hover i.fa-play, #prism-status #prism-status-button.active i.fa-play {
+        border-left: 2px solid transparent;
+        transition: transform .2s; }
+        #prism-status #prism-status-button:hover i.fa-play:nth-of-type(1), #prism-status #prism-status-button.active i.fa-play:nth-of-type(1) {
+          transform: rotate(0deg);
+          color: #ff1d3b; }
+        #prism-status #prism-status-button:hover i.fa-play:nth-of-type(2), #prism-status #prism-status-button.active i.fa-play:nth-of-type(2) {
+          transform: rotate(60deg);
+          color: #FF6600; }
+        #prism-status #prism-status-button:hover i.fa-play:nth-of-type(3), #prism-status #prism-status-button.active i.fa-play:nth-of-type(3) {
+          transform: rotate(120deg);
+          color: #fece00; }
+        #prism-status #prism-status-button:hover i.fa-play:nth-of-type(4), #prism-status #prism-status-button.active i.fa-play:nth-of-type(4) {
+          transform: rotate(180deg);
+          color: #66d73a; }
+        #prism-status #prism-status-button:hover i.fa-play:nth-of-type(5), #prism-status #prism-status-button.active i.fa-play:nth-of-type(5) {
+          transform: rotate(-120deg);
+          color: #1ab7d9; }
+        #prism-status #prism-status-button:hover i.fa-play:nth-of-type(6), #prism-status #prism-status-button.active i.fa-play:nth-of-type(6) {
+          transform: rotate(-60deg);
+          color: #6b7ee4; }
+  #prism-status #prism-status-message {
+    display: block;
+    position: relative;
+    float: left;
+    height: 50px;
+    padding: 0 10px;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: calc( 50px - 3px ); }
+    #prism-status #prism-status-message:hover {
+      opacity: 1 !important; }
 
 @keyframes rotation {
   from {
     transform: rotate(0deg); }
   to {
     transform: rotate(359deg); } }
-#prism-rainbow-button {
-  display: inline-block;
-  position: absolute;
-  width: 30px;
-  height: 30px;
-  left: 10px;
-  top: 10px;
-  z-index: 100;
-  transform-origin: 50% 70%;
-  transform: rotate(-60deg) scale(0.5);
-  transition: transform 0.2s;
-  cursor: pointer; }
-  #prism-rainbow-button i.fa-play {
-    display: block;
-    position: absolute;
-    font-size: 18px;
-    transform-origin: 40% 50%;
-    cursor: pointer;
-    color: #808080;
-    border-left: 2px solid transparent; }
-    #prism-rainbow-button i.fa-play:nth-of-type(1) {
-      transform: rotate(0deg);
-      left: 0px;
-      bottom: 0px; }
-    #prism-rainbow-button i.fa-play:nth-of-type(2) {
-      transform: rotate(60deg);
-      left: 5px;
-      bottom: 8px; }
-    #prism-rainbow-button i.fa-play:nth-of-type(3) {
-      transform: rotate(120deg);
-      left: 14px;
-      bottom: 8px; }
-    #prism-rainbow-button i.fa-play:nth-of-type(4) {
-      transform: rotate(180deg);
-      left: 18px;
-      bottom: 0px; }
-    #prism-rainbow-button i.fa-play:nth-of-type(5) {
-      transform: rotate(-120deg);
-      left: 14px;
-      bottom: -8px; }
-    #prism-rainbow-button i.fa-play:nth-of-type(6) {
-      transform: rotate(-60deg);
-      left: 5px;
-      bottom: -8px; }
-  #prism-rainbow-button.loading {
-    animation: rotation 2s infinite linear; }
-    #prism-rainbow-button.loading i.fa-play {
-      color: #1ab7d9; }
-  #prism-rainbow-button.success i.fa-play {
-    color: #66d73a !important; }
-  #prism-rainbow-button:hover, #prism-rainbow-button.active {
-    transform: rotate(0deg) scale(1);
-    transition: transform .2s; }
-    #prism-rainbow-button:hover i.fa-play, #prism-rainbow-button.active i.fa-play {
-      border-left: 2px solid transparent;
-      transition: transform .2s; }
-      #prism-rainbow-button:hover i.fa-play:nth-of-type(1), #prism-rainbow-button.active i.fa-play:nth-of-type(1) {
-        transform: rotate(0deg);
-        color: #ff1d3b; }
-      #prism-rainbow-button:hover i.fa-play:nth-of-type(2), #prism-rainbow-button.active i.fa-play:nth-of-type(2) {
-        transform: rotate(60deg);
-        color: #FF6600; }
-      #prism-rainbow-button:hover i.fa-play:nth-of-type(3), #prism-rainbow-button.active i.fa-play:nth-of-type(3) {
-        transform: rotate(120deg);
-        color: #fece00; }
-      #prism-rainbow-button:hover i.fa-play:nth-of-type(4), #prism-rainbow-button.active i.fa-play:nth-of-type(4) {
-        transform: rotate(180deg);
-        color: #66d73a; }
-      #prism-rainbow-button:hover i.fa-play:nth-of-type(5), #prism-rainbow-button.active i.fa-play:nth-of-type(5) {
-        transform: rotate(-120deg);
-        color: #1ab7d9; }
-      #prism-rainbow-button:hover i.fa-play:nth-of-type(6), #prism-rainbow-button.active i.fa-play:nth-of-type(6) {
-        transform: rotate(-60deg);
-        color: #6b7ee4; }
-
 #prism-user-bar {
   display: none; }
 
-#prism.user {
+#prism.user-bar {
   width: 100%;
   right: 20%;
   transition: right 0.2s; }
-  #prism.user #prism-user-bar {
+  #prism.user-bar #prism-user-bar {
     display: block;
     position: absolute;
     width: 20%;
@@ -169,15 +173,15 @@ body > *:not(#prism) {
     border: 0;
     color: #dddddd;
     background: #333333; }
-    #prism.user #prism-user-bar h3 {
+    #prism.user-bar #prism-user-bar h3 {
       color: #ffffff; }
-    #prism.user #prism-user-bar ul#prism-status-log {
+    #prism.user-bar #prism-user-bar ul#prism-status-log {
       padding: 0; }
-      #prism.user #prism-user-bar ul#prism-status-log li {
+      #prism.user-bar #prism-user-bar ul#prism-status-log li {
         padding: 5px 0;
         color: #ffffff;
         font-size: 18px; }
-        #prism.user #prism-user-bar ul#prism-status-log li i.fa-li {
+        #prism.user-bar #prism-user-bar ul#prism-status-log li i.fa-li {
           top: 0.5em !important; }
 
 #prism-header {
@@ -185,9 +189,15 @@ body > *:not(#prism) {
   position: relative;
   width: 100%;
   height: 50px;
+  overflow: hidden;
   border-bottom: 2px solid #000000; }
-  #prism-header i.fa-home {
-    padding: 10px; }
+  #prism-header #prism-home {
+    display: block;
+    position: relative;
+    float: left;
+    height: 50px;
+    padding: 10px;
+    color: #808080; }
   #prism-header #prism-user-account {
     float: right;
     margin: 10px;
@@ -217,7 +227,7 @@ body > *:not(#prism) {
   float: left;
   height: 100%;
   border-right: 2px solid #000000; }
-  #prism-trunk #prism-search-status {
+  #prism-trunk #prism-search {
     display: block;
     position: relative;
     width: 100%;
@@ -225,19 +235,19 @@ body > *:not(#prism) {
     border-bottom: 2px solid #000000;
     font-size: 24px;
     overflow: hidden; }
-    #prism-trunk #prism-search-status.active {
+    #prism-trunk #prism-search.active {
       background: #1ab7d9;
       color: #000000;
       border-color: #000000; }
-    #prism-trunk #prism-search-status input {
+    #prism-trunk #prism-search input {
       display: inline-block;
-      width: calc( 100% - 60px );
+      width: calc( 100% - 20px );
       padding: 2px 10px;
-      margin: 10px 0 0 50px;
+      margin: 10px;
       border: 2px solid #000000;
       border-color: #808080;
       background: #ffffff; }
-      #prism-trunk #prism-search-status input:focus {
+      #prism-trunk #prism-search input:focus {
         background: #ffffff !important;
         outline: none !important; }
   #prism-trunk menu {

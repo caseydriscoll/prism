@@ -8,9 +8,8 @@ var PrismHeader = React.createClass( {
 
 		return (
 			<header id="prism-header">
-				<a href={PRISM.url.root}>
-					<i className="fa fa-home fa-2x"></i>
-				</a>
+				<a id="prism-home" href={PRISM.url.root + '/#/'}><i className="fa fa-home fa-2x"></i></a>
+				<PrismStatus data={data} func={func} />
 				<PrismUserAccount data={data} auth={auth} func={func} />
 			</header>
 		);

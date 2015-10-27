@@ -52,16 +52,16 @@ var PrismTree = React.createClass( {
 			if ( 'addLeaf'    in changeState )
 				this.addLeaf();
 
-			if ( 'rainbow'    in changeState )
-				func.toggleRainbow();
+			if ( 'statusBar'  in changeState )
+				func.toggleStatusBar();
 
 			if ( 'search'     in changeState ) {
 				window.location = '/#/search';
-				document.getElementById( 'prism-search' ).focus();
+				document.getElementById( 'prism-search-bar' ).focus();
 			}
 
-			if ( 'user'       in changeState )
-				func.toggleUser();
+			if ( 'userBar'    in changeState )
+				func.toggleUserBar();
 
 		};
 

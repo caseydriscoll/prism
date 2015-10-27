@@ -36,8 +36,8 @@ body > *:not(#prism) { display: none; }
 }
 
 @import './prism-utils.scss';
-@import './prism-rainbow.scss';
-@import './prism-user.scss';
+@import './prism-status-bar.scss';
+@import './prism-user-bar.scss';
 
 @import './prism-header.scss';
 

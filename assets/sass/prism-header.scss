@@ -2,10 +2,15 @@
 	display: block; position: relative;
 	width: 100%; height: $header-height;
 
+	overflow: hidden;
+
 	border-bottom: $border;
 
-	i.fa-home {
+	#prism-home {
+		display: block; position: relative; float: left;
+		height: $header-height;
 		padding: 10px;
+		color: $grey;
 	}
 
 	#prism-user-account {

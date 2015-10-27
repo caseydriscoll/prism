@@ -14,9 +14,10 @@ var PrismHeader = React.createClass({
 			{ id: "prism-header" },
 			React.createElement(
 				"a",
-				{ href: PRISM.url.root },
+				{ id: "prism-home", href: PRISM.url.root + '/#/' },
 				React.createElement("i", { className: "fa fa-home fa-2x" })
 			),
+			React.createElement(PrismStatus, { data: data, func: func }),
 			React.createElement(PrismUserAccount, { data: data, auth: auth, func: func })
 		);
 	}
@@ -105,14 +106,14 @@ var PrismTree = React.createClass({
 
 			if ('addLeaf' in changeState) _this.addLeaf();
 
-			if ('rainbow' in changeState) func.toggleRainbow();
+			if ('statusBar' in changeState) func.toggleStatusBar();
 
 			if ('search' in changeState) {
 				window.location = '/#/search';
-				document.getElementById('prism-search').focus();
+				document.getElementById('prism-search-bar').focus();
 			}
 
-			if ('user' in changeState) func.toggleUser();
+			if ('userBar' in changeState) func.toggleUserBar();
 		};
 
 		this.initRouter();
@@ -1215,7 +1216,7 @@ var PrismTrunk = React.createClass({
 		return React.createElement(
 			'div',
 			{ id: 'prism-trunk', style: style, 'data-section': 'trunk' },
-			React.createElement(PrismSearchStatus, { data: data, func: func }),
+			React.createElement(PrismSearch, { data: data, func: func }),
 			React.createElement(PrismMenu, { data: data }),
 			React.createElement(PrismResizeBar, { data: data, func: func })
 		);
@@ -1223,53 +1224,8 @@ var PrismTrunk = React.createClass({
 
 });
 
-var PrismSearchStatus = React.createClass({
-	displayName: 'PrismSearchStatus',
-
-	timeout: null,
-
-	getInitialState: function getInitialState() {
-		var state = {
-			showStatus: false,
-			status: {
-				type: null,
-				message: null,
-				time: null
-			}
-		};
-
-		return state;
-	},
-
-	componentWillReceiveProps: function componentWillReceiveProps() {
-		var data = this.props.data;
-		var state = this.state;
-
-		var logs = data.status.log.length;
-
-		if (logs == 0) {
-			state.showStatus = false;
-			state.status = { type: null, message: null, time: null };
-		} else {
-			if (data.status.log[logs - 1].time == state.status.time) return;
-			state.showStatus = true;
-			state.status = data.status.log[logs - 1];
-		}
-
-		if (this.timeout != null) clearTimeout(this.timeout);
-
-		this.timeout = setTimeout(this.hide, PRISM.status.timeout);
-
-		this.setState(state);
-	},
-
-	hide: function hide() {
-		var state = this.state;
-
-		state.showStatus = false;
-
-		this.setState(state);
-	},
+var PrismSearch = React.createClass({
+	displayName: 'PrismSearch',
 
 	changeBranch: function changeBranch() {
 
@@ -1301,7 +1257,7 @@ var PrismSearchStatus = React.createClass({
 
 	render: function render() {
 
-		log(11, 'beg PrismSearchStatus.render()');
+		log(11, 'beg PrismSearch.render()');
 
 		var data = this.props.data;
 		var func = this.props.func;
@@ -1310,17 +1266,12 @@ var PrismSearchStatus = React.createClass({
 		var focus = data.active.branch == 'search' ? true : false;
 		var classes = data.active.branch == 'search' ? 'active' : '';
 
-		var status = this.state;
-		status.rainbow = data.rainbow;
-
-		log(12, 'end PrismSearchStatus.render()');
+		log(12, 'end PrismSearch.render()');
 
 		return React.createElement(
 			'div',
-			{ id: 'prism-search-status', className: classes },
-			React.createElement(PrismRainbowButton, { data: status, func: func }),
-			React.createElement(PrismRainbowStatus, { data: status, func: func }),
-			React.createElement('input', { type: 'text', placeholder: 'Search', id: 'prism-search', defaultValue: value, onClick: this.changeBranch, onBlur: this.search, onFocus: this.autoSelect, autoFocus: focus })
+			{ id: 'prism-search', className: classes },
+			React.createElement('input', { type: 'text', placeholder: 'Search', id: 'prism-search-bar', defaultValue: value, onClick: this.changeBranch, onBlur: this.search, onFocus: this.autoSelect, autoFocus: focus })
 		);
 	}
 
@@ -2071,20 +2022,8 @@ var log = function log(level, message) {
 
 "use strict";
 
-var PrismRainbowBar = React.createClass({
-	displayName: "PrismRainbowBar",
-
-	executeRainbow: function executeRainbow(e) {
-
-		var key = e.keyCode ? e.keyCode : e.which;
-		var func = this.props.func;
-		var value = e.target.value;
-
-		if (key == 13) {
-			func.executeRainbow(value);
-			e.target.value = '';
-		}
-	},
+var PrismStatusBar = React.createClass({
+	displayName: "PrismStatusBar",
 
 	render: function render() {
 
@@ -2102,7 +2041,7 @@ var PrismRainbowBar = React.createClass({
 
 		return React.createElement(
 			"div",
-			{ id: "prism-rainbow-bar" },
+			{ id: "prism-status-bar" },
 			React.createElement(
 				"h3",
 				null,
@@ -2118,48 +2057,96 @@ var PrismRainbowBar = React.createClass({
 
 });
 
-var PrismRainbowButton = React.createClass({
-	displayName: "PrismRainbowButton",
+var PrismStatus = React.createClass({
+	displayName: "PrismStatus",
+
+	timeout: null,
+
+	getInitialState: function getInitialState() {
+		var state = {
+			showStatus: false,
+			status: {
+				type: null,
+				message: null,
+				time: null
+			}
+		};
+
+		return state;
+	},
+
+	componentWillReceiveProps: function componentWillReceiveProps() {
+
+		log(11, 'beg PrismStatus.componentWillReceiveProps()');
+
+		var data = this.props.data;
+		var state = this.state;
+
+		var logs = data.status.log.length;
+
+		console.log('log: ', data.status.log);
+
+		if (logs == 0) {
+			state.showStatus = false;
+			state.status = { type: null, message: null, time: null };
+		} else {
+			if (data.status.log[logs - 1].time == state.status.time) return;
+			state.showStatus = true;
+			state.status = data.status.log[logs - 1];
+		}
+
+		if (this.timeout != null) clearTimeout(this.timeout);
+
+		this.timeout = setTimeout(this.hide, PRISM.status.timeout);
+
+		this.setState(state);
+
+		log(12, 'end PrismStatus.componentWillReceiveProps()');
+	},
+
+	hide: function hide() {
+		var state = this.state;
+
+		state.showStatus = false;
+
+		this.setState(state);
+	},
 
 	render: function render() {
+		log(11, 'beg PrismStatus.render()');
+
+		var state = this.state;
 
 		var data = this.props.data;
 		var func = this.props.func;
 
-		var classes = data.showStatus ? data.status.type : null;
+		var statusClasses = state.showStatus ? 'show-status' : 'hide-status';
 
-		classes += data.rainbow ? ' active' : '';
+		var buttonClasses = state.showStatus ? state.status.type : '';
+		buttonClasses += data.statusBar ? ' active' : '';
 
-		return React.createElement(
-			"div",
-			{ id: "prism-rainbow-button", className: classes, onClick: func.toggleRainbow },
-			React.createElement("i", { className: "fa fa-play" }),
-			React.createElement("i", { className: "fa fa-play" }),
-			React.createElement("i", { className: "fa fa-play" }),
-			React.createElement("i", { className: "fa fa-play" }),
-			React.createElement("i", { className: "fa fa-play" }),
-			React.createElement("i", { className: "fa fa-play" })
-		);
-	}
+		var status = state.status;
 
-});
-
-var PrismRainbowStatus = React.createClass({
-	displayName: "PrismRainbowStatus",
-
-	render: function render() {
-
-		var data = this.props.data;
-		var func = this.props.func;
-
-		var classes = data.showStatus ? 'show' : 'hide';
-
-		var status = data.status;
+		log(12, 'end PrismStatus.render()');
 
 		return React.createElement(
 			"div",
-			{ id: "prism-rainbow-status", className: classes },
-			status.message
+			{ id: "prism-status", className: statusClasses },
+			React.createElement(
+				"div",
+				{ id: "prism-status-button", className: buttonClasses, onClick: func.toggleStatusBar },
+				React.createElement("i", { className: "fa fa-play" }),
+				React.createElement("i", { className: "fa fa-play" }),
+				React.createElement("i", { className: "fa fa-play" }),
+				React.createElement("i", { className: "fa fa-play" }),
+				React.createElement("i", { className: "fa fa-play" }),
+				React.createElement("i", { className: "fa fa-play" })
+			),
+			React.createElement(
+				"div",
+				{ id: "prism-status-message" },
+				status.message
+			)
 		);
 	}
 
@@ -2200,10 +2187,12 @@ window.onkeyup = function (e) {
 
 	var input = document.activeElement.tagName == 'INPUT';
 
-	var doubleKeyTime = key.time - PRISM.key.last.time < PRISM.key.double.time;
-	var doubleKeyCode = key.code == PRISM.key.double.code && PRISM.key.last.code == PRISM.key.double.code;
+	// TODO: The 'RainbowBar' idea is deprecated for the time being 2015-10-27 15:58:07
+	// var doubleKeyTime = key.time - PRISM.key.last.time < PRISM.key.double.time;
+	// var doubleKeyCode = key.code == PRISM.key.double.code && PRISM.key.last.code == PRISM.key.double.code;
 
-	if (doubleKeyTime && doubleKeyCode) document.getElementById('prism-rainbow-bar').focus();
+	// if ( doubleKeyTime && doubleKeyCode )
+	// 	document.getElementById( 'prism-rainbow-bar' ).focus();
 
 	// console.log( key.code );
 
@@ -2214,10 +2203,10 @@ window.onkeyup = function (e) {
 
 			break;
 
-		case 27:
-			// Escape
-			if (document.activeElement.id == 'prism-rainbow-bar') document.getElementById('prism-rainbow-bar').blur();
-			break;
+		// case 27: // Escape
+		// 	if ( document.activeElement.id == 'prism-status-bar' )
+		// 		document.getElementById( 'prism-status-bar' ).blur();
+		// 	break;
 
 		case 32:
 			// Spacebar
@@ -2285,19 +2274,15 @@ window.onkeyup = function (e) {
 			if (!input) stateChange = { 'changeMeta': true };
 			break;
 
-		case 82:
-			// r - for rainbow bar
-			if (!input) stateChange = { 'rainbow': true };
-			break;
-
 		case 83:
-			// s - for search
-			if (!input) stateChange = { 'search': true };
+			// s - for status and search
+			if (!input && e.shiftKey) stateChange = { 'statusBar': true };else if (!input) stateChange = { 'search': true };
+
 			break;
 
 		case 85:
 			// u - for user bar
-			if (!input) stateChange = { 'user': true };
+			if (!input) stateChange = { 'userBar': true };
 			break;
 
 		case 86:
@@ -2368,7 +2353,7 @@ var Prism = React.createClass({
 					message: null
 				}
 			},
-			rainbowBar: false,
+			statusBar: false,
 			userBar: false
 		};
 
@@ -2423,22 +2408,22 @@ var Prism = React.createClass({
 		log(12, 'end Prism.getUser()');
 	},
 
-	toggleRainbow: function toggleRainbow() {
+	toggleStatusBar: function toggleStatusBar() {
 
-		log(11, 'beg Prism.toggleRainbow()');
+		log(11, 'beg Prism.toggleStatusBar()');
 
 		var state = this.state;
 
-		state.rainbowBar = state.rainbowBar ? false : true;
+		state.statusBar = state.statusBar ? false : true;
 
 		this.setState(state);
 
-		log(12, 'end Prism.toggleRainbow()');
+		log(12, 'end Prism.toggleStatusBar()');
 	},
 
-	toggleUser: function toggleUser() {
+	toggleUserBar: function toggleUserBar() {
 
-		log(11, 'beg Prism.toggleUser()');
+		log(11, 'beg Prism.toggleUserBar()');
 
 		var state = this.state;
 
@@ -2446,7 +2431,7 @@ var Prism = React.createClass({
 
 		this.setState(state);
 
-		log(12, 'end Prism.toggleUser()');
+		log(12, 'end Prism.toggleUserBar()');
 	},
 
 	changeStatus: function changeStatus(status) {
@@ -2477,19 +2462,19 @@ var Prism = React.createClass({
 		var func = {};
 
 		func.changeStatus = this.changeStatus;
-		func.toggleUser = this.toggleUser;
-		func.toggleRainbow = this.toggleRainbow;
+		func.toggleUserBar = this.toggleUserBar;
+		func.toggleStatusBar = this.toggleStatusBar;
 
-		var classes = data.rainbowBar ? 'rainbow' : '';
+		var classes = data.statusBar ? 'status-bar' : '';
 
-		classes += data.userBar ? ' user' : '';
+		classes += data.userBar ? ' user-bar' : '';
 
 		log(12, 'end Prism.render()');
 
 		return React.createElement(
 			'div',
 			{ id: 'prism', className: classes },
-			React.createElement(PrismRainbowBar, { data: data }),
+			React.createElement(PrismStatusBar, { data: data }),
 			React.createElement(PrismHeader, { auth: auth, data: data, func: func }),
 			React.createElement(PrismTree, { auth: auth, data: data, func: func }),
 			React.createElement(PrismFooter, { func: func }),

@@ -1,0 +1,132 @@
+#prism.status-bar {
+	left: $bar-width;
+	transition: left $bar-time;
+}
+
+#prism-status-bar {
+	display: block; position: absolute;
+	width: $bar-width; height: 100vh;
+	left: (-$bar-width); top: 0;
+	padding: 5px 10px;
+
+	border: 0;
+	color: $light;
+	background: $red;
+
+	h3 {
+		color: $white;
+	}
+
+	ul#prism-status-log {
+		padding: 0;
+
+		li {
+			padding: 5px 0;
+			color: $white;
+			font-size: 18px;
+
+			i.fa-li {
+				top: 0.5em !important;
+			}
+		}
+	}
+}
+
+#prism-status {
+
+	display: inline-block; position: relative;
+	height: $header-height;
+
+	padding: 0;
+
+	&.show-status {}
+	&.hide-status {
+		#prism-status-button i {
+			transition: color $bar-time;
+		}
+		#prism-status-message { 
+			opacity: 0;
+			transition: opacity $bar-time;
+		}
+	}
+
+	#prism-status-button {
+
+		display: block; position: relative; float: left;
+		width: 30px; height: 30px;
+		margin-top: 3px;
+
+		transform-origin: 50% 70%;
+
+		transform: rotate( -60deg ) scale( .6 );
+		transition: transform $bar-time;
+
+		cursor: pointer;
+
+		i.fa-play {
+			display: block; position: absolute;
+			font-size: 18px;
+
+			transform-origin: 40% 50%;
+			cursor: pointer;
+
+			color: $grey;
+			border-left: 2px solid transparent;
+
+			&:nth-of-type(1) { transform: rotate(    0deg ); left:  0px; bottom:  0px; }
+			&:nth-of-type(2) { transform: rotate(   60deg ); left:  5px; bottom:  8px; }
+			&:nth-of-type(3) { transform: rotate(  120deg ); left: 14px; bottom:  8px; }
+			&:nth-of-type(4) { transform: rotate(  180deg ); left: 18px; bottom:  0px; }
+			&:nth-of-type(5) { transform: rotate( -120deg ); left: 14px; bottom: -8px; }
+			&:nth-of-type(6) { transform: rotate(  -60deg ); left:  5px; bottom: -8px; }
+		}
+
+		&.loading{ 
+			animation: rotation 2s infinite linear;
+
+			i.fa-play { color: $blue; }
+		}
+
+		&.success { 
+			i.fa-play { color: $green !important; }
+		}
+
+		&:hover,
+		&.active {
+
+			transform: rotate( 0deg ) scale( 1 );
+			transition: transform .2s;
+
+			i.fa-play {
+				border-left: 2px solid transparent;
+				transition: transform .2s;
+
+				&:nth-of-type(1) { transform: rotate(    0deg ); color: $red; }
+				&:nth-of-type(2) { transform: rotate(   60deg ); color: $orange; }
+				&:nth-of-type(3) { transform: rotate(  120deg ); color: $yellow; }
+				&:nth-of-type(4) { transform: rotate(  180deg ); color: $green; }
+				&:nth-of-type(5) { transform: rotate( -120deg ); color: $blue; }
+				&:nth-of-type(6) { transform: rotate(  -60deg ); color: $purple; }
+			}
+		}
+
+	}
+
+	#prism-status-message {
+		display: block; position: relative; float: left;
+		height: $header-height;
+		padding: 0 10px;
+
+		font-size: 18px;
+		font-weight: bold;
+		line-height: calc( #{$header-height} - 3px );
+
+		&:hover { opacity: 1 !important; }
+	}
+
+}
+
+@keyframes rotation {
+	from {transform: rotate(0deg);}
+	to   {transform: rotate(359deg);}
+}
