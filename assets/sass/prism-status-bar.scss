@@ -91,6 +91,15 @@
 			i.fa-play { color: $green !important; }
 		}
 
+
+		&.warning { 
+			i.fa-play { color: $orange !important; }
+		}
+
+		&.error { 
+			i.fa-play { color: $red !important; }
+		}
+
 		&:hover,
 		&.active {
 

@@ -2390,7 +2390,11 @@ var Prism = React.createClass({
 
 		this.setState(state);
 
-		this.changeStatus({ type: 'success', message: 'Successfully loaded user!' });
+		if (state.auth) {
+			this.changeStatus({ type: 'success', message: 'Successfully loaded user!' });
+		} else {
+			this.changeStatus({ type: 'warning', message: 'No user logged in.' });
+		}
 		this.changeStatus({ type: 'normal', message: null });
 
 		log(12, 'end Prism.unloadUser()');
