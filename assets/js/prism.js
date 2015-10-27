@@ -15,18 +15,9 @@ var PrismHeader = React.createClass({
 			React.createElement(
 				"a",
 				{ href: PRISM.url.root },
-				React.createElement(
-					"h1",
-					{ id: "prism-title", className: "title" },
-					PRISM.title
-				)
+				React.createElement("i", { className: "fa fa-home fa-2x" })
 			),
-			React.createElement(PrismUserAccount, { data: data, auth: auth, func: func }),
-			React.createElement(
-				"span",
-				{ className: "description" },
-				PRISM.description
-			)
+			React.createElement(PrismUserAccount, { data: data, auth: auth, func: func })
 		);
 	}
 
@@ -49,7 +40,7 @@ var PrismUserAccount = React.createClass({
 			icon = React.createElement("img", { src: this.props.data.user.avatar_urls[PRISM.gravatar.width], width: PRISM.gravatar.width, height: PRISM.gravatar.height });
 		} else {
 			url = PRISM.url.login + '?redirect_to=' + PRISM.url.root;
-			icon = React.createElement("i", { className: "fa fa-user fa-2x fa-border" });
+			icon = React.createElement("i", { className: "fa fa-user fa-2x" });
 		}
 
 		return React.createElement(

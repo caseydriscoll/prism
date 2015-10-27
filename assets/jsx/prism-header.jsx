@@ -9,10 +9,9 @@ var PrismHeader = React.createClass( {
 		return (
 			<header id="prism-header">
 				<a href={PRISM.url.root}>
-					<h1 id="prism-title" className="title">{PRISM.title}</h1>
+					<i className="fa fa-home fa-2x"></i>
 				</a>
 				<PrismUserAccount data={data} auth={auth} func={func} />
-				<span className="description">{PRISM.description}</span>
 			</header>
 		);
 	}
@@ -35,7 +34,7 @@ var PrismUserAccount = React.createClass( {
 			icon = <img src={this.props.data.user.avatar_urls[PRISM.gravatar.width]} width={PRISM.gravatar.width} height={PRISM.gravatar.height} />;
 		} else {
 			url  = PRISM.url.login + '?redirect_to=' + PRISM.url.root;
-			icon = <i className="fa fa-user fa-2x fa-border"></i>;
+			icon = <i className="fa fa-user fa-2x"></i>;
 		}
 
 		return (

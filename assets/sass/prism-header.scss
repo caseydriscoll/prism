@@ -4,47 +4,13 @@
 
 	border-bottom: $border;
 
-	a {
-
-		display: inline-block; float: left;
-		padding: 5px 10px 0;
-		cursor: pointer;
-		text-decoration: none;
-
-		color: $black;
-
-		h1 {
-			margin: 0;
-			font: {
-				family: 'Kinescope';
-				size: 60px;
-			}
-		}
-
+	i.fa-home {
+		padding: 10px;
 	}
-
-	span.description {
-		display: block; position: relative; float: right;
-		max-width: 420px;
-		padding: 16px 20px;
-		
-		color: $grey;
-		
-		font: {
-			family: 'Gibson', sans-serif;
-			size: 14px;
-			style: italic;
-		}
-
-		text: {
-			align: right;
-		}
-	}
-
 
 	#prism-user-account {
 		float: right;
-		margin: 12px 10px 0 0;
+		margin: 10px;
 
 		cursor: pointer;
 
@@ -63,6 +29,8 @@
 		}
 
 		img {
+			height: calc( #{$header-height} - 20px );
+			width: calc( #{$header-height} - 20px );
 			margin-top: -2px;
 			border-radius: 50%;
 		}
