@@ -226,7 +226,8 @@ body > *:not(#prism) {
   position: relative;
   float: left;
   height: 100%;
-  border-right: 2px solid #000000; }
+  border-right: 2px solid #000000;
+  background: #dddddd; }
   #prism-trunk #prism-search {
     display: block;
     position: relative;
@@ -262,37 +263,35 @@ body > *:not(#prism) {
           border-top: none; }
         #prism-trunk menu ul li a {
           display: block;
-          padding: 20px 15px;
+          padding: 6px 3px;
           color: #808080;
-          font-size: 24px;
-          font-family: 'Source Code Pro', sans-serif;
+          font-size: 16px;
           text-decoration: none;
           cursor: pointer;
           border-top: 2px solid #000000;
           border-bottom: 2px solid #000000;
           border-color: transparent; }
           #prism-trunk menu ul li a i {
-            margin: 0 20px 0 -5px; }
+            margin: 0 8px; }
           #prism-trunk menu ul li a:hover {
-            background: #dddddd; }
+            background: #808080;
+            color: #ffffff; }
           #prism-trunk menu ul li a.active {
             font-weight: bold;
             background: #1ab7d9;
             color: #000000;
             border-color: #000000; }
-          #prism-trunk menu ul li a.parent {
-            padding: 5px 15px; }
-            #prism-trunk menu ul li a.parent:nth-of-type(1) {
-              padding-bottom: 0;
-              border-bottom: none; }
-            #prism-trunk menu ul li a.parent:nth-of-type(2) {
-              padding-left: 80px;
-              border-top: none;
-              font-style: italic;
-              font-size: 16px; }
-              #prism-trunk menu ul li a.parent:nth-of-type(2):hover {
-                background: #333333;
-                color: #1ab7d9; }
+          #prism-trunk menu ul li a.parent:nth-of-type(1) {
+            padding-bottom: 0;
+            border-bottom: none; }
+          #prism-trunk menu ul li a.parent:nth-of-type(2) {
+            padding: 3px  0 3px 45px;
+            border-top: none;
+            font-style: italic;
+            font-size: 13px; }
+            #prism-trunk menu ul li a.parent:nth-of-type(2):hover {
+              background: #333333;
+              color: #1ab7d9; }
 
 #prism-branch {
   display: block;

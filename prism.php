@@ -323,9 +323,9 @@ class Prism {
 					'double'          => array( 'code' => 32, 'time' => 200 )
 												 ),
 			'width'         => array( 
-					'default'         => array( 'trunk' => 17, 'branch' => 33, 'leaf' => 35, 'meta' =>  15 ),
-					'current'         => array( 'trunk' => 17, 'branch' => 33, 'leaf' => 35, 'meta' =>  15 ),
-					'minimum'         => array( 'trunk' => 10, 'branch' => 25, 'leaf' => 30, 'meta' =>  10 ),
+					'default'         => array( 'trunk' => 12, 'branch' => 38, 'leaf' => 35, 'meta' =>  15 ),
+					'current'         => array( 'trunk' => 12, 'branch' => 38, 'leaf' => 35, 'meta' =>  15 ),
+					'minimum'         => array( 'trunk' =>  7, 'branch' => 25, 'leaf' => 30, 'meta' =>  10 ),
 					'maximum'         => array( 'trunk' => 30, 'branch' => 40, 'leaf' => 65, 'meta' =>  30 )
 												 ),
 			'status'        => array(
