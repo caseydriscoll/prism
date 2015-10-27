@@ -180,17 +180,15 @@ var PrismTree = React.createClass({
 
 			if (view == 'grid') {
 
-				if (direction == 'left' && k % 4 != 0) next = document.getElementById(id).previousSibling;else if (direction == 'down') {
+				if (direction == 'left' && k % 3 != 0) next = document.getElementById(id).previousSibling;else if (direction == 'down') {
 					next = document.getElementById(id).nextSibling;
-					if (next != null) next = next.nextSibling;
 					if (next != null) next = next.nextSibling;
 					if (next != null) next = next.nextSibling;
 				} else if (direction == 'up') {
 					next = document.getElementById(id).previousSibling;
 					if (next != null) next = next.previousSibling;
 					if (next != null) next = next.previousSibling;
-					if (next != null) next = next.previousSibling;
-				} else if (direction == 'right' && k % 4 != 3) next = document.getElementById(id).nextSibling;
+				} else if (direction == 'right' && k % 3 != 2) next = document.getElementById(id).nextSibling;
 			} else if (view == 'half') {
 
 				if (direction == 'left' && k % 2 != 0) next = document.getElementById(id).previousSibling;else if (direction == 'down') {
