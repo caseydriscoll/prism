@@ -284,7 +284,7 @@ class Prism {
 
 		$data = array(
 			'debug'         => array(
-					'level'           => 1000,
+					'level'           => 10,
 					'ignore'          => array(
 															   'PrismLeafNode'
 															 ),

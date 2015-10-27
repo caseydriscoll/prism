@@ -35,6 +35,10 @@ var Prism = React.createClass( {
 					message : null
 				}
 			},
+			ajax             : {
+				status  : 'done',
+				queue   : []
+			},
 			statusBar  : false,
 			userBar    : false
 		};
@@ -53,6 +57,83 @@ var Prism = React.createClass( {
 
 		log( 12, 'end Prism.componentWillMount()' );
 
+	},
+
+	checkQueue: function() {
+
+		log( 11, 'beg Prism.checkQueue()' );
+
+		var state = this.state;
+
+		state.ajax.queue = state.ajax.queue.concat( PRISM.ajax.queue );
+		PRISM.ajax.queue = [];
+
+		if ( state.ajax.queue.length > 0 && state.ajax.status == 'done' )
+			this.getData( state.ajax.queue[0] );
+
+		this.setState;
+
+		log( 12, 'end Prism.checkQueue()' );
+
+	},
+
+	getData: function( request ) {
+
+		log( 11, 'beg Prism.getData()' );
+
+		var state = this.state;
+
+		state.ajax.status = 'getting';
+
+		this.setState( state );
+
+		this.changeStatus( request.status );
+
+		log( request );
+
+		jQuery.ajax( {
+			method  : 'GET',
+			url     : request.url,
+			beforeSend: function ( xhr ) {
+				xhr.setRequestHeader( 'X-WP-Nonce', PRISM.nonce );
+			},
+			success : this.dequeueAJAX,
+			error   : this.dequeueAJAX
+		} );
+
+		log( 12, 'end Prism.getData()' );
+
+	},
+
+	queueAJAX: function( request ) {
+		log( 11, 'beg Prism.queueAJAX()' );
+
+		PRISM.ajax.queue.push( request );
+
+		log( 12, 'end Prism.queueAJAX()' );
+	},
+
+	dequeueAJAX: function( response ) {
+		log( 11, 'beg Prism.dequeueAJAX()' );
+
+		var state   = this.state;
+
+		var request = state.ajax.queue.shift();
+
+		state.ajax.status = 'done';
+
+		request.callback( request, response );
+
+		// TODO: GREAT WORKAROUND OR UGLIEST WORKAROUND
+		//       TIE AJAX QUEUE TO STATE, BUT DON'T DISRUPT STATE IF NOT DONE
+		//       PUT IN TEMP QUEUE, THEN COMBINE AT END OF EVERY AJAX CALL
+		//       SHOULD BE A CLEANER WAY, BUT THIS SEEMS TO BE WORKING
+		state.ajax.queue = state.ajax.queue.concat( PRISM.ajax.queue );
+		PRISM.ajax.queue = [];
+
+		this.setState( state );
+
+		log( 12, 'end Prism.dequeueAJAX()' );
 	},
 
 	getUser: function() {
@@ -152,6 +233,8 @@ var Prism = React.createClass( {
 		var data = this.state;
 		var func = {};
 
+		func.queueAJAX       = this.queueAJAX;
+		func.checkQueue      = this.checkQueue;
 		func.changeStatus    = this.changeStatus;
 		func.toggleUserBar   = this.toggleUserBar;
 		func.toggleStatusBar = this.toggleStatusBar;

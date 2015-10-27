@@ -48,8 +48,6 @@ var PrismStatus = React.createClass( {
 
 		var logs  = data.status.log.length;
 
-		console.log( 'log: ', data.status.log );
-
 		if ( logs == 0 ) {
 			state.showStatus = false;
 			state.status = { type: null, message : null, time : null };

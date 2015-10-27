@@ -6,10 +6,6 @@ var PrismTree = React.createClass( {
 
 		var state = { 
 			branches         : {},
-			ajax             : {
-				status  : 'done',
-				queue   : []
-			},
 			active           : { 
 				branch  : null,
 				leaf    : null,
@@ -72,39 +68,11 @@ var PrismTree = React.createClass( {
 	},
 
 	componentDidMount: function() {
-
-		log( 11, 'beg PrismTree.componentDidMount()' );
-
-		var state = this.state;
-
-		state.ajax.queue = state.ajax.queue.concat( PRISM.ajax.queue );
-		PRISM.ajax.queue = [];
-
-		if ( state.ajax.queue.length > 0 && state.ajax.status == 'done' )
-			this.getData( state.ajax.queue[0] );
-
-		this.setState;
-
-		log( 12, 'end PrismTree.componentDidMount()' );
-
+		this.props.func.checkQueue();
 	},
 
 	componentDidUpdate: function() {
-
-		log( 11, 'beg PrismTree.componentDidUpdate()' );
-
-		var state = this.state;
-
-		state.ajax.queue = state.ajax.queue.concat( PRISM.ajax.queue );
-		PRISM.ajax.queue = [];
-
-		if ( state.ajax.queue.length > 0 && state.ajax.status == 'done' )
-			this.getData( state.ajax.queue[0] );
-
-		this.setState;
-
-		log( 12, 'end PrismTree.componentDidUpdate()' );
-
+		this.props.func.checkQueue();
 	},
 
 	move: function( direction ) {
@@ -789,7 +757,7 @@ var PrismTree = React.createClass( {
 			status   : { type : 'loading', message : 'Loading ' + branch + ' data...' }
 		}
 
-		this.queueAJAX( request );
+		this.props.func.queueAJAX( request );
 
 		log( 12, 'end PrismTree.loadBranch()' );
 
@@ -809,7 +777,7 @@ var PrismTree = React.createClass( {
 			status   : { type : 'loading', message : 'Searching for "' + query + '" data!' }
 		}
 
-		this.queueAJAX( request );
+		this.props.func.queueAJAX( request );
 
 		log( 12, 'end PrismTree.loadBranch()' );
 
@@ -832,7 +800,7 @@ var PrismTree = React.createClass( {
 			status   : { type : 'loading', message : 'Loading ' + activeBranch + ' data...' }
 		}
 
-		this.queueAJAX( request );
+		this.props.func.queueAJAX( request );
 
 		log( 12, 'end PrismTree.loadNestedBranch()' );
 
@@ -877,37 +845,6 @@ var PrismTree = React.createClass( {
 		log( 12, 'end PrismTree.unloadBranch()' );
 	},
 
-	queueAJAX: function( request ) {
-		log( 11, 'beg PrismTree.queueAJAX()' );
-
-		PRISM.ajax.queue.push( request );
-
-		log( 12, 'end PrismTree.queueAJAX()' );
-	},
-
-	dequeueAJAX: function( response ) {
-		log( 11, 'beg PrismTree.dequeueAJAX()' );
-
-		var state   = this.state;
-
-		var request = state.ajax.queue.shift();
-
-		state.ajax.status = 'done';
-
-		request.callback( request, response );
-
-		// TODO: GREAT WORKAROUND OR UGLIEST WORKAROUND
-		//       TIE AJAX QUEUE TO STATE, BUT DON'T DISRUPT STATE IF NOT DONE
-		//       PUT IN TEMP QUEUE, THEN COMBINE AT END OF EVERY AJAX CALL
-		//       SHOULD BE A CLEANER WAY, BUT THIS SEEMS TO BE WORKING
-		state.ajax.queue = state.ajax.queue.concat( PRISM.ajax.queue );
-		PRISM.ajax.queue = [];
-
-		this.setState( state );
-
-		log( 12, 'end PrismTree.dequeueAJAX()' );
-	},
-
 	needsData: function( branch ) {
 		log( 11, 'beg PrismTree.needsData() ' + branch );
 
@@ -922,7 +859,7 @@ var PrismTree = React.createClass( {
 				inQueue = true;
 		}, this );
 
-		this.state.ajax.queue.map( function( request, i ) {
+		this.props.data.ajax.queue.map( function( request, i ) {
 			if ( branch == request.branch )
 				inQueue = true;
 		}, this );
@@ -949,34 +886,6 @@ var PrismTree = React.createClass( {
 		return hasData;
 	},
 
-	getData: function( request ) {
-
-		log( 11, 'beg PrismTree.getData()' );
-
-		var state = this.state;
-
-		state.ajax.status = 'getting';
-
-		this.setState( state );
-
-		this.changeStatus( request.status );
-
-		log( request );
-
-		jQuery.ajax( {
-			method  : 'GET',
-			url     : request.url,
-			beforeSend: function ( xhr ) {
-				xhr.setRequestHeader( 'X-WP-Nonce', PRISM.nonce );
-			},
-			success : this.dequeueAJAX,
-			error   : this.dequeueAJAX
-		} );
-
-		log( 12, 'end PrismTree.getData()' );
-
-	},
-
 	trunkData: function() {
 
 		log( 1, '---beg PrismTree.trunkData()' );
@@ -987,8 +896,7 @@ var PrismTree = React.createClass( {
 			active  : state.active,
 			width   : state.width.current.trunk,
 			search  : state.search,
-			status  : this.props.data.status,
-			rainbow : this.props.data.rainbowBar
+			status  : this.props.data.status
 		};
 
 		log( 2, '---end PrismTree.trunkData()' );
