@@ -339,8 +339,8 @@ body > *:not(#prism) {
           color: #66d73a;
           border-color: #66d73a; }
   #prism-branch.grid ul#prism-leaves .prism-leaf {
-    width: calc( 25% - 10px );
-    padding-bottom: calc( 25% - 10px ); }
+    width: calc( 33% - 10px );
+    padding-bottom: calc( 33% - 10px ); }
   #prism-branch.half ul#prism-leaves .prism-leaf {
     width: calc( 50% - 10px );
     padding-bottom: calc( 50% - 10px ); }
