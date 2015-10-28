@@ -68,6 +68,9 @@ var PrismBranch = React.createClass( {
 				if ( b.slug.plural == leaf.type ) branch = b.slug.single;
 			} );
 
+			log( leaf.type );
+
+			if ( leaf.type == 'post' )       branch = 'post';
 			if ( leaf.type == 'attachment' ) branch = 'media';
 
 			leaf.href += branch + '/' + leaf.slug;

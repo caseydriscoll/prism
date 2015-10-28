@@ -126,7 +126,7 @@ class Prism_Posts_Data {
 									'post_content' => ''
 								),
 								array( 
-									'post_title'   => 'Youll learn things you never knew, you never knew',
+									'post_title'   => 'You\'ll learn things you never knew, you never knew',
 									'post_content' => ''
 								),
 								array( 
