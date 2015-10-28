@@ -40,7 +40,7 @@ var PrismIcon = React.createClass( {
 		var lockIcon      = data.lockMeta == 'lock' ? 'lock' : 'unlock-alt';
 
 		var lockClasses   = "fa fa-2x fa-pull-right lock-meta fa-" + lockIcon;
-		var toggleClasses = "fa fa-3x fa-pull-left toggle-meta";
+		var toggleClasses = "fa fa-2x fa-pull-left toggle-meta";
 
 		toggleClasses    += data.metaActive ? ' fa-toggle-right active' : ' fa-toggle-left';
 

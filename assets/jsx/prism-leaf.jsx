@@ -105,7 +105,7 @@ var PrismLeafHeader = React.createClass( {
 
 
 		return (
-			<header id="prism-leaf-header">
+			<header id="prism-leaf-header" className="prism-tree-header">
 				<PrismLeafTitle auth={auth} data={data.title[contentType]} func={func} />
 				<PrismIcon type='toggle' data={data} func={func} />
 			</header>

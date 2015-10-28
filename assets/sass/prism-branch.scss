@@ -4,16 +4,8 @@
 
 	border-right: $border;
 
+	// A .prism-tree-header element
 	header#prism-branch-header {
-
-		height: $sub-header-height;
-		padding: 10px;
-		border-bottom: $border;
-
-		h2 {
-			padding: 5px; margin: 0;
-			text-transform: capitalize;
-		}
 
 		div#prism-branch-visual-controls {
 
@@ -21,12 +13,10 @@
 			right: 0; top: 0;
 
 			i.fa {
-				margin: 10px 10px 0 0;
+				margin: 8px 8px 0 0;
 
 				color: $light;
 				cursor: pointer;
-
-				border-color: $light;
 
 				&:hover {
 					color: $highlight;
@@ -34,20 +24,15 @@
 				}
 
 				&.active {
-					color: $grey;
-					border-color: $grey;
-					background-color: $light;
+					color: $dark;
+					border-color: $dark;
 				}
 			}
 
 			i#prism-add-leaf {
-
 				margin-right: 25px;
 
-				&:hover {
-					color: $green;
-					border-color: $green;
-				}
+				&:hover { color: $green; }
 			}
 		}
 
@@ -107,7 +92,7 @@
 
 	ul#prism-leaves {
 
-		height: calc( 100% - #{$sub-header-height} );
+		height: calc( 100% - #{$tree-header-height} );
 		padding: 5px; margin: 0 1px 0 0;
 
 		overflow-y: scroll;

@@ -4,3 +4,19 @@
 	width: 100%; height: calc( 100vh - #{$header-height} );
 
 }
+
+.prism-tree-header {
+	display: block; position: relative;
+	width: 100%; height: $tree-header-height;
+
+	padding: $tree-header-padding;
+
+	border-bottom: $border;
+
+	h2 {
+		padding: 0; margin: 0;
+		text-transform: capitalize;
+
+		font-size: 28px;
+	}
+}

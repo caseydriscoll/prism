@@ -4,36 +4,20 @@
 	height: 100%;
 	background-color: $light;
 
+	// A .prism-tree-header element
 	header#prism-meta-header {
 
-		height: $sub-header-height;
-		padding: 10px;
-		border-bottom: $border;
-
-		h3 {
-			margin: 8px 0 0 0;
-			color: $black;
-			text: {
-				transform: capitalize;
-			}
-			font-weight: bold;
-		}
+		h2 { color: $grey; }
 
 		i.fa {
 			display: block; position: absolute;
-			right: 0; top: 0;
-			margin: 18px 15px;
+			right: 10px; top: 8px;
 			cursor: pointer;
 			color: $grey;
 			border: none;
 
-			&:hover {
-				color: $highlight;
-			}
-
-			&.fa-lock {
-				color: $black;
-			}
+			&:hover { color: $highlight; }
+			&.fa-lock { color: $black; }
 		}
 	}
 

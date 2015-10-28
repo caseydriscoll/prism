@@ -65,7 +65,9 @@ var PrismSearch = React.createClass( {
 
 		var value   = data.search.query;
 		var focus   = data.active.branch == 'search' ? true : false;
-		var classes = data.active.branch == 'search' ? 'active' : '';
+
+		var classes  = 'prism-tree-header';
+		    classes += data.active.branch == 'search' ? ' active' : '';
 
 		log( 12, 'end PrismSearch.render()' );
 

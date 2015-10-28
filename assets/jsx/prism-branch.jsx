@@ -119,14 +119,14 @@ var PrismBranchHeader = React.createClass( {
 		var full = data.view == 'full' ? ' fa-square active'   : ' fa-square';
 		var list = data.view == 'list' ? ' fa-list active'     : ' fa-list';
 
-		var classes = 'fa fa-border fa-pull-right fa-2x';
+		var classes = 'fa fa-pull-right fa-2x';
 
 		var renderAddLeaf = auth && data.active.branch !== 'search' ? <i id="prism-add-leaf" className={classes + ' fa-plus'} onClick={func.addLeaf}></i> : null;
 
 		log( 12, 'end PrismBranchHeader.render()' );
 
 		return (
-			<header id="prism-branch-header">
+			<header id="prism-branch-header" className="prism-tree-header">
 				<h2>{data.active.branch}</h2>
 				<div id="prism-branch-visual-controls">
 					<i id="prism-branch-view-rows" data-view="list" className={classes + list} onClick={this.changeView}></i>

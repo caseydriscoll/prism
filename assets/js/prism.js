@@ -1177,7 +1177,9 @@ var PrismSearch = React.createClass({
 
 		var value = data.search.query;
 		var focus = data.active.branch == 'search' ? true : false;
-		var classes = data.active.branch == 'search' ? 'active' : '';
+
+		var classes = 'prism-tree-header';
+		classes += data.active.branch == 'search' ? ' active' : '';
 
 		log(12, 'end PrismSearch.render()');
 
@@ -1380,7 +1382,7 @@ var PrismBranchHeader = React.createClass({
 		var full = data.view == 'full' ? ' fa-square active' : ' fa-square';
 		var list = data.view == 'list' ? ' fa-list active' : ' fa-list';
 
-		var classes = 'fa fa-border fa-pull-right fa-2x';
+		var classes = 'fa fa-pull-right fa-2x';
 
 		var renderAddLeaf = auth && data.active.branch !== 'search' ? React.createElement('i', { id: 'prism-add-leaf', className: classes + ' fa-plus', onClick: func.addLeaf }) : null;
 
@@ -1388,7 +1390,7 @@ var PrismBranchHeader = React.createClass({
 
 		return React.createElement(
 			'header',
-			{ id: 'prism-branch-header' },
+			{ id: 'prism-branch-header', className: 'prism-tree-header' },
 			React.createElement(
 				'h2',
 				null,
@@ -1591,7 +1593,7 @@ var PrismLeafHeader = React.createClass({
 
 		return React.createElement(
 			'header',
-			{ id: 'prism-leaf-header' },
+			{ id: 'prism-leaf-header', className: 'prism-tree-header' },
 			React.createElement(PrismLeafTitle, { auth: auth, data: data.title[contentType], func: func }),
 			React.createElement(PrismIcon, { type: 'toggle', data: data, func: func })
 		);
@@ -1717,11 +1719,11 @@ var PrismMeta = React.createClass({
 			{ id: 'prism-meta', style: style },
 			React.createElement(
 				'header',
-				{ id: 'prism-meta-header' },
+				{ id: 'prism-meta-header', className: 'prism-tree-header' },
 				React.createElement(
-					'h3',
+					'h2',
 					null,
-					'Post Meta'
+					'Meta'
 				),
 				React.createElement(PrismIcon, { type: 'lock', data: data, func: func })
 			),
@@ -1901,7 +1903,7 @@ var PrismIcon = React.createClass({
 		var lockIcon = data.lockMeta == 'lock' ? 'lock' : 'unlock-alt';
 
 		var lockClasses = "fa fa-2x fa-pull-right lock-meta fa-" + lockIcon;
-		var toggleClasses = "fa fa-3x fa-pull-left toggle-meta";
+		var toggleClasses = "fa fa-2x fa-pull-left toggle-meta";
 
 		toggleClasses += data.metaActive ? ' fa-toggle-right active' : ' fa-toggle-left';
 

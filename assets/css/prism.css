@@ -225,6 +225,19 @@ body > *:not(#prism) {
   width: 100%;
   height: calc( 100vh - 50px ); }
 
+.prism-tree-header {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 45px;
+  padding: 8px 10px;
+  border-bottom: 2px solid #000000; }
+  .prism-tree-header h2 {
+    padding: 0;
+    margin: 0;
+    text-transform: capitalize;
+    font-size: 28px; }
+
 #prism-trunk {
   display: block;
   position: relative;
@@ -233,12 +246,8 @@ body > *:not(#prism) {
   border-right: 2px solid #000000;
   background: #dddddd; }
   #prism-trunk #prism-search {
-    display: block;
-    position: relative;
-    width: 100%;
-    height: 65px;
-    border-bottom: 2px solid #000000;
-    font-size: 24px;
+    padding: 5px;
+    font-size: 18px;
     overflow: hidden; }
     #prism-trunk #prism-search.active {
       background: #1ab7d9;
@@ -246,9 +255,8 @@ body > *:not(#prism) {
       border-color: #000000; }
     #prism-trunk #prism-search input {
       display: inline-block;
-      width: calc( 100% - 20px );
+      width: calc( 100% );
       padding: 2px 10px;
-      margin: 10px;
       border: 2px solid #000000;
       border-color: #808080;
       background: #ffffff; }
@@ -303,36 +311,25 @@ body > *:not(#prism) {
   float: left;
   height: 100%;
   border-right: 2px solid #000000; }
-  #prism-branch header#prism-branch-header {
-    height: 65px;
-    padding: 10px;
-    border-bottom: 2px solid #000000; }
-    #prism-branch header#prism-branch-header h2 {
-      padding: 5px;
-      margin: 0;
-      text-transform: capitalize; }
-    #prism-branch header#prism-branch-header div#prism-branch-visual-controls {
-      display: block;
-      position: absolute;
-      right: 0;
-      top: 0; }
-      #prism-branch header#prism-branch-header div#prism-branch-visual-controls i.fa {
-        margin: 10px 10px 0 0;
-        color: #dddddd;
-        cursor: pointer;
-        border-color: #dddddd; }
-        #prism-branch header#prism-branch-header div#prism-branch-visual-controls i.fa:hover {
-          color: #1ab7d9;
-          border-color: #1ab7d9; }
-        #prism-branch header#prism-branch-header div#prism-branch-visual-controls i.fa.active {
-          color: #808080;
-          border-color: #808080;
-          background-color: #dddddd; }
-      #prism-branch header#prism-branch-header div#prism-branch-visual-controls i#prism-add-leaf {
-        margin-right: 25px; }
-        #prism-branch header#prism-branch-header div#prism-branch-visual-controls i#prism-add-leaf:hover {
-          color: #66d73a;
-          border-color: #66d73a; }
+  #prism-branch header#prism-branch-header div#prism-branch-visual-controls {
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0; }
+    #prism-branch header#prism-branch-header div#prism-branch-visual-controls i.fa {
+      margin: 8px 8px 0 0;
+      color: #dddddd;
+      cursor: pointer; }
+      #prism-branch header#prism-branch-header div#prism-branch-visual-controls i.fa:hover {
+        color: #1ab7d9;
+        border-color: #1ab7d9; }
+      #prism-branch header#prism-branch-header div#prism-branch-visual-controls i.fa.active {
+        color: #333333;
+        border-color: #333333; }
+    #prism-branch header#prism-branch-header div#prism-branch-visual-controls i#prism-add-leaf {
+      margin-right: 25px; }
+      #prism-branch header#prism-branch-header div#prism-branch-visual-controls i#prism-add-leaf:hover {
+        color: #66d73a; }
   #prism-branch.grid ul#prism-leaves .prism-leaf {
     width: calc( 33% - 10px );
     padding-bottom: calc( 33% - 10px ); }
@@ -365,7 +362,7 @@ body > *:not(#prism) {
       cursor: pointer;
       color: #808080; }
   #prism-branch ul#prism-leaves {
-    height: calc( 100% - 65px );
+    height: calc( 100% - 45px );
     padding: 5px;
     margin: 0 1px 0 0;
     overflow-y: scroll; }
@@ -449,47 +446,41 @@ body > *:not(#prism) {
   float: left;
   height: 100%;
   border-right: 2px solid #000000; }
-  #prism-leaf header#prism-leaf-header {
-    height: 65px;
-    padding: 10px;
-    border-bottom: 2px solid #000000; }
-    #prism-leaf header#prism-leaf-header h2 {
-      display: inline;
-      float: left;
-      width: calc( 100% - 300px );
-      padding: 5px;
-      margin: 0; }
-      #prism-leaf header#prism-leaf-header h2 div {
-        width: 100%;
-        min-height: 30px;
-        margin-top: -2px;
-        border: 2px solid #000000;
-        border-color: transparent;
-        white-space: nowrap; }
-      #prism-leaf header#prism-leaf-header h2 input {
-        width: calc( 100% + 10px );
-        padding: 0 5px;
-        margin: -5px 0 0 -5px;
-        border: 2px solid #000000;
-        border-color: #dddddd; }
-    #prism-leaf header#prism-leaf-header i.fa {
-      display: block;
-      position: absolute;
-      right: 0;
-      top: 0;
-      margin: 10px;
-      cursor: pointer;
-      color: #dddddd; }
-      #prism-leaf header#prism-leaf-header i.fa:hover {
-        color: #1ab7d9; }
-      #prism-leaf header#prism-leaf-header i.fa.active {
-        color: #000000; }
+  #prism-leaf header#prism-leaf-header h2 {
+    display: inline;
+    float: left;
+    width: calc( 100% - 300px ); }
+    #prism-leaf header#prism-leaf-header h2 div {
+      width: 100%;
+      min-height: 30px;
+      margin-top: -2px;
+      border: 2px solid #000000;
+      border-color: transparent;
+      white-space: nowrap; }
+    #prism-leaf header#prism-leaf-header h2 input {
+      width: calc( 100% + 10px );
+      padding: 0 5px;
+      margin: -5px 0 0 -5px;
+      border: 2px solid #000000;
+      border-color: #dddddd; }
+  #prism-leaf header#prism-leaf-header i.fa {
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 8px;
+    cursor: pointer;
+    color: #dddddd; }
+    #prism-leaf header#prism-leaf-header i.fa:hover {
+      color: #1ab7d9; }
+    #prism-leaf header#prism-leaf-header i.fa.active {
+      color: #000000; }
   #prism-leaf #prism-leaf-content {
     display: block;
     position: relative;
     float: left;
     width: calc( 100% - 20px );
-    height: calc( 100% - 20px - 65px );
+    height: calc( 100% - 20px - 45px );
     padding: 10px;
     margin: 10px;
     border: 2px solid #000000;
@@ -501,28 +492,20 @@ body > *:not(#prism) {
   float: left;
   height: 100%;
   background-color: #dddddd; }
-  #prism-meta header#prism-meta-header {
-    height: 65px;
-    padding: 10px;
-    border-bottom: 2px solid #000000; }
-    #prism-meta header#prism-meta-header h3 {
-      margin: 8px 0 0 0;
-      color: #000000;
-      text-transform: capitalize;
-      font-weight: bold; }
-    #prism-meta header#prism-meta-header i.fa {
-      display: block;
-      position: absolute;
-      right: 0;
-      top: 0;
-      margin: 18px 15px;
-      cursor: pointer;
-      color: #808080;
-      border: none; }
-      #prism-meta header#prism-meta-header i.fa:hover {
-        color: #1ab7d9; }
-      #prism-meta header#prism-meta-header i.fa.fa-lock {
-        color: #000000; }
+  #prism-meta header#prism-meta-header h2 {
+    color: #808080; }
+  #prism-meta header#prism-meta-header i.fa {
+    display: block;
+    position: absolute;
+    right: 10px;
+    top: 8px;
+    cursor: pointer;
+    color: #808080;
+    border: none; }
+    #prism-meta header#prism-meta-header i.fa:hover {
+      color: #1ab7d9; }
+    #prism-meta header#prism-meta-header i.fa.fa-lock {
+      color: #000000; }
   #prism-meta ul#prism-meta-info {
     padding: 10px;
     margin: 0; }

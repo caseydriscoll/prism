@@ -4,16 +4,13 @@
 
 	border-right: $border;
 
-	header#prism-leaf-header {
 
-		height: $sub-header-height;
-		padding: 10px;
-		border-bottom: $border;
+	// A .prism-tree-header element
+	header#prism-leaf-header {
 
 		h2 {
 			display: inline; float: left;
 			width: calc( 100% - #{$metapanel-width} );
-			padding: 5px; margin: 0;
 
 			div {
 				width: 100%; min-height: 30px;
@@ -34,17 +31,12 @@
 		i.fa {
 			display: block; position: absolute;
 			right: 0; top: 0;
-			margin: 10px;
+			margin: 8px;
 			cursor: pointer;
 			color: $light;
 
-			&:hover {
-				color: $highlight;
-			}
-
-			&.active {
-				color: $black;
-			}
+			&:hover  { color: $highlight; }
+			&.active { color: $black; }
 
 		}
 	}
@@ -52,7 +44,7 @@
 	#prism-leaf-content {
 
 		display: block; position: relative; float: left;
-		width: calc( 100% - 20px ); height: calc( 100% - 20px - #{$sub-header-height} );
+		width: calc( 100% - 20px ); height: calc( 100% - 20px - #{$tree-header-height} );
 		padding: 10px; margin: 10px;
 		border: $border;
 		border-color: $light;
