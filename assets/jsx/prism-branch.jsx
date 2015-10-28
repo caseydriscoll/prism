@@ -177,20 +177,22 @@ var PrismLeafNode = React.createClass( {
 
 		if ( id == 'no-search-results' ) data.href = 'search';
 
-		var styles  = {};
 		var classes = 'prism-leaf ' + data.active;
 
-
-		var thumbnail = null;
+		var thumbnail = { 
+			url     : null, 
+			styles  : {},
+			classes : 'media'
+		};
 
 		if ( data.type == 'attachment' && data.media_type == 'image' )
-			thumbnail = data.media_details.sizes.thumbnail.source_url;
+			thumbnail.url = data.media_details.sizes.thumbnail.source_url;
 
 		if ( 'featured_image_thumbnail_url' in data )
-			thumbnail = data.featured_image_thumbnail_url;
+			thumbnail.url = data.featured_image_thumbnail_url;
 
-		if ( thumbnail != null ) {
-			styles.backgroundImage = 'url(' + thumbnail + ')';
+		if ( thumbnail.url != null ) {
+			thumbnail.styles.backgroundImage = 'url(' + thumbnail.url + ')';
 			classes += ' media';
 		}
 
@@ -204,11 +206,12 @@ var PrismLeafNode = React.createClass( {
 		log( 2, 'end PrismLeafNode.render()' );
 
 		return (
-			<li id={data.href} className={classes} key={this.props.key} style={styles}>
+			<li id={data.href} className={classes} key={this.props.key}>
 				<a href={ '#/' + data.href}>
 					<h4>{data.title[contentType]}</h4>
 					<p>{content}</p>
 				</a>
+				<b className={thumbnail.classes} style={thumbnail.styles}></b>
 			</li>
 		)
 	}

@@ -45,49 +45,51 @@
 
 	&.grid ul#prism-leaves .prism-leaf {
 		width: calc( #{$grid-size} - 10px );
-		padding-bottom: calc( #{$grid-size} - 10px );
+		padding-bottom: calc( #{$grid-size} - 14px );
 	}
 
 	&.half ul#prism-leaves .prism-leaf {
 		width: calc( #{$half-size} - 10px );
-		padding-bottom: calc( #{$half-size} - 10px );
+		padding-bottom: calc( #{$half-size} - 14px );
 	}
 
 	&.full ul#prism-leaves .prism-leaf {
 		width: calc( #{$full-size} - 10px );
-		padding-bottom: calc( #{$full-size} - 10px );
+		padding-bottom: calc( #{$full-size} - 14px );
 	}
 
-	&.list ul#prism-leaves .prism-leaf,
-	&.list ul#prism-leaves .prism-leaf.media:hover {
+	&.list ul#prism-leaves .prism-leaf {
 		width: calc( 100% - 10px ) !important;
 		padding-bottom: 100px !important;
-		background: {
-			position: left center !important;
-			size: 100px !important;
-			repeat: no-repeat;
+
+		a {
+			left: 100px;
+			font: {
+				size: 16px;
+				weight: bold;
+			}
+			line-height: 20px;
+
+			color: $grey;
+
+			h4 { background: none !important; }
 		}
-		opacity: 1 !important;
+
+		b.media {
+
+			width: 100px; height: 100px;
+			right: auto;
+
+			background: {
+				position: right center !important;
+				size: 100px !important;
+				repeat: no-repeat;
+				color: rgba( $light, .5 );
+			}
+		}
 
 		&:hover  { background-color: $light !important; }
 		&.active { background-color: $highlight !important; }
-
-		&.media a { padding-left: 110px; }
-
-		a {
-			background-color: $white;
-
-			text-shadow: none;
-			font-size: 16px;
-			font-weight: bold;
-			line-height: 20px;
-
-			background: none;
-
-			cursor: pointer;
-
-			color: $grey;
-		}
 	}
 
 	ul#prism-leaves {
@@ -106,102 +108,93 @@
 			display: block; position: relative; float: left;
 			height: auto; margin: 5px;
 
-			&.media {
-				opacity: .4;
-				background-position: center center;
-				background-size: 100%;
+			border: $border;
+			border-color: $grey;
 
-				a {
-					color: $black;
-					text-shadow: 0 0 2px $white;
-
-					&:hover {
-						color: $white;
-						background-color: transparent;
-						border-color: $black;
-						text-shadow: 0 0 2px $black;
-					}
-
-				}
-
-				&:hover {
-					opacity: .8;
-					background-size: 105% !important;
-					box-shadow: 0 0 5px $dark;
-
-					transition: background-size .1s;
-				}
-
-				&.active {
-					opacity: 1;
-					box-shadow: 0 0 10px $highlight;
-
-					a {
-						color: $white;
-						background: transparent;
-						text-shadow: 0 0 5px $black;
-					}
-				}
-
-			}
-
-			a {
+			a, b {
 				display: block; position: absolute;
 				left: 0; right: 0;
 				top: 0; bottom: 0;
-				padding: 7px;
+			}
 
-				font-size: 16px;
-				font-weight: bold;
+			a {
+				z-index: 2;
+				padding: 3px;
+
+				font: {
+					size: 16px;
+					weight: bold;
+				}
 				line-height: 20px;
-
-				background: none;
-
-				cursor: pointer;
 
 				color: $grey;
 
 				text-decoration: none;
 
-				border: $border;
-				border-color: $grey;
-
+				background-color: rgba( $white, .7 );
 				overflow: hidden;
 
 				h4 {
-					margin: 0 0 5px;
+					padding: 5px; margin: 0;
 					font-size: 16px;
 					line-height: 20px;
+					background-color: rgba( $white, .5 );
 				}
 
 				p {
+					padding: 5px; margin: 0;
 					font-size: 12px;
 					line-height: 15px;
 					color: $grey;
 				}
-
-
-				&:hover {
-					color: $black;
-					background-color: $light;
-					border-color: $black;
-
-					p { color: $dark }
-				}
-
 			}
 
-			&.active {
+			b.media {
+				z-index: 1;
+				margin: 0;
+				background-position: center center;
+				background-size: 100%;
+			}
 
+			&:not(.media) {
+				h4 { background: none !important; }
+			}
+
+			&:hover {
+
+				box-shadow: 0 0 10px $grey;
+				border-color: $grey;
+
+				a {
+					color: $dark;
+					background-color: rgba( $grey, .5 );
+
+					h4 { background-color: rgba( $white, .7 ); }
+				}
+
+				b.media {
+					background-size: 105% !important;
+					transition: background-size .1s;
+				}
+			}
+
+			&.active { 
 				box-shadow: 0 0 10px $highlight;
+				border-color: $black;
 
 				a {
 					color: $black;
-					background: $highlight;
-					border-color: $black;
+					background-color: rgba( $white, .1 );
 
-					p { color: $dark; }
+					h4 { background-color: rgba( $white, .9 ); }
+					p  { color: $black; }
 				}
+
+				b.media {
+					background-color: $highlight;
+					background-size: 105% !important;
+				}
+
 			}
 
 		}

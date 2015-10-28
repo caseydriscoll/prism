@@ -332,35 +332,36 @@ body > *:not(#prism) {
         color: #66d73a; }
   #prism-branch.grid ul#prism-leaves .prism-leaf {
     width: calc( 33% - 10px );
-    padding-bottom: calc( 33% - 10px ); }
+    padding-bottom: calc( 33% - 14px ); }
   #prism-branch.half ul#prism-leaves .prism-leaf {
     width: calc( 50% - 10px );
-    padding-bottom: calc( 50% - 10px ); }
+    padding-bottom: calc( 50% - 14px ); }
   #prism-branch.full ul#prism-leaves .prism-leaf {
     width: calc( 100% - 10px );
-    padding-bottom: calc( 100% - 10px ); }
-  #prism-branch.list ul#prism-leaves .prism-leaf, #prism-branch.list ul#prism-leaves .prism-leaf.media:hover {
+    padding-bottom: calc( 100% - 14px ); }
+  #prism-branch.list ul#prism-leaves .prism-leaf {
     width: calc( 100% - 10px ) !important;
-    padding-bottom: 100px !important;
-    background-position: left center !important;
-    background-size: 100px !important;
-    background-repeat: no-repeat;
-    opacity: 1 !important; }
-    #prism-branch.list ul#prism-leaves .prism-leaf:hover, #prism-branch.list ul#prism-leaves .prism-leaf.media:hover:hover {
-      background-color: #dddddd !important; }
-    #prism-branch.list ul#prism-leaves .prism-leaf.active, #prism-branch.list ul#prism-leaves .prism-leaf.media:hover.active {
-      background-color: #1ab7d9 !important; }
-    #prism-branch.list ul#prism-leaves .prism-leaf.media a, #prism-branch.list ul#prism-leaves .prism-leaf.media:hover.media a {
-      padding-left: 110px; }
-    #prism-branch.list ul#prism-leaves .prism-leaf a, #prism-branch.list ul#prism-leaves .prism-leaf.media:hover a {
-      background-color: #ffffff;
-      text-shadow: none;
+    padding-bottom: 100px !important; }
+    #prism-branch.list ul#prism-leaves .prism-leaf a {
+      left: 100px;
       font-size: 16px;
       font-weight: bold;
       line-height: 20px;
-      background: none;
-      cursor: pointer;
       color: #808080; }
+      #prism-branch.list ul#prism-leaves .prism-leaf a h4 {
+        background: none !important; }
+    #prism-branch.list ul#prism-leaves .prism-leaf b.media {
+      width: 100px;
+      height: 100px;
+      right: auto;
+      background-position: right center !important;
+      background-size: 100px !important;
+      background-repeat: no-repeat;
+      background-color: rgba(221, 221, 221, 0.5); }
+    #prism-branch.list ul#prism-leaves .prism-leaf:hover {
+      background-color: #dddddd !important; }
+    #prism-branch.list ul#prism-leaves .prism-leaf.active {
+      background-color: #1ab7d9 !important; }
   #prism-branch ul#prism-leaves {
     height: calc( 100% - 45px );
     padding: 5px;
@@ -374,71 +375,69 @@ body > *:not(#prism) {
       position: relative;
       float: left;
       height: auto;
-      margin: 5px; }
-      #prism-branch ul#prism-leaves .prism-leaf.media {
-        opacity: .4;
-        background-position: center center;
-        background-size: 100%; }
-        #prism-branch ul#prism-leaves .prism-leaf.media a {
-          color: #000000;
-          text-shadow: 0 0 2px #ffffff; }
-          #prism-branch ul#prism-leaves .prism-leaf.media a:hover {
-            color: #ffffff;
-            background-color: transparent;
-            border-color: #000000;
-            text-shadow: 0 0 2px #000000; }
-        #prism-branch ul#prism-leaves .prism-leaf.media:hover {
-          opacity: .8;
-          background-size: 105% !important;
-          box-shadow: 0 0 5px #333333;
-          transition: background-size .1s; }
-        #prism-branch ul#prism-leaves .prism-leaf.media.active {
-          opacity: 1;
-          box-shadow: 0 0 10px #1ab7d9; }
-          #prism-branch ul#prism-leaves .prism-leaf.media.active a {
-            color: #ffffff;
-            background: transparent;
-            text-shadow: 0 0 5px #000000; }
-      #prism-branch ul#prism-leaves .prism-leaf a {
+      margin: 5px;
+      border: 2px solid #000000;
+      border-color: #808080; }
+      #prism-branch ul#prism-leaves .prism-leaf a, #prism-branch ul#prism-leaves .prism-leaf b {
         display: block;
         position: absolute;
         left: 0;
         right: 0;
         top: 0;
-        bottom: 0;
-        padding: 7px;
+        bottom: 0; }
+      #prism-branch ul#prism-leaves .prism-leaf a {
+        z-index: 2;
+        padding: 3px;
         font-size: 16px;
         font-weight: bold;
         line-height: 20px;
-        background: none;
-        cursor: pointer;
         color: #808080;
         text-decoration: none;
-        border: 2px solid #000000;
-        border-color: #808080;
+        background-color: rgba(255, 255, 255, 0.7);
         overflow: hidden; }
         #prism-branch ul#prism-leaves .prism-leaf a h4 {
-          margin: 0 0 5px;
+          padding: 5px;
+          margin: 0;
           font-size: 16px;
-          line-height: 20px; }
+          line-height: 20px;
+          background-color: rgba(255, 255, 255, 0.5); }
         #prism-branch ul#prism-leaves .prism-leaf a p {
+          padding: 5px;
+          margin: 0;
           font-size: 12px;
           line-height: 15px;
           color: #808080; }
-        #prism-branch ul#prism-leaves .prism-leaf a:hover {
-          color: #000000;
-          background-color: #dddddd;
-          border-color: #000000; }
-          #prism-branch ul#prism-leaves .prism-leaf a:hover p {
-            color: #333333; }
+      #prism-branch ul#prism-leaves .prism-leaf b.media {
+        z-index: 1;
+        margin: 0;
+        background-position: center center;
+        background-size: 100%; }
+      #prism-branch ul#prism-leaves .prism-leaf:not(.media) h4 {
+        background: none !important; }
+      #prism-branch ul#prism-leaves .prism-leaf:hover {
+        box-shadow: 0 0 10px #808080;
+        border-color: #808080; }
+        #prism-branch ul#prism-leaves .prism-leaf:hover a {
+          color: #333333;
+          background-color: rgba(128, 128, 128, 0.5); }
+          #prism-branch ul#prism-leaves .prism-leaf:hover a h4 {
+            background-color: rgba(255, 255, 255, 0.7); }
+        #prism-branch ul#prism-leaves .prism-leaf:hover b.media {
+          background-size: 105% !important;
+          transition: background-size .1s; }
       #prism-branch ul#prism-leaves .prism-leaf.active {
-        box-shadow: 0 0 10px #1ab7d9; }
+        box-shadow: 0 0 10px #1ab7d9;
+        border-color: #000000; }
         #prism-branch ul#prism-leaves .prism-leaf.active a {
           color: #000000;
-          background: #1ab7d9;
-          border-color: #000000; }
+          background-color: rgba(255, 255, 255, 0.1); }
+          #prism-branch ul#prism-leaves .prism-leaf.active a h4 {
+            background-color: rgba(255, 255, 255, 0.9); }
           #prism-branch ul#prism-leaves .prism-leaf.active a p {
-            color: #333333; }
+            color: #000000; }
+        #prism-branch ul#prism-leaves .prism-leaf.active b.media {
+          background-color: #1ab7d9;
+          background-size: 105% !important; }
 
 #prism-leaf {
   display: block;
