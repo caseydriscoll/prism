@@ -1331,8 +1331,6 @@ var PrismBranch = React.createClass({
 				if (b.slug.plural == leaf.type) branch = b.slug.single;
 			});
 
-			log(leaf.type);
-
 			if (leaf.type == 'post') branch = 'post';
 			if (leaf.type == 'attachment') branch = 'media';
 
@@ -1443,8 +1441,6 @@ var PrismLeafNode = React.createClass({
 		var data = this.props.data;
 		var func = this.props.func;
 
-		log(data);
-
 		var id = this.id();
 
 		if (id == 'no-search-results') data.href = 'search';
@@ -1452,12 +1448,15 @@ var PrismLeafNode = React.createClass({
 		var styles = {};
 		var classes = 'prism-leaf ' + data.active;
 
-		if (data.type == 'attachment' && data.media_type == 'image') {
-			var thumbnail = data.media_details.sizes.thumbnail.source_url;
+		var thumbnail = null;
 
+		if (data.type == 'attachment' && data.media_type == 'image') thumbnail = data.media_details.sizes.thumbnail.source_url;
+
+		if ('featured_image_thumbnail_url' in data) thumbnail = data.featured_image_thumbnail_url;
+
+		if (thumbnail != null) {
 			styles.backgroundImage = 'url(' + thumbnail + ')';
-
-			classes += ' ' + data.type;
+			classes += ' media';
 		}
 
 		var contentType,

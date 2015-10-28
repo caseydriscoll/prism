@@ -26,35 +26,35 @@ class Prism_Posts_Data {
 			array(
 				'title'       => 'Posts',
 				'slug'        => array(
-				                   'plural' => 'posts',
-				                   'single' => 'post'
-				                 ),
+													 'plural' => 'posts',
+													 'single' => 'post'
+												 ),
 				'icon'        => 'fa-thumb-tack',
 				'connections' => array()
 			),
 			array(
 				'title'       => 'Swatches',
 				'slug'        => array(
-				                   'plural' => 'swatches',
-				                   'single' => 'swatch'
-				                 ),
+													 'plural' => 'swatches',
+													 'single' => 'swatch'
+												 ),
 				'icon'        => 'fa-sticky-note-o',
 				'connections' => array()
 			),
 			array(
 				'title'       => 'Crayons',
 				'slug'        => array(
-				                   'plural' => 'crayons',
-				                   'single' => 'crayon'
-				                 ),
+													 'plural' => 'crayons',
+													 'single' => 'crayon'
+												 ),
 				'connections' => array()
 			),
 			array(
 				'title'       => 'Cities',
 				'slug'        => array(
-				                   'plural' => 'cities',
-				                   'single' => 'city'
-				                 ),
+													 'plural' => 'cities',
+													 'single' => 'city'
+												 ),
 				'icon'        => 'fa-map',
 				'connections' => array()
 			),
@@ -152,6 +152,25 @@ class Prism_Posts_Data {
 			$post['post_date']   = self::rand_date();
 
 			$posts[$i]['id'] = wp_insert_post( $post );
+
+			$url = 'http://lorempixel.com/500/500/';
+			$tmp = plugin_dir_path( __FILE__ ) . 'images/';
+
+			if ( ! file_exists( $tmp ) ) {
+				mkdir( $tmp , 0660, true );
+			}
+
+			$name = 'image_' . $i . '.jpg';
+
+			if ( ! file_exists( $tmp . $name ) )
+				file_put_contents( $tmp . $name, file_get_contents( $url ) );
+
+			$file_array = array( 'tmp_name' => $tmp . $name, 'name' => $name );
+
+			$media = media_handle_sideload( $file_array, $posts[$i]['id'] );
+
+			set_post_thumbnail( $posts[$i]['id'], $media );
+
 		}
 
 

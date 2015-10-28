@@ -20,6 +20,8 @@ class Prism {
 		add_filter( 'rest_private_query_vars', 'Prism::override_query_vars', 10, 1 );
 
 		add_filter( 'rest_post_query', 'Prism::override_query', 10, 2 );
+		add_filter( 'rest_prepare_post', 'Prism::prepare_request', 10, 3 );
+
 
 		add_action( 'init', array( __CLASS__, 'business_logic' ) );
 		add_action( 'p2p_init', array( __CLASS__, 'connections' ) );
@@ -52,7 +54,7 @@ class Prism {
 
 		register_post_type( 'actors', $args );
 
-		
+
 		$args = array(
 			'public' => true,
 			'label'  => 'Swatches',
@@ -200,10 +202,18 @@ class Prism {
 
 	}
 
+	// Thanks https://gist.github.com/yoren/c8c98dc7c701bb87a844
 	public static function prepare_request( $data, $post, $request ) {
 
-		return $data;
+		$_data        = $data->data;
+		$thumbnail_id = get_post_thumbnail_id( $post->ID );
+		$thumbnail    = wp_get_attachment_image_src( $thumbnail_id );
 
+		$_data['featured_image_thumbnail_url'] = $thumbnail[0];
+
+		$data->data = $_data;
+
+		return $data;
 	}
 
 	public static function load_assets() {

@@ -15,3 +15,4 @@ wp rewrite structure '/%postname%'
 rm -rf htdocs/wp-content/uploads/
 wp plugin activate prism/prism-data-media
 wp plugin activate prism/prism-data-movies
+wp plugin activate prism/prism-data-posts
