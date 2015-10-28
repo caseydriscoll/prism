@@ -301,7 +301,7 @@ class Prism {
 												 ),
 			'view'          => array(
 					'search'          => 'list',
-					'default'         => 'list'
+					'default'         => 'grid'
 												 ),
 			'branches'      => apply_filters( 'prism_branches', $branches ),
 			'meta'          => $meta,
