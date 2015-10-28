@@ -52,6 +52,31 @@ class Prism {
 
 		register_post_type( 'actors', $args );
 
+		
+		$args = array(
+			'public' => true,
+			'label'  => 'Swatches',
+			'show_in_rest' => true
+		);
+
+		register_post_type( 'swatches', $args );
+
+		$args = array(
+			'public' => true,
+			'label'  => 'Crayons',
+			'show_in_rest' => true
+		);
+
+		register_post_type( 'crayons', $args );
+
+		$args = array(
+			'public' => true,
+			'label'  => 'Cities',
+			'show_in_rest' => true
+		);
+
+		register_post_type( 'cities', $args );
+
 	}
 
 
@@ -66,43 +91,6 @@ class Prism {
 		) );
 
 	}
-
-	public static function sample_types() {
-
-		$args = array(
-			'public' => true,
-			'label'  => 'Swatches',
-			'show_in_rest' => true
-		);
-
-		// register_post_type( 'swatches', $args );
-
-		$args = array(
-			'public' => true,
-			'label'  => 'Crayons',
-			'show_in_rest' => true
-		);
-
-		// register_post_type( 'crayons', $args );
-
-		$args = array(
-			'public' => true,
-			'label'  => 'Cities',
-			'show_in_rest' => true
-		);
-
-		// register_post_type( 'cities', $args );
-
-		$args = array(
-			'public' => true,
-			'label'  => 'Birds',
-			'show_in_rest' => true
-		);
-
-		// register_post_type( 'birds', $args );
-
-	}
-
 
 	public static function append_p2p_connections() {
 
@@ -264,12 +252,7 @@ class Prism {
 
 	public static function localize() {
 
-		$branches = array(
-			// array( 'title' => 'Posts',    'slug' => 'posts',    'icon' => 'fa-thumb-tack' ),
-			// array( 'title' => 'Swatches', 'slug' => 'swatches', 'icon' => 'fa-sticky-note-o' ),
-			// array( 'title' => 'Crayons',  'slug' => 'crayons',  ),
-			// array( 'title' => 'Cities',   'slug' => 'cities',   'icon' => 'fa-map' ),
-		);
+		$branches = array();
 
 		$meta = array(
 			'default' => array(
