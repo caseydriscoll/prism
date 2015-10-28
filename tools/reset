@@ -11,3 +11,7 @@ wp plugin activate prism rest-api posts-to-posts
 wp option update blogdescription "A developer friendly, React & Backbone based plugin for fast, REST API centric WordPress application development"
 
 wp rewrite structure '/%postname%'
+
+rm -rf htdocs/wp-content/uploads/
+wp plugin activate prism/prism-data-media
+wp plugin activate prism/prism-data-movies

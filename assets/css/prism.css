@@ -339,20 +339,20 @@ body > *:not(#prism) {
   #prism-branch.full ul#prism-leaves .prism-leaf {
     width: calc( 100% - 10px );
     padding-bottom: calc( 100% - 10px ); }
-  #prism-branch.list ul#prism-leaves .prism-leaf, #prism-branch.list ul#prism-leaves .prism-leaf.media:hover {
+  #prism-branch.list ul#prism-leaves .prism-leaf, #prism-branch.list ul#prism-leaves .prism-leaf.attachment:hover {
     width: calc( 100% - 10px ) !important;
     padding-bottom: 100px !important;
     background-position: left center !important;
     background-size: 100px !important;
     background-repeat: no-repeat;
     opacity: 1 !important; }
-    #prism-branch.list ul#prism-leaves .prism-leaf:hover, #prism-branch.list ul#prism-leaves .prism-leaf.media:hover:hover {
+    #prism-branch.list ul#prism-leaves .prism-leaf:hover, #prism-branch.list ul#prism-leaves .prism-leaf.attachment:hover:hover {
       background-color: #dddddd !important; }
-    #prism-branch.list ul#prism-leaves .prism-leaf.active, #prism-branch.list ul#prism-leaves .prism-leaf.media:hover.active {
+    #prism-branch.list ul#prism-leaves .prism-leaf.active, #prism-branch.list ul#prism-leaves .prism-leaf.attachment:hover.active {
       background-color: #1ab7d9 !important; }
-    #prism-branch.list ul#prism-leaves .prism-leaf.media a, #prism-branch.list ul#prism-leaves .prism-leaf.media:hover.media a {
+    #prism-branch.list ul#prism-leaves .prism-leaf.attachment a, #prism-branch.list ul#prism-leaves .prism-leaf.attachment:hover.attachment a {
       padding-left: 110px; }
-    #prism-branch.list ul#prism-leaves .prism-leaf a, #prism-branch.list ul#prism-leaves .prism-leaf.media:hover a {
+    #prism-branch.list ul#prism-leaves .prism-leaf a, #prism-branch.list ul#prism-leaves .prism-leaf.attachment:hover a {
       background-color: #ffffff;
       text-shadow: none;
       font-size: 16px;
@@ -375,27 +375,27 @@ body > *:not(#prism) {
       float: left;
       height: auto;
       margin: 5px; }
-      #prism-branch ul#prism-leaves .prism-leaf.media {
+      #prism-branch ul#prism-leaves .prism-leaf.attachment {
         opacity: .4;
         background-position: center center;
         background-size: 100%; }
-        #prism-branch ul#prism-leaves .prism-leaf.media a {
+        #prism-branch ul#prism-leaves .prism-leaf.attachment a {
           color: #000000;
           text-shadow: 0 0 2px #ffffff; }
-          #prism-branch ul#prism-leaves .prism-leaf.media a:hover {
+          #prism-branch ul#prism-leaves .prism-leaf.attachment a:hover {
             color: #ffffff;
             background-color: transparent;
             border-color: #000000;
             text-shadow: 0 0 2px #000000; }
-        #prism-branch ul#prism-leaves .prism-leaf.media:hover {
+        #prism-branch ul#prism-leaves .prism-leaf.attachment:hover {
           opacity: .8;
           background-size: 105% !important;
           box-shadow: 0 0 5px #333333;
           transition: background-size .1s; }
-        #prism-branch ul#prism-leaves .prism-leaf.media.active {
+        #prism-branch ul#prism-leaves .prism-leaf.attachment.active {
           opacity: 1;
           box-shadow: 0 0 10px #1ab7d9; }
-          #prism-branch ul#prism-leaves .prism-leaf.media.active a {
+          #prism-branch ul#prism-leaves .prism-leaf.attachment.active a {
             color: #ffffff;
             background: transparent;
             text-shadow: 0 0 5px #000000; }

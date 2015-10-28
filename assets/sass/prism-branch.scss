@@ -59,7 +59,7 @@
 	}
 
 	&.list ul#prism-leaves .prism-leaf,
-	&.list ul#prism-leaves .prism-leaf.media:hover {
+	&.list ul#prism-leaves .prism-leaf.attachment:hover {
 		width: calc( 100% - 10px ) !important;
 		padding-bottom: 100px !important;
 		background: {
@@ -72,7 +72,7 @@
 		&:hover  { background-color: $light !important; }
 		&.active { background-color: $highlight !important; }
 
-		&.media a { padding-left: 110px; }
+		&.attachment a { padding-left: 110px; }
 
 		a {
 			background-color: $white;
@@ -106,7 +106,7 @@
 			display: block; position: relative; float: left;
 			height: auto; margin: 5px;
 
-			&.media {
+			&.attachment {
 				opacity: .4;
 				background-position: center center;
 				background-size: 100%;

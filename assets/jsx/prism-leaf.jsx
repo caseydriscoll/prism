@@ -44,8 +44,12 @@ var PrismLeaf = React.createClass( {
 		var data = this.props.data;
 		var func = this.props.func;
 
-		var content;
-		var contentType = data.content.raw == null ? 'rendered' : 'raw';
+		var contentType, content = null;
+
+		if ( data.content != null ) {
+			contentType = data.content.raw == null ? 'rendered' : 'raw';
+			content = data.content[contentType].length > 0 ? data.content[contentType].substring( 0, 75 ) + '...' : '';
+		}
 
 
 		if ( data.type == 'attachment' ) 
@@ -101,7 +105,7 @@ var PrismLeafHeader = React.createClass( {
 		var data = this.props.data;
 		var func = this.props.func;
 
-		var contentType = data.content.raw == null ? 'rendered' : 'raw';
+		var contentType = data.title.raw == null ? 'rendered' : 'raw';
 
 
 		return (

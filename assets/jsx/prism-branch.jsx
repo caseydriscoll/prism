@@ -68,6 +68,8 @@ var PrismBranch = React.createClass( {
 				if ( b.slug.plural == leaf.type ) branch = b.slug.single;
 			} );
 
+			if ( leaf.type == 'attachment' ) branch = 'media';
+
 			leaf.href += branch + '/' + leaf.slug;
 
 			return <PrismLeafNode data={leaf} key={key} func={func} />
@@ -152,9 +154,6 @@ var PrismLeafNode = React.createClass( {
 
 		if ( id == null ) return 'no-search-results';
 
-		if ( id.slice(-1) != 's' )
-			id += 's';
-
 		if ( this.props.data.type == 'attachment' )
 			id = 'media';
 
@@ -173,13 +172,7 @@ var PrismLeafNode = React.createClass( {
 		var data = this.props.data;
 		var func = this.props.func;
 
-		// TODO: Don't do this.
-		// This is an UGLY stop gap to get around the post/posts problem
-		// if ( type.slice(-1) != 's' )
-		// 	type += 's';
-
-		// if ( this.props.type == 'media' )
-		// 	type = this.props.type;
+		log( data );
 
 		var id    = this.id();
 
@@ -188,17 +181,20 @@ var PrismLeafNode = React.createClass( {
 		var styles  = {};
 		var classes = 'prism-leaf ' + data.active;
 
-		// if ( type == 'media' && data.media_type == 'image' ) {
-		// 	var thumbnail  = data.media_details.sizes.thumbnail.source_url;
+		if ( data.type == 'attachment' && data.media_type == 'image' ) {
+			var thumbnail  = data.media_details.sizes.thumbnail.source_url;
 
-		// 	styles.backgroundImage = 'url(' + thumbnail + ')';
+			styles.backgroundImage = 'url(' + thumbnail + ')';
 
-		// 	classes += ' ' + type;
-		// }
+			classes += ' ' + data.type;
+		}
 
-		var contentType = data.content.raw == null ? 'rendered' : 'raw';
+		var contentType, content = null;
 
-		var content = data.content[contentType].length > 0 ? data.content[contentType].substring( 0, 75 ) + '...' : '';
+		if ( data.content != null ) {
+			contentType = data.content.raw == null ? 'rendered' : 'raw';
+			content = data.content[contentType].length > 0 ? data.content[contentType].substring( 0, 75 ) + '...' : '';
+		}
 
 		log( 2, 'end PrismLeafNode.render()' );
 

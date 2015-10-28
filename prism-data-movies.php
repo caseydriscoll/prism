@@ -12,7 +12,7 @@ class Prism_Movies_Data {
 	static function init() {
 		register_activation_hook( __FILE__, array( __CLASS__, 'install' ) );
 
-		add_filter( 'prism_branches', array( __CLASS__, 'add_branches' ) );
+		add_filter( 'prism_branches', array( __CLASS__, 'add_branches' ), 10 );
 
 	}
 

@@ -269,7 +269,6 @@ class Prism {
 			// array( 'title' => 'Swatches', 'slug' => 'swatches', 'icon' => 'fa-sticky-note-o' ),
 			// array( 'title' => 'Crayons',  'slug' => 'crayons',  ),
 			// array( 'title' => 'Cities',   'slug' => 'cities',   'icon' => 'fa-map' ),
-			// array( 'title' => 'Media',    'slug' => 'media',    'icon' => 'fa-image' )
 		);
 
 		$meta = array(
@@ -308,8 +307,6 @@ class Prism {
 					'queue'           => array()
 												 ),
 			'view'          => array(
-					// 'posts'           => 'list',
-					// 'media'           => 'grid',
 					'search'          => 'list',
 					'default'         => 'grid'
 												 ),
