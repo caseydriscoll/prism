@@ -177,16 +177,14 @@ body > *:not(#prism) {
     border: 0;
     color: #dddddd;
     background: #333333; }
-    #prism.user-bar #prism-user-bar h3 {
-      color: #ffffff; }
-    #prism.user-bar #prism-user-bar ul#prism-status-log {
-      padding: 0; }
-      #prism.user-bar #prism-user-bar ul#prism-status-log li {
-        padding: 5px 0;
-        color: #ffffff;
-        font-size: 18px; }
-        #prism.user-bar #prism-user-bar ul#prism-status-log li i.fa-li {
-          top: 0.5em !important; }
+    #prism.user-bar #prism-user-bar a {
+      display: block;
+      width: 100%;
+      padding: 5px;
+      border-radius: 5px;
+      font-size: 18px;
+      background: #dddddd;
+      text-align: center; }
 
 #prism-header {
   display: block;

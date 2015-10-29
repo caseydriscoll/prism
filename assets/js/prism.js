@@ -2084,7 +2084,15 @@ var PrismUserBar = React.createClass({
 	},
 
 	render: function render() {
-		return React.createElement("div", { id: "prism-user-bar" });
+		return React.createElement(
+			"div",
+			{ id: "prism-user-bar" },
+			React.createElement(
+				"a",
+				{ href: PRISM.url.login + '?redirect_to=' + PRISM.url.root },
+				"Login"
+			)
+		);
 	}
 });
 

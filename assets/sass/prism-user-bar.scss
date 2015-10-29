@@ -16,22 +16,14 @@
 		color: $light;
 		background: $dark;
 
-		h3 {
-			color: $white;
-		}
-
-		ul#prism-status-log {
-			padding: 0;
-
-			li {
-				padding: 5px 0;
-				color: $white;
-				font-size: 18px;
-
-				i.fa-li {
-					top: 0.5em !important;
-				}
-			}
+		a {
+			display: block;
+			width: 100%;
+			padding: 5px;
+			border-radius: 5px;
+			font-size: 18px;
+			background: $light;
+			text-align: center;
 		}
 	}
 }

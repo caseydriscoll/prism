@@ -6,7 +6,9 @@ var PrismUserBar = React.createClass( {
 
 	render: function() {
 		return(
-			<div id="prism-user-bar"></div> 
+			<div id="prism-user-bar">
+				<a href={PRISM.url.login + '?redirect_to=' + PRISM.url.root}>Login</a>
+			</div> 
 		)
 	}
 } )
