@@ -177,9 +177,11 @@ var PrismTree = React.createClass({
   * Build all url routes with the following pattern:
   *
   * 1. https://url.com/#/activeBranchPlural
-  * 2. https://url.com/#/activeBranchSingle/:activeLeaf
-  * 3. https://url.com/#/parentBranchSingle/:parentLeaf/activeBranchPlural
-  * 4. https://url.com/#/parentBranchSingle/:parentLeaf/activeBranchPlural/:activeLeaf
+  * 2. https://url.com/#/activeBranchSingle/new
+  * 3. https://url.com/#/activeBranchSingle/:activeLeaf
+  * 4. https://url.com/#/parentBranchSingle/:parentLeaf/activeBranchPlural
+  * 5. https://url.com/#/parentBranchSingle/:parentLeaf/activeBranchPlural/new
+  * 6. https://url.com/#/parentBranchSingle/:parentLeaf/activeBranchPlural/:activeLeaf
   * 
   */
 	initRouter: function initRouter() {
@@ -205,6 +207,16 @@ var PrismTree = React.createClass({
 			}).bind(this);
 
 			// Route Pattern 2.
+			// https://url.com/#/activeBranchSingle/new
+			// https://patch.works/#/movie/new
+			var newLeafMethod = "new_" + activeBranchSingle;
+			routes[activeBranchSingle + "/new"] = newLeafMethod;
+
+			routerConfig[newLeafMethod] = (function () {
+				this.newLeaf(activeBranchPlural);
+			}).bind(this);
+
+			// Route Pattern 3.
 			// https://url.com/#/activeBranchSingle/:activeleaf
 			// https://patch.works/#/movie/soylent-green
 			var activeLeafMethod = "get_active_" + activeBranchSingle;
@@ -214,7 +226,7 @@ var PrismTree = React.createClass({
 				this.changeLeaf(activeBranchPlural, activeLeaf);
 			}).bind(this);
 
-			// Create all dynamic Route Patterns 3 and 4 for every connection
+			// Create all dynamic Route Patterns 4, 5 and 6 for every connection
 			branch.connections.map(function (activeBranch, i) {
 
 				var parentBranchSingle = activeBranchSingle;
@@ -231,7 +243,7 @@ var PrismTree = React.createClass({
 					}
 				}, this);
 
-				// Route Pattern 3.
+				// Route Pattern 4.
 				// https://url.com/#/parentBranchSingle/:parentLeaf/childBranchPlural
 				// https://patch.works/#/movie/soylent-green/actors
 				var nestedBranchMethod = "get_" + childBranchPlural + "_of_" + parentBranchSingle;
@@ -241,7 +253,17 @@ var PrismTree = React.createClass({
 					this.changeNestedBranch(parentBranchPlural, parentLeaf, childBranchPlural);
 				}).bind(this);
 
-				// Route Pattern 4.
+				// Route Pattern 5.
+				// https://url.com/#/parentBranchSingle/:parentLeaf/childBranchPlural/new
+				// https://patch.works/#/movie/soylent-green/actor/new
+				var newNestedLeafMethod = "new_" + childBranchSingle + "_of_" + parentBranchSingle;
+
+				routes[parentBranchSingle + "/:parentLeaf/" + childBranchSingle + '/new'] = newNestedLeafMethod;
+				routerConfig[newNestedLeafMethod] = (function (parentBranchPlural, parentLeaf, childBranchPlural) {
+					this.newNestedLeaf(parentBranchPlural, parentLeaf, childBranchPlural);
+				}).bind(this);
+
+				// Route Pattern 6.
 				// https://url.com/#/parentBranchSingle/:parentLeaf/childBranchSingle/:activeLeaf
 				// https://patch.works/#/movie/soylent-green/actor/charlton-heston
 				var nestedLeafMethod = "get_active_" + childBranchSingle + "_of_" + parentBranchSingle;
@@ -660,9 +682,9 @@ var PrismTree = React.createClass({
 		log(12, 'end PrismTree.changeView()');
 	},
 
-	addLeaf: function addLeaf() {
+	newLeaf: function newLeaf() {
 
-		log(11, 'beg PrismTree.addLeaf()');
+		log(11, 'beg PrismTree.newLeaf()');
 
 		var data = {
 			title: '',
@@ -670,9 +692,24 @@ var PrismTree = React.createClass({
 			date: new Date().toISOString().slice(0, 19)
 		};
 
-		this.saveLeaf('create', data);
+		// this.saveLeaf( 'create', data );
 
-		log(12, 'end PrismTree.addLeaf()');
+		log(12, 'end PrismTree.newLeaf()');
+	},
+
+	newNestedLeaf: function newNestedLeaf() {
+
+		log(11, 'beg PrismTree.newNestedLeaf()');
+
+		var data = {
+			title: '',
+			content: ' ',
+			date: new Date().toISOString().slice(0, 19)
+		};
+
+		// this.saveLeaf( 'create', data );
+
+		log(12, 'end PrismTree.newNestedLeaf()');
 	},
 
 	/**
