@@ -231,7 +231,8 @@ body > *:not(#prism) {
     padding: 0;
     margin: 0;
     text-transform: capitalize;
-    font-size: 28px; }
+    font-size: 28px;
+    line-height: 1; }
 
 #prism-trunk {
   display: block;
@@ -423,8 +424,13 @@ body > *:not(#prism) {
           background-size: 105% !important;
           transition: background-size .1s; }
       #prism-branch ul#prism-leaves .prism-leaf.active {
+        background-color: #1ab7d9;
         box-shadow: 0 0 10px #1ab7d9;
         border-color: #000000; }
+        #prism-branch ul#prism-leaves .prism-leaf.active.new {
+          background-color: #66d73a;
+          box-shadow: 0 0 10px #66d73a;
+          border-color: #000000; }
         #prism-branch ul#prism-leaves .prism-leaf.active a {
           color: #000000;
           background-color: rgba(255, 255, 255, 0.1); }
@@ -433,7 +439,6 @@ body > *:not(#prism) {
           #prism-branch ul#prism-leaves .prism-leaf.active a p {
             color: #000000; }
         #prism-branch ul#prism-leaves .prism-leaf.active b.media {
-          background-color: #1ab7d9;
           background-size: 105% !important; }
 
 #prism-leaf {

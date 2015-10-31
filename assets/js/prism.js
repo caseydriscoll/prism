@@ -95,7 +95,9 @@ var PrismTree = React.createClass({
 
 			if ('changeMeta' in changeState) _this.changeMeta();
 
-			if ('addLeaf' in changeState) _this.addLeaf();
+			if ('newLeaf' in changeState) {
+				window.location = '/#/' + getSingular(_this.state.active.branch) + '/new';
+			}
 
 			if ('statusBar' in changeState) func.toggleStatusBar();
 
@@ -739,7 +741,7 @@ var PrismTree = React.createClass({
 			callback: this.unloadLeaf
 		};
 
-		if (type == 'create') request.status = { type: 'saving', message: 'Creating new leaf in ' + data.branch + '...' };else request.status = { type: 'saving', message: 'Updating leaf ' + data.id + '...' };
+		if (type == 'create') request.status = { type: 'saving', message: 'Creating new ' + getSingular(data.branch) + '...' };else request.status = { type: 'saving', message: 'Updating ' + getSingular(data.branch) + ' ' + data.id + '...' };
 
 		this.props.func.queueAJAX(request);
 
@@ -763,20 +765,35 @@ var PrismTree = React.createClass({
 			var leaf = response;
 			var branch = state.branches[state.active.branch];
 
+			var slug;
+			var status;
+
+			if (request.type == 'create') {
+				slug = 'new';
+				leaf['new'] = 'new';
+				status = { type: 'success', message: 'Created new ' + getSingular(leaf.type) + '!' };
+			}
+
+			if (request.type == 'update') {
+				slug = leaf.slug;
+				status = { type: 'success', message: 'Updated ' + getSingular(leaf.type) + ' ' + slug + '!' };
+			}
+
 			leaf.metapanel = 'closed';
 
 			state.active.leaf.id = leaf.id;
+
 			branch.leaves[leaf.id] = leaf;
+			branch.slugs[leaf.slug] = leaf.id;
 
 			state.currentlyChanged = false;
 
 			this.setState(state);
 
-			if (request.type == 'create') this.changeStatus({ type: 'success', message: 'Created leaf!' });
-
-			if (request.type == 'update') this.changeStatus({ type: 'success', message: 'Updated leaf ' + leaf.id + '!' });
-
+			this.changeStatus(status);
 			this.changeStatus({ type: 'normal', message: null });
+
+			window.location.hash = '/' + getSingular(state.active.branch) + '/' + slug;
 		}
 	},
 
@@ -1512,6 +1529,7 @@ var PrismLeafNode = React.createClass({
 		if (id == 'no-search-results') data.href = 'search';
 
 		var classes = 'prism-leaf ' + data.active;
+		classes += data['new'] != undefined ? ' new' : '';
 
 		var thumbnail = {
 			url: null,
@@ -1666,12 +1684,10 @@ var PrismLeafHeader = React.createClass({
 		var data = this.props.data;
 		var func = this.props.func;
 
-		var contentType = data.title.raw == null ? 'rendered' : 'raw';
-
 		return React.createElement(
 			'header',
 			{ id: 'prism-leaf-header', className: 'prism-tree-header' },
-			React.createElement(PrismLeafTitle, { auth: auth, data: data.title[contentType], func: func }),
+			React.createElement(PrismLeafTitle, { auth: auth, data: data, func: func }),
 			React.createElement(PrismIcon, { type: 'toggle', data: data, func: func })
 		);
 	}
@@ -1681,7 +1697,10 @@ var PrismLeafTitle = React.createClass({
 	displayName: 'PrismLeafTitle',
 
 	getInitialState: function getInitialState() {
-		return { edit: false };
+
+		var isNew = this.props.data['new'] == 'new';
+
+		return { edit: isNew };
 	},
 
 	toggleEdit: function toggleEdit(e) {
@@ -1700,32 +1719,18 @@ var PrismLeafTitle = React.createClass({
 		var data = this.props.data;
 		var func = this.props.func;
 
-		var editTitle = React.createElement('input', { autoFocus: true, 'data-key': 'title', type: 'text', value: data, onBlur: this.toggleEdit, onFocus: func.autoSelect, onChange: func.changeValue });
+		var contentType = data.title.raw == null ? 'rendered' : 'raw';
+
+		var editTitle = React.createElement('input', { autoFocus: true, 'data-key': 'title', type: 'text', value: data.title[contentType], onBlur: this.toggleEdit, onFocus: func.autoSelect, onChange: func.changeValue });
 		var staticTitle = React.createElement(
 			'div',
 			{ onClick: this.toggleEdit },
-			data
+			data.title[contentType]
 		);
 
 		var renderTitle = this.state.edit ? editTitle : staticTitle;
 
 		return renderTitle;
-	},
-
-	clickTitle: function clickTitle() {
-		if (PRISM.newleaf) {
-			PRISM.newleaf = false;
-
-			jQuery('#prism-leaf-header h2 div').click();
-		}
-	},
-
-	componentDidMount: function componentDidMount() {
-		this.clickTitle();
-	},
-
-	componentDidUpdate: function componentDidUpdate() {
-		this.clickTitle();
 	},
 
 	render: function render() {
@@ -2203,7 +2208,7 @@ window.onkeyup = function (e) {
 	switch (key.code) {
 		case 13:
 			// Return
-			if (input) document.activeElement.blur();else stateChange = { 'addLeaf': true };
+			if (input) document.activeElement.blur();else stateChange = { 'newLeaf': true };
 
 			break;
 
@@ -2271,6 +2276,11 @@ window.onkeyup = function (e) {
 
 			if (!input && e.shiftKey) stateChange = { 'lockMeta': true };else if (!input && key.mode == 'v') stateChange = { 'view': 'list' };else if (!input) stateChange = { 'move': 'right' };
 
+			break;
+
+		case 78:
+			// n - for newLeaf
+			if (!input) stateChange = { 'newLeaf': true };
 			break;
 
 		case 80:

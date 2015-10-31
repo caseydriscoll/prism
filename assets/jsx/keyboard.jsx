@@ -29,7 +29,7 @@ window.onkeyup = function(e) {
 	switch ( key.code ) {
 		case 13: // Return
 			if ( input ) document.activeElement.blur();
-			else         stateChange = { 'addLeaf' : true };
+			else         stateChange = { 'newLeaf' : true };
 			
 			break;
 
@@ -101,6 +101,11 @@ window.onkeyup = function(e) {
 			else if ( ! input )
 				stateChange = { 'move' : 'right' };
 
+			break;
+
+		case 78: // n - for newLeaf
+			if ( ! input ) 
+				stateChange = { 'newLeaf' : true };
 			break;
 
 		case 80: // p - for panel

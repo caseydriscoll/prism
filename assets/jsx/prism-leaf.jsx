@@ -107,12 +107,9 @@ var PrismLeafHeader = React.createClass( {
 		var data = this.props.data;
 		var func = this.props.func;
 
-		var contentType = data.title.raw == null ? 'rendered' : 'raw';
-
-
 		return (
 			<header id="prism-leaf-header" className="prism-tree-header">
-				<PrismLeafTitle auth={auth} data={data.title[contentType]} func={func} />
+				<PrismLeafTitle auth={auth} data={data} func={func} />
 				<PrismIcon type='toggle' data={data} func={func} />
 			</header>
 		)
@@ -124,7 +121,10 @@ var PrismLeafHeader = React.createClass( {
 var PrismLeafTitle = React.createClass( {
 
 	getInitialState : function() {
-		return { edit : false };
+
+		var isNew = this.props.data.new == 'new';
+
+		return { edit : isNew };
 	},
 
 	toggleEdit: function(e) {
@@ -145,26 +145,16 @@ var PrismLeafTitle = React.createClass( {
 		var data = this.props.data;
 		var func = this.props.func;
 
-		var editTitle   = <input autoFocus data-key='title' type="text" value={data} onBlur={this.toggleEdit} onFocus={func.autoSelect} onChange={func.changeValue} />;
-		var staticTitle = <div onClick={this.toggleEdit}>{data}</div>;
+		var contentType = data.title.raw == null ? 'rendered' : 'raw';
+
+		var editTitle   = <input autoFocus data-key='title' type="text" value={data.title[contentType]} onBlur={this.toggleEdit} onFocus={func.autoSelect} onChange={func.changeValue} />;
+		var staticTitle = <div onClick={this.toggleEdit}>{data.title[contentType]}</div>;
 
 		var renderTitle = this.state.edit ? editTitle : staticTitle;
 
 		return renderTitle;
 
 	},
-
-	clickTitle: function() {
-		if ( PRISM.newleaf ) {
-			PRISM.newleaf = false;
-
-			jQuery( '#prism-leaf-header h2 div' ).click();
-		}
-	},
-
-	componentDidMount  : function() { this.clickTitle() },
-
-	componentDidUpdate : function() { this.clickTitle() },
 
 	render: function() {
 

@@ -181,8 +181,15 @@
 			}
 
 			&.active { 
+				background-color: $highlight;
 				box-shadow: 0 0 10px $highlight;
 				border-color: $black;
+
+				&.new { 
+					background-color: $green; 
+					box-shadow: 0 0 10px $green;
+					border-color: $black;
+				}
 
 				a {
 					color: $black;
@@ -193,7 +200,6 @@
 				}
 
 				b.media {
-					background-color: $highlight;
 					background-size: 105% !important;
 				}
 

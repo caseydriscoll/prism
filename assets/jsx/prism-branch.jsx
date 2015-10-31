@@ -178,7 +178,8 @@ var PrismLeafNode = React.createClass( {
 
 		if ( id == 'no-search-results' ) data.href = 'search';
 
-		var classes = 'prism-leaf ' + data.active;
+		var classes  = 'prism-leaf ' + data.active;
+		    classes += data.new != undefined ? ' new' : '';
 
 		var thumbnail = { 
 			url     : null, 

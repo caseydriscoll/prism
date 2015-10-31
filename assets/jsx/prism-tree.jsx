@@ -45,8 +45,9 @@ var PrismTree = React.createClass( {
 			if ( 'changeMeta' in changeState )
 				this.changeMeta();
 
-			if ( 'addLeaf'    in changeState )
-				this.addLeaf();
+			if ( 'newLeaf'    in changeState ){
+				window.location = '/#/' + getSingular( this.state.active.branch ) + '/new';
+			}
 
 			if ( 'statusBar'  in changeState )
 				func.toggleStatusBar();
@@ -761,9 +762,9 @@ var PrismTree = React.createClass( {
 		}
 
 		if ( type == 'create' )
-			request.status = { type : 'saving', message : 'Creating new leaf in ' + data.branch + '...' };
+			request.status = { type : 'saving', message : 'Creating new ' + getSingular( data.branch ) + '...' };
 		else
-			request.status = { type : 'saving', message : 'Updating leaf ' + data.id + '...' };
+			request.status = { type : 'saving', message : 'Updating ' + getSingular( data.branch ) + ' ' + data.id + '...' };
 
 		this.props.func.queueAJAX( request );
 
@@ -789,22 +790,36 @@ var PrismTree = React.createClass( {
 			var leaf   = response;
 			var branch = state.branches[state.active.branch];
 
+			var slug;
+			var status;
+
+			if ( request.type == 'create' ) {
+				slug     = 'new';
+				leaf.new = 'new';
+				status   = { type: 'success', message: 'Created new ' + getSingular( leaf.type ) + '!' };
+			}
+
+			if ( request.type == 'update' ) {
+				slug     = leaf.slug;
+				status   = { type: 'success', message: 'Updated ' + getSingular( leaf.type ) + ' ' + slug + '!' };
+			}
+
+
 			leaf.metapanel = 'closed';
 
 			state.active.leaf.id   = leaf.id;
-			branch.leaves[leaf.id] = leaf;
+
+			branch.leaves[leaf.id]  = leaf;
+			branch.slugs[leaf.slug] = leaf.id;
 
 			state.currentlyChanged = false;
 
 			this.setState( state );
 
-			if ( request.type == 'create' )
-				this.changeStatus( { type: 'success', message: 'Created leaf!' } );
-
-			if ( request.type == 'update' )
-				this.changeStatus( { type: 'success', message: 'Updated leaf ' + leaf.id + '!' } );
-
+			this.changeStatus( status );
 			this.changeStatus( { type: 'normal',  message: null } );
+
+			window.location.hash = '/' + getSingular( state.active.branch ) + '/' + slug;
 
 		}
 	},
