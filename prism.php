@@ -262,7 +262,17 @@ class Prism {
 
 	public static function localize() {
 
-		$branches = array();
+		$branches = array(
+			array(
+				'title'       => 'Home',
+				'slug'        => array(
+				                   'plural' => 'home',
+				                   'single' => 'home'
+				                 ),
+				'icon'        => 'fa-home',
+				'connections' => array(),
+				'route'       => '/#/'
+			),);
 
 		$meta = array(
 			'default' => array(

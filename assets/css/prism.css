@@ -59,7 +59,7 @@ body > *:not(#prism) {
   display: inline-block;
   position: relative;
   height: 50px;
-  padding: 0; }
+  padding: 0 6px; }
   #prism-status.hide-status #prism-status-button i {
     transition: color 0.2s; }
   #prism-status.hide-status #prism-status-message {
@@ -73,7 +73,7 @@ body > *:not(#prism) {
     height: 30px;
     margin-top: 3px;
     transform-origin: 50% 70%;
-    transform: rotate(-60deg) scale(0.6);
+    transform: rotate(-60deg) scale(0.5);
     transition: transform 0.2s;
     cursor: pointer; }
     #prism-status #prism-status-button i.fa-play {
@@ -151,7 +151,7 @@ body > *:not(#prism) {
     position: relative;
     float: left;
     height: 50px;
-    padding: 0 10px;
+    padding: 0 4px;
     font-size: 18px;
     font-weight: bold;
     line-height: calc( 50px - 3px ); }
@@ -197,13 +197,6 @@ body > *:not(#prism) {
   height: 50px;
   overflow: hidden;
   border-bottom: 2px solid #000000; }
-  #prism-header #prism-home {
-    display: block;
-    position: relative;
-    float: left;
-    height: 50px;
-    padding: 10px;
-    color: #808080; }
   #prism-header #prism-user-account {
     float: right;
     margin: 10px;
@@ -299,7 +292,7 @@ body > *:not(#prism) {
             padding-bottom: 0;
             border-bottom: none; }
           #prism-trunk menu ul li a.parent:nth-of-type(2) {
-            padding: 3px  0 3px 45px;
+            padding: 3px  0 3px 40px;
             border-top: none;
             font-style: italic;
             font-size: 13px; }

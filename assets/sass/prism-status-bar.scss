@@ -37,7 +37,7 @@
 	display: inline-block; position: relative;
 	height: $header-height;
 
-	padding: 0;
+	padding: 0 6px;
 
 	&.show-status {}
 	&.hide-status {
@@ -58,7 +58,7 @@
 
 		transform-origin: 50% 70%;
 
-		transform: rotate( -60deg ) scale( .6 );
+		transform: rotate( -60deg ) scale( .5 );
 		transition: transform $bar-time;
 
 		cursor: pointer;
@@ -130,7 +130,7 @@
 	#prism-status-message {
 		display: block; position: relative; float: left;
 		height: $header-height;
-		padding: 0 10px;
+		padding: 0 4px;
 
 		font-size: 18px;
 		font-weight: bold;

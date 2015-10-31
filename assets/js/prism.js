@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
 var PrismHeader = React.createClass({
-	displayName: "PrismHeader",
+	displayName: 'PrismHeader',
 
 	render: function render() {
 
@@ -10,13 +10,8 @@ var PrismHeader = React.createClass({
 		var func = this.props.func;
 
 		return React.createElement(
-			"header",
-			{ id: "prism-header" },
-			React.createElement(
-				"a",
-				{ id: "prism-home", href: PRISM.url.root + '/#/' },
-				React.createElement("i", { className: "fa fa-home fa-2x" })
-			),
+			'header',
+			{ id: 'prism-header' },
 			React.createElement(PrismStatus, { data: data, func: func }),
 			React.createElement(PrismUserAccount, { data: data, auth: auth, func: func })
 		);
@@ -25,7 +20,7 @@ var PrismHeader = React.createClass({
 });
 
 var PrismUserAccount = React.createClass({
-	displayName: "PrismUserAccount",
+	displayName: 'PrismUserAccount',
 
 	render: function render() {
 
@@ -38,15 +33,15 @@ var PrismUserAccount = React.createClass({
 
 		if (auth) {
 			url = PRISM.url.login + '?redirect_to=' + PRISM.url.root + '&action=logout';
-			icon = React.createElement("img", { src: this.props.data.user.avatar_urls[PRISM.gravatar.width], width: PRISM.gravatar.width, height: PRISM.gravatar.height });
+			icon = React.createElement('img', { src: this.props.data.user.avatar_urls[PRISM.gravatar.width], width: PRISM.gravatar.width, height: PRISM.gravatar.height });
 		} else {
 			url = PRISM.url.login + '?redirect_to=' + PRISM.url.root;
-			icon = React.createElement("i", { className: "fa fa-user fa-2x" });
+			icon = React.createElement('i', { className: 'fa fa-user fa-2x' });
 		}
 
 		return React.createElement(
-			"a",
-			{ id: "prism-user-account", onClick: func.toggleUserBar },
+			'a',
+			{ id: 'prism-user-account', onClick: func.toggleUserBar },
 			icon
 		);
 	}
@@ -1254,6 +1249,13 @@ var PrismMenu = React.createClass({
 		var menuItems = PRISM.branches.map(function (branch, i) {
 
 			var branchPlural = branch.slug.plural;
+			var href = '';
+
+			if ('route' in branch) {
+				href = branch.route;
+			} else {
+				href = '/#/' + branchPlural;
+			}
 
 			var active = branchPlural == data.active.branch;
 			var parent = data.active.parent;
@@ -1294,7 +1296,7 @@ var PrismMenu = React.createClass({
 				{ key: i },
 				React.createElement(
 					'a',
-					{ href: '/#/' + branchPlural, id: branchPlural, className: classes },
+					{ href: href, id: branchPlural, className: classes },
 					React.createElement('i', { className: iconClasses }),
 					title
 				),

@@ -91,6 +91,13 @@ var PrismMenu = React.createClass( {
 		var menuItems = PRISM.branches.map( function( branch, i ) {
 
 			var branchPlural = branch.slug.plural;
+			var href         = '';
+
+			if ( 'route' in branch ) {
+				href = branch.route;
+			} else {
+				href = '/#/' + branchPlural;
+			}
 
 			var active  = branchPlural == data.active.branch;
 			var parent  = data.active.parent;
@@ -124,7 +131,7 @@ var PrismMenu = React.createClass( {
 
 			return (
 				<li key={i}>
-					<a href={'/#/' + branchPlural} id={branchPlural} className={classes}>
+					<a href={href} id={branchPlural} className={classes}>
 						<i className={iconClasses}></i>{title}
 					</a>
 					{parentLink()}
