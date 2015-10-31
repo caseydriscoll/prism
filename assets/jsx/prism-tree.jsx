@@ -192,6 +192,9 @@ var PrismTree = React.createClass( {
 
 
 			// Create all dynamic Route Patterns 4, 5 and 6 for every connection
+			// (if connections exist in the first place)
+			if ( ! ( 'connections' in branch ) ) return;
+
 			branch.connections.map( function( activeBranch, i ) {
 
 				var parentBranchSingle = activeBranchSingle;

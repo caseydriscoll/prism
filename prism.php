@@ -270,7 +270,7 @@ class Prism {
 				                   'single' => 'home'
 				                 ),
 				'icon'        => 'fa-home',
-				'connections' => array(),
+				// 'connections' => array(),
 				'route'       => '/#/'
 			),);
 
