@@ -99,7 +99,7 @@ var PrismMenu = React.createClass( {
 				href = '/#/' + branchPlural;
 			}
 
-			var active  = branchPlural == data.active.branch;
+			var active  = branchPlural == data.active.branch || ( branchPlural == 'home' && data.active.branch == null );
 			var parent  = data.active.parent;
 
 			var classes = active ? 'active'  : '';

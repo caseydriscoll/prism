@@ -273,6 +273,11 @@ var PrismTree = React.createClass({
 			}, this);
 		}, this);
 
+		routes[''] = 'root';
+		routerConfig.root = (function () {
+			this.changeBranch('/');
+		}).bind(this);
+
 		routes.search = 'search';
 		routerConfig.search = (function () {
 			this.changeSearch();
@@ -418,11 +423,11 @@ var PrismTree = React.createClass({
 
 		var state = this.state;
 
-		state.active.branch = activeBranch;
+		state.active.branch = activeBranch != '/' ? activeBranch : null;
 		state.active.leaf = { id: null, slug: null };
 		state.active.parent = { branch: null, leaf: { id: null, slug: null } };
 
-		if (!(activeBranch in state.branches)) {
+		if (activeBranch != '/' && !(activeBranch in state.branches)) {
 			state.branches[activeBranch] = { leaves: {}, slugs: {} };
 			this.loadBranch(activeBranch);
 		}
@@ -1260,7 +1265,7 @@ var PrismMenu = React.createClass({
 				href = '/#/' + branchPlural;
 			}
 
-			var active = branchPlural == data.active.branch;
+			var active = branchPlural == data.active.branch || branchPlural == 'home' && data.active.branch == null;
 			var parent = data.active.parent;
 
 			var classes = active ? 'active' : '';
