@@ -205,6 +205,9 @@ var PrismTree = React.createClass( {
 				var childBranchPlural;
 
 				// TODO: Currently cycles through whole map, convert to 'some' or use for/break?
+				//       
+				//       Made a getSingular() function, not sure what to do about needed plural
+				//       Could be different than the activeBranch name? 2015-10-30 21:17:16
 				PRISM.branches.map( function( branch, i ) {
 					if ( branch.slug.plural == activeBranch ) {
 						childBranchSingle = branch.slug.single;
@@ -1065,6 +1068,9 @@ var PrismTree = React.createClass( {
 			var leaves   = branches[branch].leaves;
 
 			// TODO: Currently cycles through whole map, convert to 'some' or use for/break?
+			//       
+			//       This is different than getSingular
+			//       This returns whole branch object 2015-10-30 21:20:44
 			PRISM.branches.map( function( b, i ) {
 				if ( b.slug.plural == branch ) metaData.branch = b;
 			} );

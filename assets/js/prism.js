@@ -234,6 +234,9 @@ var PrismTree = React.createClass({
 				var childBranchPlural;
 
 				// TODO: Currently cycles through whole map, convert to 'some' or use for/break?
+				//      
+				//       Made a getSingular() function, not sure what to do about needed plural
+				//       Could be different than the activeBranch name? 2015-10-30 21:17:16
 				PRISM.branches.map(function (branch, i) {
 					if (branch.slug.plural == activeBranch) {
 						childBranchSingle = branch.slug.single;
@@ -1018,6 +1021,9 @@ var PrismTree = React.createClass({
 			var leaves = branches[branch].leaves;
 
 			// TODO: Currently cycles through whole map, convert to 'some' or use for/break?
+			//      
+			//       This is different than getSingular
+			//       This returns whole branch object 2015-10-30 21:20:44
 			PRISM.branches.map(function (b, i) {
 				if (b.slug.plural == branch) metaData.branch = b;
 			});
@@ -1278,11 +1284,7 @@ var PrismMenu = React.createClass({
 				if (active && parent.branch != null) {
 
 					var leaf = data.active.parent.leaf;
-					var parentSingle;
-
-					PRISM.branches.map(function (b, i) {
-						if (b.slug.plural == parent.branch) parentSingle = b.slug.single;
-					});
+					var parentSingle = getSingular(parent.branch);
 
 					var href = '/#/' + parentSingle + '/' + leaf.slug;
 
@@ -1380,18 +1382,12 @@ var PrismBranch = React.createClass({
 			leaf.href = '';
 
 			if (data.active.parent.branch != null) {
-				// TODO: Currently cycles through whole map, convert to 'some' or use for/break?
-				PRISM.branches.map(function (b, i) {
-					if (b.slug.plural == data.active.parent.branch) parentBranch = b.slug.single;
-				});
+				parentBranch = getSingular(data.active.parent.branch);
 
 				leaf.href += parentBranch + '/' + data.active.parent.leaf.slug + '/';
 			}
 
-			// TODO: Currently cycles through whole map, convert to 'some' or use for/break?
-			PRISM.branches.map(function (b, i) {
-				if (b.slug.plural == leaf.type) branch = b.slug.single;
-			});
+			branch = getSingular(leaf.type);
 
 			if (leaf.type == 'post') branch = 'post';
 			if (leaf.type == 'attachment') branch = 'media';
@@ -1435,11 +1431,7 @@ var PrismBranchHeader = React.createClass({
 	},
 
 	newLeaf: function newLeaf() {
-		var branch;
-
-		PRISM.branches.map(function (b, i) {
-			if (b.slug.plural == this.props.data.active.branch) branch = b.slug.single;
-		}, this);
+		var branch = getSingular(this.props.data.active.branch);
 
 		window.location.hash = '/' + branch + '/new';
 	},
@@ -1902,12 +1894,7 @@ var PrismMetaConnection = React.createClass({
 		var label = this.props.label;
 
 		var nameSingle = data.branch.slug.single;
-		var nestedSingle;
-
-		// TODO: Currently cycles through whole map, convert to 'some' or use for/break?
-		PRISM.branches.map(function (branch, i) {
-			if (branch.slug.plural == label) nestedSingle = branch.slug.single;
-		});
+		var nestedSingle = getSingular(label);
 
 		var renderData = Object.keys(data[label]).map(function (key, i) {
 			var href = "/#/" + nameSingle + "/" + data.slug + "/" + nestedSingle + "/" + data[label][key].slug;
@@ -2018,6 +2005,17 @@ var log = function log(level, message) {
 
 		if (!ignore) console.log(_.now(), message);
 	}
+};
+
+var getSingular = function getSingular(branch) {
+
+	var singularBranch;
+
+	PRISM.branches.map(function (b, i) {
+		if (b.slug.plural == branch) singularBranch = b.slug.single;
+	});
+
+	return singularBranch;
 };
 
 "use strict";

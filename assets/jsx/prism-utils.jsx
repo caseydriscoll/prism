@@ -73,3 +73,18 @@ var log = function( level, message ) {
 		if ( ! ignore ) console.log( _.now(), message );
 	}
 }
+
+
+var getSingular = function( branch ) {
+
+	var singularBranch;
+
+	PRISM.branches.map( function( b, i ) {
+		if ( b.slug.plural == branch ) singularBranch = b.slug.single;
+	} );
+
+	return singularBranch;
+
+}
+
+

@@ -54,19 +54,12 @@ var PrismBranch = React.createClass( {
 			leaf.href = '';
 
 			if ( data.active.parent.branch != null ) {
-				// TODO: Currently cycles through whole map, convert to 'some' or use for/break?
-				PRISM.branches.map( function( b, i ) {
-					if ( b.slug.plural == data.active.parent.branch ) parentBranch = b.slug.single;
-				} );
+				parentBranch = getSingular( data.active.parent.branch );
 
 				leaf.href += parentBranch + '/' + data.active.parent.leaf.slug + '/';
 			}
 
-
-			// TODO: Currently cycles through whole map, convert to 'some' or use for/break?
-			PRISM.branches.map( function( b, i ) {
-				if ( b.slug.plural == leaf.type ) branch = b.slug.single;
-			} );
+			branch = getSingular( leaf.type );
 
 			if ( leaf.type == 'post' )       branch = 'post';
 			if ( leaf.type == 'attachment' ) branch = 'media';
@@ -110,11 +103,7 @@ var PrismBranchHeader = React.createClass( {
 	},
 
 	newLeaf : function() {
-		var branch;
-
-		PRISM.branches.map( function( b, i ) {
-			if ( b.slug.plural == this.props.data.active.branch ) branch = b.slug.single;
-		}, this );
+		var branch = getSingular( this.props.data.active.branch );
 
 		window.location.hash = '/' + branch + '/new';
 	},

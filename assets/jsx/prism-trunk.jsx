@@ -112,11 +112,7 @@ var PrismMenu = React.createClass( {
 				if ( active && parent.branch != null ) {
 
 					var leaf = data.active.parent.leaf;
-					var parentSingle;
-
-					PRISM.branches.map( function( b, i ) {
-						if ( b.slug.plural == parent.branch ) parentSingle = b.slug.single;
-					} );
+					var parentSingle = getSingular( parent.branch );
 
 					var href = '/#/' + parentSingle + '/' + leaf.slug;
 
