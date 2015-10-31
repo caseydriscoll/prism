@@ -193,6 +193,20 @@ var PrismTree = React.createClass({
 			var activeBranchSingle = branch.slug.single;
 			var activeBranchPlural = branch.slug.plural;
 
+			// Register any custom callback if declared
+			// and then escape as it won't follow normal routing patterns
+			if ('route' in branch && 'callback' in branch) {
+
+				var callbackMethod = branch.callback + '_method';
+
+				routes[branch.route] = callbackMethod;
+				routerConfig[callbackMethod] = (function () {
+					this.callCustomCallback(branch.route, branch.callback);
+				}).bind(this);
+
+				return;
+			}
+
 			// Route Pattern 1.
 			// https://url.com/#/activeBranchPlural
 			// https://patch.works/#/movies
@@ -298,6 +312,22 @@ var PrismTree = React.createClass({
 		Backbone.history.start();
 
 		log(12, 'end PrismTree.initRouter()');
+	},
+
+	// http://stackoverflow.com/questions/912596/how-to-turn-a-string-into-a-javascript-function-call
+	callCustomCallback: function callCustomCallback(route, callback) {
+
+		var state = this.state;
+
+		state.active.branch = route;
+
+		this.setState(state);
+
+		var fn = window[callback];
+
+		if (typeof fn === 'function') {
+			fn(this);
+		}
 	},
 
 	/**
@@ -1280,12 +1310,12 @@ var PrismMenu = React.createClass({
 		var menuItems = PRISM.branches.map(function (branch, i) {
 
 			var branchPlural = branch.slug.plural;
-			var href = '';
+			var href = '/#/';
 
 			if ('route' in branch) {
-				href = branch.route;
+				href += branch.route;
 			} else {
-				href = '/#/' + branchPlural;
+				href += branchPlural;
 			}
 
 			var active = branchPlural == data.active.branch || branchPlural == 'home' && data.active.branch == null;
@@ -2021,6 +2051,11 @@ var getSingular = function getSingular(branch) {
 	});
 
 	return singularBranch;
+};
+
+var get_today = function get_today(obj) {
+	log('This is just stub function, working as proof of concept for now.');
+	log(obj.state);
 };
 
 "use strict";

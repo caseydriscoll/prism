@@ -88,3 +88,8 @@ var getSingular = function( branch ) {
 }
 
 
+var get_today = function( obj ) {
+	log( 'This is just stub function, working as proof of concept for now.' );
+	log( obj.state );
+}
+

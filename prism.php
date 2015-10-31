@@ -271,7 +271,7 @@ class Prism {
 				                 ),
 				'icon'        => 'fa-home',
 				// 'connections' => array(),
-				'route'       => '/#/'
+				'route'       => ''
 			),);
 
 		$meta = array(

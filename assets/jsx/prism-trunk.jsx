@@ -91,12 +91,12 @@ var PrismMenu = React.createClass( {
 		var menuItems = PRISM.branches.map( function( branch, i ) {
 
 			var branchPlural = branch.slug.plural;
-			var href         = '';
+			var href         = '/#/';
 
 			if ( 'route' in branch ) {
-				href = branch.route;
+				href += branch.route;
 			} else {
-				href = '/#/' + branchPlural;
+				href += branchPlural;
 			}
 
 			var active  = branchPlural == data.active.branch || ( branchPlural == 'home' && data.active.branch == null );
