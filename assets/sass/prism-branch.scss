@@ -165,11 +165,11 @@
 			&:hover {
 
 				box-shadow: 0 0 10px $grey;
-				border-color: $grey;
+				border-color: $black;
 
 				a {
 					color: $dark;
-					background-color: rgba( $grey, .5 );
+					background-color: rgba( $grey, .3 );
 
 					h4 { background-color: rgba( $white, .7 ); }
 				}
