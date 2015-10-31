@@ -81,10 +81,16 @@
 			&:nth-of-type(6) { transform: rotate(  -60deg ); left:  5px; bottom: -8px; }
 		}
 
-		&.loading{ 
+		&.loading { 
 			animation: rotation 2s infinite linear;
 
 			i.fa-play { color: $blue; }
+		}
+
+		&.saving { 
+			animation: rotation 2s infinite linear;
+
+			i.fa-play { color: $purple; }
 		}
 
 		&.success { 

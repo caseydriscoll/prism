@@ -306,7 +306,6 @@ class Prism {
 			'branches'      => apply_filters( 'prism_branches', $branches ),
 			'meta'          => $meta,
 			'lockMeta'      => 'lock',
-			'newleaf'       => false,
 			'key'           => array(
 					'mode'            => false,
 					'last'            => array( 'code' =>  0, 'time' => 0   ),

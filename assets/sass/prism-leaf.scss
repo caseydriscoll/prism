@@ -9,22 +9,24 @@
 	header#prism-leaf-header {
 
 		h2 {
-			display: inline; float: left;
-			width: calc( 100% - #{$metapanel-width} );
+			display: block;
+			width: 100%;
+			padding: 0;
 
 			div {
 				width: 100%; min-height: 30px;
-				margin-top: -2px;
-				border: $border;
-				border-color: transparent;
+				margin-top: 0;
+				border: none;
 				white-space: nowrap;
+				overflow: hidden;
 			}
 
 			input {
-				width: calc( 100% + 10px );
+				width: 100%;
 				padding: 0 5px; margin: -5px 0 0 -5px;
-				border: $border;
-				border-color: $light;
+				border: none;
+
+				&:focus { border: none; outline: none; }
 			}
 		}
 

@@ -597,10 +597,10 @@ var PrismTree = React.createClass({
 		var state = this.state;
 
 		var branch = state.branches[state.active.branch];
-		var leaf = state.active.leaf;
+		var leaf = state.active.leaf.id;
 		var key = e.target.dataset.key;
 
-		if (key == 'title' || key == 'content') branch.leaves[leaf][key].rendered = e.target.value;else branch.leaves[leaf][key] = e.target.value;
+		if (key == 'title' || key == 'content') branch.leaves[leaf][key].raw = e.target.value;else branch.leaves[leaf][key] = e.target.value;
 
 		state.currentlyChanged = true;
 
@@ -682,17 +682,21 @@ var PrismTree = React.createClass({
 		log(12, 'end PrismTree.changeView()');
 	},
 
-	newLeaf: function newLeaf() {
+	newLeaf: function newLeaf(branch) {
 
-		log(11, 'beg PrismTree.newLeaf()');
+		log(11, 'beg PrismTree.newLeaf() ' + branch);
+
+		this.changeBranch(branch);
 
 		var data = {
-			title: '',
-			content: ' ',
+			title: 'New',
+			content_raw: '',
+			branch: branch,
+			url: PRISM.url.rest + branch,
 			date: new Date().toISOString().slice(0, 19)
 		};
 
-		// this.saveLeaf( 'create', data );
+		this.saveLeaf('create', data);
 
 		log(12, 'end PrismTree.newLeaf()');
 	},
@@ -713,53 +717,61 @@ var PrismTree = React.createClass({
 	},
 
 	/**
-  * This function creates a new leaf through this.addLeaf     (create type)
+  * This function creates a new leaf through this.newLeaf     (create type)
   *   or updates and existing leaf through PrismLeaf.prepLeaf (update type)
-  *
-  * TODO: The url should not rely on this.state.active.branch,
-  *   cause maybe the user can switch it real fast
   */
 	saveLeaf: function saveLeaf(type, data) {
 
 		log(11, 'beg PrismTree.saveLeaf()');
 
-		var url = PRISM.url.rest + this.state.active.branch;
-
-		if (type == 'create') PRISM.newleaf = true;
-
-		if (type == 'update') url += '/' + data.id;
-
-		jQuery.ajax({
+		var request = {
+			url: data.url,
 			method: 'POST',
-			url: url,
 			data: data,
-			beforeSend: function beforeSend(xhr) {
-				xhr.setRequestHeader('X-WP-Nonce', PRISM.nonce);
-			},
-			success: (function (response) {
+			type: type,
+			url: data.url,
+			callback: this.unloadLeaf
+		};
 
-				var state = this.state;
+		if (type == 'create') request.status = { type: 'saving', message: 'Creating new leaf in ' + data.branch + '...' };else request.status = { type: 'saving', message: 'Updating leaf ' + data.id + '...' };
 
-				var leaf = response;
-				var branch = state.branches[state.active.branch];
+		this.props.func.queueAJAX(request);
 
-				leaf.metapanel = 'closed';
-
-				state.active.leaf = leaf.id;
-				branch.leaves[leaf.id] = leaf;
-
-				state.currentlyChanged = false;
-
-				if (PRISM.newleaf) location.hash = "/" + this.state.active.branch + "/" + leaf.id;
-
-				this.setState(state);
-			}).bind(this),
-			error: (function (response) {
-				console.log('error: ', response);
-			}).bind(this)
-		});
+		this.props.func.checkQueue();
 
 		log(12, 'end PrismTree.saveLeaf()');
+	},
+
+	unloadLeaf: function unloadLeaf(request, response) {
+		log(request);
+		log(response);
+
+		if (response.status == 400 || response.status == 403) {
+
+			this.changeStatus({ type: 'error', message: response.statusText + ': ' + response.responseJSON[0].message });
+			this.changeStatus({ type: 'normal', message: null });
+		} else {
+
+			var state = this.state;
+
+			var leaf = response;
+			var branch = state.branches[state.active.branch];
+
+			leaf.metapanel = 'closed';
+
+			state.active.leaf.id = leaf.id;
+			branch.leaves[leaf.id] = leaf;
+
+			state.currentlyChanged = false;
+
+			this.setState(state);
+
+			if (request.type == 'create') this.changeStatus({ type: 'success', message: 'Created leaf!' });
+
+			if (request.type == 'update') this.changeStatus({ type: 'success', message: 'Updated leaf ' + leaf.id + '!' });
+
+			this.changeStatus({ type: 'normal', message: null });
+		}
 	},
 
 	loadBranch: function loadBranch(branch) {
@@ -773,6 +785,7 @@ var PrismTree = React.createClass({
 
 		var request = {
 			url: PRISM.url.rest + branch + params,
+			method: 'GET',
 			callback: this.unloadBranch,
 			branch: branch,
 			status: { type: 'loading', message: 'Loading ' + branch + ' data...' }
@@ -792,6 +805,7 @@ var PrismTree = React.createClass({
 
 		var request = {
 			url: PRISM.url.rest + 'posts' + params,
+			method: 'GET',
 			callback: this.unloadBranch,
 			branch: 'search',
 			status: { type: 'loading', message: 'Searching for "' + query + '" data!' }
@@ -814,6 +828,7 @@ var PrismTree = React.createClass({
 
 		var request = {
 			url: PRISM.url.rest + parentBranch + params,
+			method: 'GET',
 			callback: this.unloadBranch,
 			branch: route,
 			status: { type: 'loading', message: 'Loading ' + activeBranch + ' data...' }
@@ -1409,6 +1424,16 @@ var PrismBranchHeader = React.createClass({
 		log(12, 'end PrismBranchHeader.changeView()');
 	},
 
+	newLeaf: function newLeaf() {
+		var branch;
+
+		PRISM.branches.map(function (b, i) {
+			if (b.slug.plural == this.props.data.active.branch) branch = b.slug.single;
+		}, this);
+
+		window.location.hash = '/' + branch + '/new';
+	},
+
 	render: function render() {
 
 		log(11, 'beg PrismBranchHeader.render()');
@@ -1424,7 +1449,9 @@ var PrismBranchHeader = React.createClass({
 
 		var classes = 'fa fa-pull-right fa-2x';
 
-		var renderAddLeaf = auth && data.active.branch !== 'search' ? React.createElement('i', { id: 'prism-add-leaf', className: classes + ' fa-plus', onClick: func.addLeaf }) : null;
+		var newLeafButton = React.createElement('i', { id: 'prism-add-leaf', className: classes + ' fa-plus', onClick: this.newLeaf });
+
+		var renderNewLeaf = auth && data.active.branch !== 'search' ? newLeafButton : null;
 
 		log(12, 'end PrismBranchHeader.render()');
 
@@ -1443,7 +1470,7 @@ var PrismBranchHeader = React.createClass({
 				React.createElement('i', { id: 'prism-branch-view-full', 'data-view': 'full', className: classes + full, onClick: this.changeView }),
 				React.createElement('i', { id: 'prism-branch-view-half', 'data-view': 'half', className: classes + half, onClick: this.changeView }),
 				React.createElement('i', { id: 'prism-branch-view-grid', 'data-view': 'grid', className: classes + grid, onClick: this.changeView }),
-				renderAddLeaf
+				renderNewLeaf
 			)
 		);
 	}
@@ -1560,7 +1587,9 @@ var PrismLeaf = React.createClass({
 
 		data = {
 			'id': data.id,
-			'status': 'publish'
+			'status': 'publish',
+			'branch': data.type,
+			'url': PRISM.url.rest + data.type + '/' + data.id
 		};
 
 		data[e.target.dataset.key] = e.target.value;
@@ -2351,20 +2380,20 @@ var Prism = React.createClass({
 		state.ajax.queue = state.ajax.queue.concat(PRISM.ajax.queue);
 		PRISM.ajax.queue = [];
 
-		if (state.ajax.queue.length > 0 && state.ajax.status == 'done') this.getData(state.ajax.queue[0]);
+		if (state.ajax.queue.length > 0 && state.ajax.status == 'done') this.sendRequest(state.ajax.queue[0]);
 
 		this.setState;
 
 		log(12, 'end Prism.checkQueue()');
 	},
 
-	getData: function getData(request) {
+	sendRequest: function sendRequest(request) {
 
-		log(11, 'beg Prism.getData()');
+		log(11, 'beg Prism.sendRequest()');
 
 		var state = this.state;
 
-		state.ajax.status = 'getting';
+		if (request.method == 'GET') state.ajax.status = 'getting';else if (request.method == 'POST') state.ajax.status = 'posting';
 
 		this.setState(state);
 
@@ -2373,8 +2402,9 @@ var Prism = React.createClass({
 		log(request);
 
 		jQuery.ajax({
-			method: 'GET',
+			method: request.method,
 			url: request.url,
+			data: request.data,
 			beforeSend: function beforeSend(xhr) {
 				xhr.setRequestHeader('X-WP-Nonce', PRISM.nonce);
 			},
@@ -2382,7 +2412,7 @@ var Prism = React.createClass({
 			error: this.dequeueAJAX
 		});
 
-		log(12, 'end Prism.getData()');
+		log(12, 'end Prism.sendRequest()');
 	},
 
 	queueAJAX: function queueAJAX(request) {
@@ -2426,6 +2456,7 @@ var Prism = React.createClass({
 
 		var request = {
 			url: PRISM.url.rest + 'users/me',
+			method: 'GET',
 			callback: this.unloadUser,
 			status: { type: 'loading', message: 'Loading user data...' }
 		};

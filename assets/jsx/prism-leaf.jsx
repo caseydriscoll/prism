@@ -25,7 +25,9 @@ var PrismLeaf = React.createClass( {
 
 		data = {
 			'id'     : data.id,
-			'status' : 'publish'
+			'status' : 'publish',
+			'branch' : data.type,
+			'url'    : PRISM.url.rest + data.type + '/' + data.id
 		};
 
 		data[e.target.dataset.key] = e.target.value;

@@ -69,7 +69,7 @@ var Prism = React.createClass( {
 		PRISM.ajax.queue = [];
 
 		if ( state.ajax.queue.length > 0 && state.ajax.status == 'done' )
-			this.getData( state.ajax.queue[0] );
+			this.sendRequest( state.ajax.queue[0] );
 
 		this.setState;
 
@@ -77,13 +77,16 @@ var Prism = React.createClass( {
 
 	},
 
-	getData: function( request ) {
+	sendRequest: function( request ) {
 
-		log( 11, 'beg Prism.getData()' );
+		log( 11, 'beg Prism.sendRequest()' );
 
 		var state = this.state;
 
-		state.ajax.status = 'getting';
+		if      ( request.method == 'GET' )
+			state.ajax.status = 'getting';
+		else if ( request.method == 'POST' )
+			state.ajax.status = 'posting';
 
 		this.setState( state );
 
@@ -92,8 +95,9 @@ var Prism = React.createClass( {
 		log( request );
 
 		jQuery.ajax( {
-			method  : 'GET',
+			method  : request.method,
 			url     : request.url,
+			data    : request.data,
 			beforeSend: function ( xhr ) {
 				xhr.setRequestHeader( 'X-WP-Nonce', PRISM.nonce );
 			},
@@ -101,9 +105,10 @@ var Prism = React.createClass( {
 			error   : this.dequeueAJAX
 		} );
 
-		log( 12, 'end Prism.getData()' );
+		log( 12, 'end Prism.sendRequest()' );
 
 	},
+
 
 	queueAJAX: function( request ) {
 		log( 11, 'beg Prism.queueAJAX()' );
@@ -146,6 +151,7 @@ var Prism = React.createClass( {
 
 		var request = {
 			url      : PRISM.url.rest + 'users/me',
+			method   : 'GET',
 			callback : this.unloadUser,
 			status   : { type : 'loading', message : 'Loading user data...' }
 		}

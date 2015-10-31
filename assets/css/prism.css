@@ -112,6 +112,10 @@ body > *:not(#prism) {
       animation: rotation 2s infinite linear; }
       #prism-status #prism-status-button.loading i.fa-play {
         color: #1ab7d9; }
+    #prism-status #prism-status-button.saving {
+      animation: rotation 2s infinite linear; }
+      #prism-status #prism-status-button.saving i.fa-play {
+        color: #6b7ee4; }
     #prism-status #prism-status-button.success i.fa-play {
       color: #66d73a !important; }
     #prism-status #prism-status-button.warning i.fa-play {
@@ -446,22 +450,24 @@ body > *:not(#prism) {
   height: 100%;
   border-right: 2px solid #000000; }
   #prism-leaf header#prism-leaf-header h2 {
-    display: inline;
-    float: left;
-    width: calc( 100% - 300px ); }
+    display: block;
+    width: 100%;
+    padding: 0; }
     #prism-leaf header#prism-leaf-header h2 div {
       width: 100%;
       min-height: 30px;
-      margin-top: -2px;
-      border: 2px solid #000000;
-      border-color: transparent;
-      white-space: nowrap; }
+      margin-top: 0;
+      border: none;
+      white-space: nowrap;
+      overflow: hidden; }
     #prism-leaf header#prism-leaf-header h2 input {
-      width: calc( 100% + 10px );
+      width: 100%;
       padding: 0 5px;
       margin: -5px 0 0 -5px;
-      border: 2px solid #000000;
-      border-color: #dddddd; }
+      border: none; }
+      #prism-leaf header#prism-leaf-header h2 input:focus {
+        border: none;
+        outline: none; }
   #prism-leaf header#prism-leaf-header i.fa {
     display: block;
     position: absolute;
