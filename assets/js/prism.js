@@ -96,7 +96,7 @@ var PrismTree = React.createClass({
 			if ('changeMeta' in changeState) _this.changeMeta();
 
 			if ('newLeaf' in changeState) {
-				window.location = '/#/' + getSingular(_this.state.active.branch) + '/new';
+				_this.newLeafLink();
 			}
 
 			if ('statusBar' in changeState) func.toggleStatusBar();
@@ -271,12 +271,12 @@ var PrismTree = React.createClass({
 				}).bind(this);
 
 				// Route Pattern 5.
-				// https://url.com/#/parentBranchSingle/:parentLeaf/childBranchPlural/new
+				// https://url.com/#/parentBranchSingle/:parentLeaf/childBranchSingle/new
 				// https://patch.works/#/movie/soylent-green/actor/new
 				var newNestedLeafMethod = "new_" + childBranchSingle + "_of_" + parentBranchSingle;
 
 				routes[parentBranchSingle + "/:parentLeaf/" + childBranchSingle + '/new'] = newNestedLeafMethod;
-				routerConfig[newNestedLeafMethod] = (function (parentBranchPlural, parentLeaf, childBranchPlural) {
+				routerConfig[newNestedLeafMethod] = (function (parentLeaf) {
 					this.newNestedLeaf(parentBranchPlural, parentLeaf, childBranchPlural);
 				}).bind(this);
 
@@ -720,6 +720,17 @@ var PrismTree = React.createClass({
 		log(12, 'end PrismTree.changeView()');
 	},
 
+	newLeafLink: function newLeafLink() {
+		log(11, 'beg PrismTree.newLeafLink()');
+
+		var parent = this.state.active.parent;
+		var branch = this.state.active.branch;
+
+		if (parent.leaf.slug == null) window.location = '/#/' + getSingular(branch) + '/new';else window.location = '/#/' + getSingular(parent.branch) + '/' + parent.leaf.slug + '/' + getSingular(branch) + '/new';
+
+		log(12, 'end PrismTree.newLeafLink()');
+	},
+
 	newLeaf: function newLeaf(branch) {
 
 		log(11, 'beg PrismTree.newLeaf() ' + branch);
@@ -739,17 +750,21 @@ var PrismTree = React.createClass({
 		log(12, 'end PrismTree.newLeaf()');
 	},
 
-	newNestedLeaf: function newNestedLeaf() {
+	newNestedLeaf: function newNestedLeaf(parentBranch, parentLeaf, branch) {
 
-		log(11, 'beg PrismTree.newNestedLeaf()');
+		log(11, 'beg PrismTree.newNestedLeaf() ' + parentBranch + ' ' + parentLeaf + ' ' + branch);
 
 		var data = {
-			title: '',
-			content: ' ',
+			title: 'New',
+			content_raw: '',
+			parent_branch: parentBranch,
+			parent_leaf: parentLeaf,
+			branch: branch,
+			url: PRISM.url.rest + branch,
 			date: new Date().toISOString().slice(0, 19)
 		};
 
-		// this.saveLeaf( 'create', data );
+		this.saveLeaf('create', data);
 
 		log(12, 'end PrismTree.newNestedLeaf()');
 	},
@@ -793,7 +808,9 @@ var PrismTree = React.createClass({
 			var state = this.state;
 
 			var leaf = response;
-			var branch = state.branches[state.active.branch];
+			var branch = null;
+
+			if ('parent_branch' in request.data) branch = state.branches[state.active.parent.route];else branch = state.branches[state.active.branch];
 
 			var slug;
 			var status;
@@ -823,7 +840,7 @@ var PrismTree = React.createClass({
 			this.changeStatus(status);
 			this.changeStatus({ type: 'normal', message: null });
 
-			window.location.hash = '/' + getSingular(state.active.branch) + '/' + slug;
+			this.newLeafLink();
 		}
 	},
 
@@ -1160,6 +1177,7 @@ var PrismTree = React.createClass({
 
 		var branchFunctions = {
 			loadBranch: this.loadBranch,
+			newLeafLink: this.newLeafLink,
 			changeLeaf: this.changeLeaf,
 			changeView: this.changeView,
 			changeWidth: this.changeWidth,
@@ -1477,12 +1495,6 @@ var PrismBranchHeader = React.createClass({
 		log(12, 'end PrismBranchHeader.changeView()');
 	},
 
-	newLeaf: function newLeaf() {
-		var branch = getSingular(this.props.data.active.branch);
-
-		window.location.hash = '/' + branch + '/new';
-	},
-
 	render: function render() {
 
 		log(11, 'beg PrismBranchHeader.render()');
@@ -1498,7 +1510,7 @@ var PrismBranchHeader = React.createClass({
 
 		var classes = 'fa fa-pull-right fa-2x';
 
-		var newLeafButton = React.createElement('i', { id: 'prism-add-leaf', className: classes + ' fa-plus', onClick: this.newLeaf });
+		var newLeafButton = React.createElement('i', { id: 'prism-add-leaf', className: classes + ' fa-plus', onClick: func.newLeafLink });
 
 		var renderNewLeaf = auth && data.active.branch !== 'search' ? newLeafButton : null;
 

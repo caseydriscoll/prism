@@ -22,6 +22,8 @@ class Prism {
 		add_filter( 'rest_post_query', 'Prism::override_query', 10, 2 );
 		add_filter( 'rest_prepare_post', 'Prism::prepare_request', 10, 3 );
 
+		add_action( 'rest_insert_post', 'Prism::add_p2p_connections_on_insert', 10, 2 );
+
 
 		add_action( 'init', array( __CLASS__, 'business_logic' ) );
 		add_action( 'p2p_init', array( __CLASS__, 'connections' ) );
@@ -162,6 +164,36 @@ class Prism {
 		}
 
 		return $args;
+	}
+
+	public static function add_p2p_connections_on_insert( $post, $request ) {
+
+		if ( array_key_exists( 'parent_branch', $_REQUEST ) ) {
+
+			// parent_leaf is a slug
+			$parent_branch = $_REQUEST['parent_branch'];
+			$parent_leaf   = $_REQUEST['parent_leaf'];
+
+			$branch        = $_REQUEST['branch'];
+
+			$type          = $parent_branch . '_to_' . $branch;
+
+
+			$args = array(
+				'name'        => $parent_leaf,
+				'post_type'   => $parent_branch,
+				'post_status' => 'publish',
+				'numberposts' => 1
+			);
+
+			$parent = new WP_Query( $args );
+
+			$parent->the_post();
+
+
+			p2p_type( $type )->connect( get_the_ID(), $post->ID );
+		}
+
 	}
 
 	public static function get_connections( $object, $field_name, $request ) {

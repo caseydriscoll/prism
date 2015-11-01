@@ -102,12 +102,6 @@ var PrismBranchHeader = React.createClass( {
 
 	},
 
-	newLeaf : function() {
-		var branch = getSingular( this.props.data.active.branch );
-
-		window.location.hash = '/' + branch + '/new';
-	},
-
 	render: function() {
 
 		log( 11, 'beg PrismBranchHeader.render()' );
@@ -123,7 +117,7 @@ var PrismBranchHeader = React.createClass( {
 
 		var classes = 'fa fa-pull-right fa-2x';
 
-		var newLeafButton = <i id="prism-add-leaf" className={classes + ' fa-plus'} onClick={this.newLeaf}></i>;
+		var newLeafButton = <i id="prism-add-leaf" className={classes + ' fa-plus'} onClick={func.newLeafLink}></i>;
 
 		var renderNewLeaf = auth && data.active.branch !== 'search' ? newLeafButton : null;
 

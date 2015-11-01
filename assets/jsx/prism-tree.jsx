@@ -46,7 +46,7 @@ var PrismTree = React.createClass( {
 				this.changeMeta();
 
 			if ( 'newLeaf'    in changeState ){
-				window.location = '/#/' + getSingular( this.state.active.branch ) + '/new';
+				this.newLeafLink();
 			}
 
 			if ( 'statusBar'  in changeState )
@@ -242,12 +242,12 @@ var PrismTree = React.createClass( {
 
 
 				// Route Pattern 5.
-				// https://url.com/#/parentBranchSingle/:parentLeaf/childBranchPlural/new
+				// https://url.com/#/parentBranchSingle/:parentLeaf/childBranchSingle/new
 				// https://patch.works/#/movie/soylent-green/actor/new
 				var newNestedLeafMethod = "new_" + childBranchSingle + "_of_" + parentBranchSingle;
 
 				routes[parentBranchSingle + "/:parentLeaf/" + childBranchSingle + '/new'] = newNestedLeafMethod;
-				routerConfig[newNestedLeafMethod] = function( parentBranchPlural, parentLeaf, childBranchPlural ) { 
+				routerConfig[newNestedLeafMethod] = function( parentLeaf ) { 
 				                                     this.newNestedLeaf( parentBranchPlural, parentLeaf, childBranchPlural );
 				                                   }.bind( this );
 
@@ -737,6 +737,20 @@ var PrismTree = React.createClass( {
 
 	},
 
+	newLeafLink : function() {
+		log( 11, 'beg PrismTree.newLeafLink()' );
+
+		var parent = this.state.active.parent;
+		var branch = this.state.active.branch;
+
+		if ( parent.leaf.slug == null )
+			window.location = '/#/' + getSingular( branch ) + '/new';
+		else
+			window.location = '/#/' + getSingular( parent.branch ) + '/' + parent.leaf.slug + '/' + getSingular( branch ) + '/new';
+
+		log( 12, 'end PrismTree.newLeafLink()' );
+	},
+
 	newLeaf: function( branch ) {
 
 		log( 11, 'beg PrismTree.newLeaf() ' + branch );
@@ -757,17 +771,21 @@ var PrismTree = React.createClass( {
 
 	},
 
-	newNestedLeaf: function() {
+	newNestedLeaf: function( parentBranch, parentLeaf, branch ) {
 
-		log( 11, 'beg PrismTree.newNestedLeaf()' );
+		log( 11, 'beg PrismTree.newNestedLeaf() ' + parentBranch + ' ' + parentLeaf + ' ' + branch );
 
 		var data = { 
-			title   : '',
-			content : ' ',
-			date    : new Date().toISOString().slice(0, 19)
+			title         : 'New',
+			content_raw   : '',
+			parent_branch : parentBranch,
+			parent_leaf   : parentLeaf,
+			branch        : branch,
+			url           : PRISM.url.rest + branch,
+			date          : new Date().toISOString().slice(0, 19)
 		};
 
-		// this.saveLeaf( 'create', data );
+		this.saveLeaf( 'create', data );
 
 		log( 12, 'end PrismTree.newNestedLeaf()' );
 
@@ -817,7 +835,12 @@ var PrismTree = React.createClass( {
 			var state  = this.state;
 
 			var leaf   = response;
-			var branch = state.branches[state.active.branch];
+			var branch = null;
+
+			if ( 'parent_branch' in request.data )
+				branch = state.branches[state.active.parent.route];
+			else
+				branch = state.branches[state.active.branch];
 
 			var slug;
 			var status;
@@ -848,7 +871,7 @@ var PrismTree = React.createClass( {
 			this.changeStatus( status );
 			this.changeStatus( { type: 'normal',  message: null } );
 
-			window.location.hash = '/' + getSingular( state.active.branch ) + '/' + slug;
+			this.newLeafLink();
 
 		}
 	},
@@ -1211,6 +1234,7 @@ var PrismTree = React.createClass( {
 
 		var branchFunctions = {
 			loadBranch  : this.loadBranch,
+			newLeafLink : this.newLeafLink,
 			changeLeaf  : this.changeLeaf,
 			changeView  : this.changeView,
 			changeWidth : this.changeWidth,
