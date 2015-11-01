@@ -634,7 +634,9 @@ var PrismTree = React.createClass({
 
 		var state = this.state;
 
-		var branch = state.branches[state.active.branch];
+		var activeBranch = state.active.parent.branch == null ? state.active.branch : state.active.parent.route;
+
+		var branch = state.branches[activeBranch];
 		var leaf = state.active.leaf.id;
 		var key = e.target.dataset.key;
 
@@ -808,9 +810,9 @@ var PrismTree = React.createClass({
 			var state = this.state;
 
 			var leaf = response;
-			var branch = null;
+			var activeBranch = 'parent_branch' in request.data ? state.active.parent.route : state.active.branch;
 
-			if ('parent_branch' in request.data) branch = state.branches[state.active.parent.route];else branch = state.branches[state.active.branch];
+			var branch = state.branches[activeBranch];
 
 			var slug;
 			var status;
@@ -840,7 +842,9 @@ var PrismTree = React.createClass({
 			this.changeStatus(status);
 			this.changeStatus({ type: 'normal', message: null });
 
-			this.newLeafLink();
+			var parent = state.active.parent;
+
+			if (parent.leaf.slug == null) changeHash([getSingular(state.active.branch), leaf.slug]);else changeHash([getSingular(parent.branch), parent.leaf.slug, getSingular(state.active.branch), leaf.slug]);
 		}
 	},
 
@@ -1062,6 +1066,7 @@ var PrismTree = React.createClass({
 		}
 
 		leafData.width = this.state.width.current;
+		leafData.parent = this.state.active.parent;
 		leafData.metaActive = this.hasActiveMeta();
 		leafData.currentlyChanged = this.state.currentlyChanged;
 
@@ -1647,16 +1652,18 @@ var PrismLeaf = React.createClass({
 
 		if (!data.currentlyChanged) return;
 
-		data = {
-			'id': data.id,
-			'status': 'publish',
-			'branch': data.type,
-			'url': PRISM.url.rest + data.type + '/' + data.id
+		var leaf = {
+			id: data.id,
+			status: 'publish',
+			branch: data.type,
+			url: PRISM.url.rest + data.type + '/' + data.id
 		};
 
-		data[e.target.dataset.key] = e.target.value;
+		if (data.parent.branch != null) leaf.parent_branch = data.parent.branch;
 
-		func.saveLeaf('update', data);
+		leaf[e.target.dataset.key] = e.target.value;
+
+		func.saveLeaf('update', leaf);
 	},
 
 	autoSelect: function autoSelect(e) {
@@ -2052,6 +2059,16 @@ var log = function log(level, message) {
 
 		if (!ignore) console.log(_.now(), message);
 	}
+};
+
+var changeHash = function changeHash(sections) {
+	var newLink = '';
+
+	sections.map(function (piece) {
+		newLink += '/' + piece;
+	});
+
+	window.location.hash = newLink;
 };
 
 var getSingular = function getSingular(branch) {

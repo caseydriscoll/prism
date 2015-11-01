@@ -23,16 +23,19 @@ var PrismLeaf = React.createClass( {
 
 		if ( ! data.currentlyChanged ) return;
 
-		data = {
-			'id'     : data.id,
-			'status' : 'publish',
-			'branch' : data.type,
-			'url'    : PRISM.url.rest + data.type + '/' + data.id
+		var leaf = {
+			id     : data.id,
+			status : 'publish',
+			branch : data.type,
+			url    : PRISM.url.rest + data.type + '/' + data.id
 		};
 
-		data[e.target.dataset.key] = e.target.value;
+		if ( data.parent.branch != null )
+			leaf.parent_branch = data.parent.branch;
 
-		func.saveLeaf( 'update', data );
+		leaf[e.target.dataset.key] = e.target.value;
+
+		func.saveLeaf( 'update', leaf );
 
 	},
 

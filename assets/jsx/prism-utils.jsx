@@ -75,6 +75,17 @@ var log = function( level, message ) {
 }
 
 
+var changeHash = function( sections ) {
+	var newLink = '';
+
+	sections.map( function( piece ) {
+		newLink += '/' + piece;
+	} );
+
+	window.location.hash = newLink;
+}
+
+
 var getSingular = function( branch ) {
 
 	var singularBranch;

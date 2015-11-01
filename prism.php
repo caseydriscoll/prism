@@ -168,7 +168,7 @@ class Prism {
 
 	public static function add_p2p_connections_on_insert( $post, $request ) {
 
-		if ( array_key_exists( 'parent_branch', $_REQUEST ) ) {
+		if ( array_key_exists( 'parent_leaf', $_REQUEST ) ) {
 
 			// parent_leaf is a slug
 			$parent_branch = $_REQUEST['parent_branch'];
