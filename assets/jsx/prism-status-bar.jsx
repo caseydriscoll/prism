@@ -6,7 +6,7 @@ var PrismStatusBar = React.createClass( {
 		var func = this.props.func;
 
 		var statusLog = _.clone( data.status.log ).reverse().map( function( entry, i ) {
-			return ( <li className={entry.type}><i className="fa fa-li fa-chevron-right"></i>{entry.message}</li> );
+			return ( <li className={entry.type} key={i}><i className="fa fa-li fa-chevron-right"></i>{entry.message}</li> );
 		}, this );
 
 		return (

@@ -2100,7 +2100,7 @@ var PrismStatusBar = React.createClass({
 		var statusLog = _.clone(data.status.log).reverse().map(function (entry, i) {
 			return React.createElement(
 				"li",
-				{ className: entry.type },
+				{ className: entry.type, key: i },
 				React.createElement("i", { className: "fa fa-li fa-chevron-right" }),
 				entry.message
 			);
