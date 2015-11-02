@@ -16,7 +16,6 @@ var PrismTree = React.createClass( {
 				query   : ''
 			},
 			lockMeta         : PRISM.lockMeta,
-			currentlyChanged : false,
 			width            : PRISM.width
 		};
 
@@ -655,8 +654,6 @@ var PrismTree = React.createClass( {
 		else
 			branch.leaves[leaf][key] = e.target.value;
 
-		state.currentlyChanged = true;
-
 		this.setState( state );
 
 		log( 12, 'end PrismTree.changeValue()' );
@@ -861,8 +858,6 @@ var PrismTree = React.createClass( {
 
 			branch.leaves[leaf.id]  = leaf;
 			branch.slugs[leaf.slug] = leaf.id;
-
-			state.currentlyChanged = false;
 
 			this.setState( state );
 
@@ -1117,7 +1112,6 @@ var PrismTree = React.createClass( {
 		leafData.width            = this.state.width.current;
 		leafData.parent           = this.state.active.parent;
 		leafData.metaActive       = this.hasActiveMeta();
-		leafData.currentlyChanged = this.state.currentlyChanged;
 
 		log( 2, '---end PrismTree.leafData()' );
 
@@ -1201,7 +1195,6 @@ var PrismTree = React.createClass( {
 		metaData.width            = this.state.width.current.meta;
 		metaData.metaActive       = this.hasActiveMeta();
 		metaData.lockMeta         = this.state.lockMeta;
-		metaData.currentlyChanged = this.state.currentlyChanged;
 
 		log( 2, '---end PrismTree.metaData()' );
 

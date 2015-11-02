@@ -21,8 +21,6 @@ var PrismLeaf = React.createClass( {
 		var data = this.props.data;
 		var func = this.props.func;
 
-		if ( ! data.currentlyChanged ) return;
-
 		var leaf = {
 			id     : data.id,
 			status : 'publish',

@@ -5,8 +5,6 @@ var PrismMeta = React.createClass( {
 		var data = this.props.data;
 		var func = this.props.func;
 
-		if ( ! data.currentlyChanged ) return;
-
 		data = {
 			'id'     : data.id,
 			'status' : 'publish'
