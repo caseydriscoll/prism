@@ -26,3 +26,5 @@ Here is what it could look like with more stuffs.
 ## Loading
 
 Run ./tools/reset to init the database and init with sample data with `wp plugin activate prism/prism-data-movies`
+
+A model of the plugin with sample data can be found at <http://prism.patch.party>
