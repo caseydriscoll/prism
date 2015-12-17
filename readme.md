@@ -31,6 +31,9 @@ Here is what it could look like with more stuffs.
 1. Run `grunt` to initially compile assets
 1. Activate plugin, activating Posts-to-Posts dependency at the same time.
 
+## Installing Sample Data
+
+Load sample data by activating any of the 'Data' plugins
 
 ## Loading
 
