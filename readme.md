@@ -23,6 +23,15 @@ Here is what it could look like with more stuffs.
 ![prism](docs/prism.png)
 
 
+## Getting Started
+
+1. Clone the plugin into your WordPress `plugins` directory
+1. Make sure npm, grunt and grunt-cli are installed on your system.
+1. Run `npm install` to install all dependencies.
+1. Run `grunt` to initially compile assets
+1. Activate plugin, activating Posts-to-Posts dependency at the same time.
+
+
 ## Loading
 
 Run ./tools/reset to init the database and init with sample data with `wp plugin activate prism/prism-data-movies`
