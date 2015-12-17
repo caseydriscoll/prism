@@ -33,7 +33,7 @@ Here is what it could look like with more stuffs.
 
 ## Installing Sample Data
 
-Load sample data by activating any of the 'Data' plugins
+Load sample data by activating any of the 'Data' plugins. On activation the plugin will load sample data
 
 ## Loading
 
