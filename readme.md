@@ -8,7 +8,7 @@ We need a super flexible way for viewing and manipulating all your stuff.
 
 That's the name, Prism. It's a fast way of viewing the data in your application.
 
-#Simple UI
+# Simple UI
 
 Like millions of other users, I enjoy the simple and effective three tier UI commonly found in desktop applications.
 
@@ -26,11 +26,20 @@ Here is what it could look like with more stuffs.
 ## Getting Started
 
 1. Clone the plugin into your WordPress `plugins` directory
-   `git clone git@github.com:patchdotworks/prism.git`
-1. Make sure npm, grunt and grunt-cli are installed on your system.
-1. Run `npm install` to install all dependencies.
-1. Run `grunt` to initially compile assets
-1. Activate plugin, activating Posts-to-Posts dependency at the same time.
+> `git clone git@github.com:patchdotworks/prism.git`
+
+2. Confirm the [Node Package Manager](https://nodejs.org/en/download/) is installed on your system.
+> `npm -v`
+
+3. Install all packages and dependencies found in `package.json`.
+> `npm install`
+
+4. Compile all sass and jsx source files to css and js
+> `grunt`
+
+5. Activate plugin, activating Posts-to-Posts dependency at the same time.
+> `wp plugin install posts-to-posts --activate`
+> `wp plugin activate prism`
 
 ## Installing Sample Data
 
