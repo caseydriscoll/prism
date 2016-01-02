@@ -26,7 +26,7 @@ Here is what it could look like with more stuffs.
 ## Getting Started
 
 1. Clone the plugin into your WordPress `plugins` directory
-   `git clone https://github.com/patchdotworks/prism.git`
+   `git clone git@github.com:patchdotworks/prism.git`
 1. Make sure npm, grunt and grunt-cli are installed on your system.
 1. Run `npm install` to install all dependencies.
 1. Run `grunt` to initially compile assets
