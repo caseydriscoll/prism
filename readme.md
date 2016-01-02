@@ -39,6 +39,7 @@ Here is what it could look like with more stuffs.
 
 5. Activate plugin, activating Posts-to-Posts dependency at the same time.
 > `wp plugin install posts-to-posts --activate`
+
 > `wp plugin activate prism`
 
 ## Installing Sample Data
