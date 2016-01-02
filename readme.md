@@ -8,6 +8,8 @@ We need a super flexible way for viewing and manipulating all your stuff.
 
 That's the name, Prism. It's a fast way of viewing the data in your application.
 
+A model of the plugin with sample data can be found at <http://prism.patch.party>
+
 # Simple UI
 
 Like millions of other users, I enjoy the simple and effective three tier UI commonly found in desktop applications.
@@ -25,6 +27,8 @@ Here is what it could look like with more stuffs.
 
 ## Getting Started
 
+### Installing and Activating Plugins and Dependencies
+
 1) Clone the plugin into your WordPress `plugins` directory
 
 > `git clone git@github.com:patchdotworks/prism.git`
@@ -41,18 +45,22 @@ Here is what it could look like with more stuffs.
 
 > `grunt`
 
-5) Activate plugin, activating Posts-to-Posts dependency at the same time.
+5) Activate plugin, activating [Posts-to-Posts](https://wordpress.org/plugins/posts-to-posts/) dependency at the same time.
 
 > `wp plugin install posts-to-posts --activate`
 
 > `wp plugin activate prism`
 
-## Installing Sample Data
+### Installing Sample Data
 
-Load sample data by activating any of the 'Data' plugins. On activation the plugin will load sample data
+Load sample data by activating any of the 'Data' plugins. When activated the plugin will load sample data into the database
 
-## Loading
+> `wp plugin activate prism/prism-data-movies`
+
+## Development
+
+### Loading
 
 Run ./tools/reset to init the database and init with sample data with `wp plugin activate prism/prism-data-movies`
 
-A model of the plugin with sample data can be found at <http://prism.patch.party>
+
