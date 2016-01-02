@@ -13,12 +13,9 @@ Take a look at [The Purpose of Prism](https://caseypatrickdriscoll.com/the-purpo
 
 ### Tree UI
 
-Like millions of other users, I enjoy the simple and effective three tier UI commonly found in desktop applications.
+A simple hierarchy by design. Root access to information on the left. Branches in the middle. Leaf and node information on the right. Clicking on an item moves you up and down the tree. Commonly found in many desktop applications.
 
 ![prism-skeleton](docs/prism-skeleton.png)
-
-It's non-pretentious hierarchy by design. Root access to information on the left. Branches in the middle. Leaf and node information on the right. Clicking on an item moves you up and down the tree.
-
 
 ## Getting Started
 
