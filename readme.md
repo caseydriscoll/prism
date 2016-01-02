@@ -26,19 +26,25 @@ Here is what it could look like with more stuffs.
 ## Getting Started
 
 1. Clone the plugin into your WordPress `plugins` directory
+
 $ `git clone git@github.com:patchdotworks/prism.git`
 
 2. Confirm the [Node Package Manager](https://nodejs.org/en/download/) is installed on your system.
+
 $ `npm -v`
 
 3. Install all Node packages and dependencies found in `package.json`.
+
 $ `npm install`
 
 4. Compile all sass and jsx source files to css and js
+
 $ `grunt`
 
 5. Activate plugin, activating Posts-to-Posts dependency at the same time.
+
 $ `wp plugin install posts-to-posts --activate
+
 $ `wp plugin activate prism`
 
 ## Installing Sample Data
