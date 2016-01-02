@@ -1,28 +1,24 @@
-Prism is a developer friendly, React & Backbone based theme for fast, API centric WordPress application development
+Prism is a developer focused, React & Backbone front end framework for fast, API centric WordPress application development
 
-Actually, it's a plugin to start. Actually actually, it will probably never be a theme.
+WordPress is a super flexible and powerful system for _storing and retrieving_ stuff.
 
-WordPress is a super flexible way of holding all your stuff.
+Prism is super flexible and powerful interface for _viewing and manipulating_ that stuff.
 
-We need a super flexible way for viewing and manipulating all your stuff.
+Prism is an opinionated tree structure. It provides a scaffolding for moving up and down your application data.
 
-That's the name, Prism. It's a fast way of viewing the data in your application.
+Take a look at an example install at <http://prism.patch.party>
 
-A model of the plugin with sample data can be found at <http://prism.patch.party>
+Take a look at [The Purpose of Prism](https://caseypatrickdriscoll.com/the-purpose-of-prism/) for more background information.
 
-# Simple UI
+## Features
+
+### Tree UI
 
 Like millions of other users, I enjoy the simple and effective three tier UI commonly found in desktop applications.
 
 ![prism-skeleton](docs/prism-skeleton.png)
 
-It's non-pretentious hierarchy by design. Root access to information on the left. Branches in the middle. Leaf and node information on the right.
-
-Clicking on an item moves you up and down the tree.
-
-Here is what it could look like with more stuffs.
-
-![prism](docs/prism.png)
+It's non-pretentious hierarchy by design. Root access to information on the left. Branches in the middle. Leaf and node information on the right. Clicking on an item moves you up and down the tree.
 
 
 ## Getting Started
