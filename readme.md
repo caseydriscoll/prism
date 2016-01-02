@@ -4,10 +4,9 @@ WordPress is a super flexible and powerful system for _storing and retrieving_ s
 
 Prism is super flexible and powerful interface for _viewing and manipulating_ that stuff.
 
-Prism is an opinionated tree structure. It provides a scaffolding for moving up and down your application data.
+Prism is an simple [tree structure](https://en.wikipedia.org/wiki/Tree_(data_structure)). It provides a scaffolding for moving up and down your application data.
 
 Take a look at an example install at <http://prism.patch.party>
-
 Take a look at [The Purpose of Prism](https://caseypatrickdriscoll.com/the-purpose-of-prism/) for more background information.
 
 ## Features
