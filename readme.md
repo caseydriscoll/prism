@@ -6,7 +6,7 @@ Prism is super flexible and powerful interface for _viewing and manipulating_ th
 
 Prism is an simple [tree structure](https://en.wikipedia.org/wiki/Tree_(data_structure)). It provides a scaffolding for moving up and down your application data.
 
-Take a look at an example install at <http://prism.patch.party>
+Take a look at an example install at <http://prism.caseydris.co>
 Take a look at [The Purpose of Prism](https://caseypatrickdriscoll.com/the-purpose-of-prism/) for more background information.
 
 ## Features
@@ -23,7 +23,7 @@ A simple hierarchy by design. Root access to information on the left. Branches i
 
 1) Clone the plugin into your WordPress `plugins` directory
 
-> `git clone git@github.com:patchdotworks/prism.git`
+> `git clone git@github.com:caseypatrickdriscoll/prism.git`
 
 2) Confirm the [Node Package Manager](https://nodejs.org/en/download/) is installed on your system.
 

@@ -3,8 +3,8 @@
 /**
  * Plugin Name: Prism
  * Description: A developer friendly, React and Backbone based theme for fast API centric WordPress application development.
- * Author: PatchWorks
- * Author URI: https:/patch.works
+ * Author: Casey Patrick Driscoll
+ * Author URI: https://caseypatrickdriscoll.com
  */
 
 

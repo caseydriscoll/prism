@@ -3,8 +3,8 @@
 /**
  * Plugin Name: Prism | Movies Data
  * Description: Activate to load sample 'Movies' data
- * Author: PatchWorks
- * Author URI: https:/patch.works
+ * Author: Casey Patrick Driscoll
+ * Author URI: https://caseypatrickdriscoll.com
  */
 
 class Prism_Movies_Data {

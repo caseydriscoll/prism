@@ -3,8 +3,8 @@
 /**
  * Plugin Name: Prism | Media Data
  * Description: Activate to load sample 'Media' data
- * Author: PatchWorks
- * Author URI: https:/patch.works
+ * Author: Casey Patrick Driscoll
+ * Author URI: https://caseypatrickdriscoll.com
  */
 
 class Prism_Media_Data {
